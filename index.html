@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gamified learning platform</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url("images/pr.jpeg");
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 70px;
+            color: rgb(102, 19, 19);
+            text-shadow: 3px 3px 15px rgba(0,0,0,0.7);
+        }
+
+        .pop {
+            transform: scale(0);
+            animation: popAnimation 0.6s ease-out forwards;
+        }
+
+        @keyframes popAnimation {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .scroll-text {
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 26px;
+            color: darkgoldenrod;
+            margin-top: 10px;
+            animation: scroll 10s linear infinite;
+        }
+
+        @keyframes scroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+        .buttons {
+            margin-top: 80px;
+        }
+
+        .bubble {
+            display: inline-block;
+            padding: 20px 40px;
+            margin: 20px;
+            font-size: 24px;
+            color: white;
+            background: radial-gradient(circle, #ff9a9e, #fad0c4);
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+
+        .bubble:hover {
+            transform: scale(1.2);
+        } 
+        .bubble-float {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: floatUp 10s infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-120vh);
+                opacity: 0;
+            }
+        }
+
+       
+
+    </style>
+</head>
+
+<body>
+
+    
+    <h1 class="pop">Welcome to Gyaan Setu</h1>
+
+    <div class="scroll-text">
+        Welcome to Gyaan Setu, A gamified and enjoyable learning platform for students!
+    </div>
+
+    <div class="buttons">
+         <a href="login.html" class="bubble">Login</a>
+         <a href="signup.html" class="bubble">Sign Up</a>
+
+    </div>
+
+</body>
+</html>
