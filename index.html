@@ -1,22 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Gamified learning platform</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamified learning platform - Gyaan Setu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Baloo 2', cursive, Arial, sans-serif;
             text-align: center;
             background-image: url("images/pr.jpeg");
             background-size: cover;
             background-position: center;
-            overflow: hidden;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: #2c3e50;
         }
+
+        /* --- SCREEN 1: HERO HOME LANDING --- */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
         h1 {
             font-size: 70px;
-            color: rgb(102, 19, 19);
-            text-shadow: 3px 3px 15px rgba(0,0,0,0.7);
+            /* Locked to your rich, professional Chocolate Brown */
+            color: #4E342E;
+            text-shadow: 4px 4px 0px #FFF9C4, 0px 0px 20px rgba(0,0,0,0.4);
+            margin-bottom: 10px;
         }
 
         .pop {
@@ -26,82 +54,405 @@
 
         @keyframes popAnimation {
             0% { transform: scale(0); }
-            60% { transform: scale(1.3); }
+            60% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        .scroll-text {
-            white-space: nowrap;
+
+        /* --- SCROLLING TEXT CONTAINER LAYER --- */
+        .scroll-container {
+            width: 95%;
+            max-width: 1100px;
             overflow: hidden;
-            font-size: 26px;
-            color: darkgoldenrod;
+            background: transparent; 
+            padding: 10px 0;
             margin-top: 10px;
-            animation: scroll 10s linear infinite;
         }
 
-        @keyframes scroll {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
+        .scroll-text {
+            white-space: nowrap;
+            display: inline-block;
+            font-size: 28px;
+            color: #FFFFFF; 
+            font-weight: 700;
+            /* Backed by a rich, solid brown stroke silhouette outline for clean readability */
+            text-shadow: 
+                3px 3px 0px #4E342E, 
+                -3px -3px 0px #4E342E, 
+                3px -3px 0px #4E342E, 
+                -3px 3px 0px #4E342E,
+                0px 8px 15px rgba(0,0,0,0.3);
+            animation: scroll 18s linear infinite;
         }
+
+        /* Fixed slow start: Begins text already inside screen view bounds on first load */
+        @keyframes scroll {
+            0% { transform: translateX(10%); }
+            100% { transform: translateX(-100%); }
+        }
+
         .buttons {
-            margin-top: 80px;
+            margin-top: 50px;
+            z-index: 10;
         }
 
         .bubble {
             display: inline-block;
-            padding: 20px 40px;
+            padding: 18px 50px;
             margin: 20px;
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: bold;
             color: white;
             background: radial-gradient(circle, #ff9a9e, #fad0c4);
             border-radius: 50px;
             text-decoration: none;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
+            border: 4px solid white;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .bubble:hover {
-            transform: scale(1.2);
-        } 
+            transform: scale(1.1) translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+        }
+
+        .scroll-down-hint {
+            position: absolute;
+            bottom: 30px;
+            background: white;
+            color: #4E342E;
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid #4E342E;
+            animation: hintBounce 1.5s infinite ease-in-out;
+        }
+
+        @keyframes hintBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- SIDEBAR NAV MENU DRAWER PANEL --- */
+        .sidebar-toggle {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: #4E342E; 
+            color: white;
+            border: 3px solid white;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            font-family: 'Baloo 2', cursive;
+            transition: transform 0.2s;
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100vh;
+            background: #FAFAFA;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.25);
+            z-index: 999;
+            transition: left 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+            padding: 90px 20px 30px 20px;
+            text-align: left;
+            border-right: 6px dashed #4E342E; 
+        }
+
+        .nav-sidebar.open {
+            left: 0;
+        }
+
+        .nav-sidebar h2 {
+            color: #4E342E;
+            margin-bottom: 25px;
+            border-bottom: 3px dashed #cfd8dc;
+            padding-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        /* Fixed text block items remain static on interaction */
+        .nav-sidebar a {
+            display: block;
+            color: #455a64;
+            text-decoration: none;
+            font-size: 1.35rem;
+            font-weight: bold;
+            padding: 12px 18px;
+            margin: 6px 0;
+            border-radius: 15px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-sidebar a:hover {
+            background: #EFEBE9; 
+            color: #4E342E;
+        }
+
+        /* --- SCREEN 2: DETAILS CHANNELS MATRIX --- */
+        .explore-section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
+            border-top: 8px dashed #4E342E;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 3.2rem;
+            color: #4E342E;
+            text-shadow: 2px 2px 0px #fff9c4;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 1.4rem;
+            color: #555;
+            max-width: 700px;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: white;
+            border: 4px solid #fad0c4;
+            border-radius: 40px;
+            padding: 35px 25px;
+            box-shadow: 0 8px 0px #fad0c4;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 14px 0px #fad0c4;
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: floatIcon 3s infinite ease-in-out;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .feature-card h3 {
+            font-size: 1.7rem;
+            color: #4E342E;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 1.15rem;
+            color: #546e7a;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        /* --- SCREEN 3: CONTACT & INFO FOOTER --- */
+        .footer-info-section {
+            background: #2D1B18;
+            color: #efebe9;
+            padding: 60px 20px;
+            border-top: 6px solid #ff9a9e;
+            text-align: left;
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: space-between;
+        }
+
+        .footer-box {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .footer-box h3 {
+            color: #ff9a9e;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-left: 5px solid white;
+            padding-left: 10px;
+        }
+
+        .footer-box p, .footer-box li {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .footer-box ul {
+            list-style: none;
+        }
+
+        /* --- BACKGROUND BALLOONS DECOR SPRITES --- */
         .bubble-float {
             position: absolute;
             bottom: -100px;
-            width: 50px;
-            height: 50px;
-            background: rgba(255,255,255,0.5);
+            width: 55px;
+            height: 55px;
+            background: rgba(255,255,255,0.4);
             border-radius: 50%;
-            animation: floatUp 10s infinite;
+            animation: floatUp 12s infinite linear;
+            pointer-events: none;
+            z-index: 1;
         }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-120vh);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) scale(0.8); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-130vh) scale(1.2); opacity: 0; }
         }
 
-       
-
+        .bf1 { left: 12%; animation-duration: 9s; }
+        .bf2 { left: 45%; animation-duration: 15s; animation-delay: 2s; }
+        .bf3 { left: 82%; animation-duration: 11s; animation-delay: 1s; }
     </style>
 </head>
 
 <body>
 
-    
-    <h1 class="pop">Welcome to Gyaan Setu</h1>
+    <!-- Sidebar Control Bar button -->
+    <button class="sidebar-toggle" onclick="toggleMenu()">☰ Menu</button>
 
-    <div class="scroll-text">
-        Welcome to Gyaan Setu, A gamified and enjoyable learning platform for students!
-    </div>
+    <!-- Slideout Navigation Panel Component -->
+    <nav class="nav-sidebar" id="sidebarMenu">
+        <h2>Explore Gyaan Setu</h2>
+        <a href="#hero" onclick="toggleMenu()">🏠 Home</a>
+        <a href="#explore" onclick="toggleMenu()">🎯 What You Learn</a>
+        <a href="#about" onclick="toggleMenu()">🌾 About Us</a>
+        <a href="#contact" onclick="toggleMenu()">📞 Contact Us</a>
+    </nav>
 
-    <div class="buttons">
-         <a href="login.html" class="bubble">Login</a>
-         <a href="signup.html" class="bubble">Sign Up</a>
+    <!-- Floating Bubble Layers -->
+    <div class="bubble-float bf1"></div>
+    <div class="bubble-float bf2"></div>
+    <div class="bubble-float bf3"></div>
 
-    </div>
+    <!-- ================= SCREEN 1: HERO SECTOR ================= -->
+    <section class="hero-section" id="hero">
+        <h1 class="pop">Welcome to Gyaan Setu</h1>
 
+        <!-- High contrast free scrolling horizontal marquee tracking line -->
+        <div class="scroll-container">
+            <div class="scroll-text">
+                Welcome to Gyaan Setu, A gamified and enjoyable learning platform for students.
+                We are dedicated to making education fun and engaging through interactive games and
+                activities. Join us on this exciting journey of learning and growth!
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a href="login.html" class="bubble">Login</a>
+            <a href="signup.html" class="bubble">Sign Up</a>
+        </div>
+
+        <a href="#explore" class="scroll-down-hint">Explore Playground 👇</a>
+    </section>
+
+    <!-- ================= SCREEN 2: DETAILS CHANNELS EXPOSITION ================= -->
+    <section class="explore-section" id="explore">
+        <h2 class="section-title">What Will You Learn? 🧩✨</h2>
+        <p class="section-subtitle">Gyaan Setu builds your personalized bridge of knowledge using interactive quests designed contextually for your standard level!</p>
+        
+        <div class="features-grid">
+            
+            <div class="feature-card">
+                <span class="card-icon">🔢</span>
+                <h3>Math Magic</h3>
+                <p>Master number sequences, complete fresh fruits counting maps, and solve addition or subtraction puzzles tailored directly to your class standard!</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="card-icon">📚</span>
+                <h3>ABC English Fun</h3>
+                <p>Learn broken sentence fixing mechanics, trace language spellings via missing character blanks, and read exciting educational tales.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="card-icon">🐯</span>
+                <h3>Animal World</h3>
+                <p>Identify friendly animals, decode wilderness audio clues, and explore nature wonders designed to scale automatically with age levels.</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="card-icon">🎨</span>
+                <h3>Story & Fun Canvas</h3>
+                <p>Dive into delightful local folktales, practice hands-on coloring, and follow step-by-step paper folding origami craft modules!</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= SCREEN 3: PROFILE DESCRIPTIONS FOOTER ================= -->
+    <footer class="footer-info-section" id="about">
+        <div class="footer-container">
+            
+            <div class="footer-box">
+                <h3>About Our Vision 🌾</h3>
+                <p>Gyaan Setu is specifically engineered to bridge the accessibility gap for rural primary education learners. By morphing foundational curriculum benchmarks into localized journey paths modeled on iconic cultural motifs, we empower independent exploration without requiring high-spec technical devices.</p>
+            </div>
+
+            <div class="footer-box" id="contact">
+                <h3>Contact Us 📞</h3>
+                <ul>
+                    <li>📧 Email: support@gyaansetu.edu.in</li>
+                    <li>📞 Helpline: +91 1800-XXX-XXXX</li>
+                    <li>📍 Location: Rural Education Initiative Hub, Pune, India</li>
+                    <li>🏢 Open Access Project for Primary Schools</li>
+                </ul>
+            </div>
+
+        </div>
+        
+        <center>
+            <hr style="border: 1px dashed rgba(255,255,255,0.2); margin: 30px 0 20px 0; max-width: 1100px;">
+            <p style="font-size: 1rem; text-align: center; color: #bcaaa4;">&copy; 2026 Gyaan Setu Platforms. Bridging Education through Play.</p>
+        </center>
+    </footer>
+
+    <!-- Core View Toggle Drawer Script -->
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebarMenu');
+            sidebar.classList.toggle('open');
+        }
+    </script>
 </body>
 </html>
