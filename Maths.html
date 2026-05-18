@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYAAN SETU - Maths Adventure</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Comic Sans MS', cursive;
+}
+
+body{
+background:linear-gradient(to bottom,#9be7ff,#fff9c4);
+overflow-x:hidden;
+min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+header{
+background:linear-gradient(90deg,#ff758c,#ffb199);
+padding:20px;
+text-align:center;
+position:relative;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+header h1{
+font-size:60px;
+color:white;
+letter-spacing:5px;
+text-shadow:3px 3px 5px rgba(0,0,0,0.2);
+animation:bounce 2s infinite;
+}
+
+.bridge{
+width:100%;
+height:70px;
+margin-top:10px;
+background:linear-gradient(to right,#ff9a9e,#fad0c4,#fbc2eb,#a18cd1);
+border-top:6px dashed white;
+border-bottom:6px dashed white;
+animation:bridgeMove 5s linear infinite;
+border-radius:20px;
+}
+
+@keyframes bridgeMove{
+0%{
+background-position:0 0;
+}
+100%{
+background-position:1000px 0;
+}
+}
+
+@keyframes bounce{
+0%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+100%{transform:translateY(0);}
+}
+
+/* ================= FLOATING ITEMS ================= */
+
+.float{
+position:absolute;
+font-size:40px;
+animation:float 8s linear infinite;
+opacity:0.8;
+}
+
+@keyframes float{
+0%{
+transform:translateY(100vh) rotate(0deg);
+}
+100%{
+transform:translateY(-120vh) rotate(360deg);
+}
+}
+
+/* ================= MAIN CONTAINER ================= */
+
+.container{
+width:90%;
+max-width:900px;
+margin:40px auto;
+background:white;
+padding:40px;
+border-radius:40px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+text-align:center;
+animation:fadeIn 1s;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.title{
+font-size:50px;
+color:#ff6f00;
+margin-bottom:20px;
+}
+
+.subtitle{
+font-size:24px;
+color:#666;
+margin-bottom:25px;
+}
+
+/* ================= BUTTONS ================= */
+
+.level-buttons button,
+.option-btn,
+.next-btn{
+padding:18px 25px;
+margin:12px;
+border:none;
+border-radius:20px;
+font-size:22px;
+cursor:pointer;
+transition:0.3s;
+font-weight:bold;
+}
+
+.level-buttons button{
+background:#7c4dff;
+color:white;
+}
+
+.level-buttons button:hover{
+transform:scale(1.1);
+background:#ff4081;
+}
+
+.option-btn{
+display:block;
+width:80%;
+margin:15px auto;
+background:#ffd54f;
+color:#333;
+}
+
+.option-btn:hover{
+transform:scale(1.05);
+background:#4dd0e1;
+color:white;
+}
+
+.next-btn{
+background:#00c853;
+color:white;
+display:none;
+}
+
+.next-btn:hover{
+transform:scale(1.1);
+background:#00e676;
+}
+
+/* ================= QUESTION ================= */
+
+.question{
+font-size:40px;
+color:#ec407a;
+margin:30px 0;
+}
+
+.quote{
+font-size:24px;
+color:#26a69a;
+margin-top:20px;
+}
+
+/* ================= POPUP ================= */
+
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+z-index:1000;
+}
+
+.popup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+padding:35px;
+border-radius:30px;
+text-align:center;
+display:none;
+z-index:1001;
+animation:popupAnim 0.5s;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+@keyframes popupAnim{
+from{
+transform:translate(-50%,-50%) scale(0);
+}
+to{
+transform:translate(-50%,-50%) scale(1);
+}
+}
+
+.popup h2{
+font-size:45px;
+margin-bottom:10px;
+}
+
+.popup p{
+font-size:24px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:700px){
+
+header h1{
+font-size:40px;
+}
+
+.title{
+font-size:35px;
+}
+
+.question{
+font-size:28px;
+}
+
+.option-btn{
+width:95%;
+font-size:18px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- FLOATING OBJECTS -->
+
+<div class="float" style="left:5%; animation-delay:0s;">⭐</div>
+<div class="float" style="left:20%; animation-delay:2s;">🔺</div>
+<div class="float" style="left:40%; animation-delay:4s;">🔵</div>
+<div class="float" style="left:60%; animation-delay:1s;">🟩</div>
+<div class="float" style="left:80%; animation-delay:3s;">🌈</div>
+
+<!-- HEADER -->
+
+<header>
+
+<h1>🌈 GYAAN SETU 🌈</h1>
+
+<div class="bridge"></div>
+
+</header>
+
+<!-- MAIN CONTENT -->
+
+<div class="container">
+
+<!-- INTRO PAGE -->
+
+<div id="introPage">
+
+<h1 class="title">Welcome Little Learners! 🚀</h1>
+
+<p class="subtitle">
+Cross the magical bridge of learning with fun maths games 🌉
+</p>
+
+<h2 style="color:#7c4dff;">Choose Your Class</h2>
+
+<div class="level-buttons">
+
+<button onclick="startFun('KG')">Kinder Garden</button>
+
+<button onclick="startFun('1')">Class 1</button>
+
+<button onclick="startFun('2')">Class 2</button>
+
+<button onclick="startFun('3')">Class 3</button>
+
+</div>
+
+</div>
+
+<!-- FUN PAGE -->
+
+<div id="funPage" style="display:none;">
+
+<h1 class="title">🎉 Hey! Let's Have Fun With Maths 🎉</h1>
+
+<p class="subtitle">
+Get ready for a magical maths adventure 🌈
+</p>
+
+<button class="next-btn" style="display:inline-block;"
+onclick="beginQuestions()">
+Start Adventure 🚀
+</button>
+
+</div>
+
+<!-- QUESTIONS -->
+
+<div id="questionPage" style="display:none;">
+
+<h1 class="title">🧠 Maths Adventure</h1>
+
+<div class="question" id="questionText"></div>
+
+<div id="options"></div>
+
+<div class="quote" id="quoteText"></div>
+
+<button class="next-btn" id="nextBtn"
+onclick="nextQuestion()">
+Next Level 🌉
+</button>
+
+</div>
+
+</div>
+
+<!-- POPUP -->
+
+<div class="overlay" id="overlay"></div>
+
+<div class="popup" id="popup">
+
+<h2 id="popupTitle"></h2>
+
+<p id="popupMessage"></p>
+
+</div>
+
+<script>
+
+/* ================= QUESTIONS ================= */
+
+const questions = {
+
+KG:[
+{
+q:"🍎 Count the apples: 2 + 1 = ?",
+options:["2","3","5"],
+answer:"3"
+},
+{
+q:"🔺 Which shape is Triangle?",
+options:["⭕","🔺","⭐"],
+answer:"🔺"
+},
+{
+q:"🐥 Count the birds: 4 - 1 = ?",
+options:["3","5","2"],
+answer:"3"
+},
+{
+q:"🌟 Which number comes after 5?",
+options:["6","4","8"],
+answer:"6"
+},
+{
+q:"🍭 Which is bigger?",
+options:["2","9","1"],
+answer:"9"
+},
+{
+q:"🟦 Identify the square shape",
+options:["🟦","⚪","🔺"],
+answer:"🟦"
+}
+],
+
+1:[
+{
+q:"🍫 5 + 3 = ?",
+options:["8","6","9"],
+answer:"8"
+},
+{
+q:"🚗 10 - 4 = ?",
+options:["5","6","7"],
+answer:"6"
+},
+{
+q:"🔵 Which shape is Circle?",
+options:["🔵","🟩","🔺"],
+answer:"🔵"
+},
+{
+q:"🍎 2 × 2 = ?",
+options:["4","6","8"],
+answer:"4"
+},
+{
+q:"🌈 What comes after 19?",
+options:["18","20","22"],
+answer:"20"
+},
+{
+q:"🐠 Which is smallest?",
+options:["8","3","5"],
+answer:"3"
+}
+],
+
+2:[
+{
+q:"🎈 15 + 10 = ?",
+options:["20","25","30"],
+answer:"25"
+},
+{
+q:"🍭 20 - 8 = ?",
+options:["12","10","14"],
+answer:"12"
+},
+{
+q:"🧩 5 × 3 = ?",
+options:["15","20","10"],
+answer:"15"
+},
+{
+q:"📚 18 ÷ 2 = ?",
+options:["9","8","6"],
+answer:"9"
+},
+{
+q:"⭐ Which is EVEN number?",
+options:["7","11","8"],
+answer:"8"
+},
+{
+q:"🔷 How many sides in square?",
+options:["4","3","5"],
+answer:"4"
+}
+],
+
+3:[
+{
+q:"🚀 45 + 23 = ?",
+options:["68","72","64"],
+answer:"68"
+},
+{
+q:"🎯 50 - 19 = ?",
+options:["29","31","35"],
+answer:"31"
+},
+{
+q:"🍕 6 × 4 = ?",
+options:["24","20","18"],
+answer:"24"
+},
+{
+q:"🎁 36 ÷ 6 = ?",
+options:["7","8","6"],
+answer:"6"
+},
+{
+q:"🟣 How many corners does rectangle have?",
+options:["4","5","6"],
+answer:"4"
+},
+{
+q:"🌟 Which is ODD number?",
+options:["12","14","9"],
+answer:"9"
+}
+]
+
+};
+
+/* ================= QUOTES ================= */
+
+const quotes = [
+
+"🌟 Learning is Fun!",
+"🚀 You are a Maths Superstar!",
+"🌈 Keep Crossing the Gyaan Setu Bridge!",
+"🎉 Smart Kids Never Give Up!",
+"🧠 Every Question Makes You Stronger!",
+"✨ You Are Amazing!"
+
+];
+
+let selectedLevel="";
+let currentQuestion=0;
+
+/* ================= START FUN ================= */
+
+function startFun(level){
+
+selectedLevel=level;
+
+document.getElementById("introPage").style.display="none";
+
+document.getElementById("funPage").style.display="block";
+
+}
+
+/* ================= BEGIN QUESTIONS ================= */
+
+function beginQuestions(){
+
+document.getElementById("funPage").style.display="none";
+
+document.getElementById("questionPage").style.display="block";
+
+showQuestion();
+
+}
+
+/* ================= SHOW QUESTION ================= */
+
+function showQuestion(){
+
+const q = questions[selectedLevel][currentQuestion];
+
+document.getElementById("questionText").innerHTML=
+"Level "+(currentQuestion+1)+" 🌉<br><br>"+q.q;
+
+document.getElementById("quoteText").innerHTML=
+quotes[currentQuestion % quotes.length];
+
+const optionsDiv=document.getElementById("options");
+
+optionsDiv.innerHTML="";
+
+q.options.forEach(option=>{
+
+let btn=document.createElement("button");
+
+btn.classList.add("option-btn");
+
+btn.innerHTML=option;
+
+btn.onclick=function(){
+
+checkAnswer(option);
+
+};
+
+optionsDiv.appendChild(btn);
+
+});
+
+document.getElementById("nextBtn").style.display="none";
+
+}
+
+/* ================= CHECK ANSWER ================= */
+
+function checkAnswer(selected){
+
+const correct =
+questions[selectedLevel][currentQuestion].answer;
+
+if(selected===correct){
+
+showPopup(
+"🎉 Correct!",
+"Wonderful! You crossed the bridge 🌉"
+);
+
+document.getElementById("nextBtn").style.display="inline-block";
+
+}
+else{
+
+showPopup(
+"❌ Try Again!",
+"Oops! Give another try 😊"
+);
+
+}
+
+}
+
+/* ================= NEXT QUESTION ================= */
+
+function nextQuestion(){
+
+currentQuestion++;
+
+if(currentQuestion < questions[selectedLevel].length){
+
+showQuestion();
+
+}
+else{
+
+document.getElementById("questionPage").innerHTML=
+
+`
+<h1 class="title">🏆 Congratulations 🏆</h1>
+
+<p class="subtitle">
+You completed all levels of GYAAN SETU 🌈
+</p>
+
+<h2 style="color:#ff4081;">
+You Are A Maths Champion 🚀
+</h2>
+
+<br>
+
+<button class="next-btn"
+style="display:inline-block;"
+onclick="location.reload()">
+
+Play Again 🔄
+
+</button>
+`;
+
+}
+
+}
+
+/* ================= POPUP ================= */
+
+function showPopup(title,message){
+
+document.getElementById("popupTitle").innerHTML=title;
+
+document.getElementById("popupMessage").innerHTML=message;
+
+document.getElementById("popup").style.display="block";
+
+document.getElementById("overlay").style.display="block";
+
+setTimeout(()=>{
+
+document.getElementById("popup").style.display="none";
+
+document.getElementById("overlay").style.display="none";
+
+},2000);
+
+}
+
+</script>
+
+</body>
+</html>
