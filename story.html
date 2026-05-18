@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+
+<title>Funny Magical Story World</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+/* BODY */
+
+body{
+
+height:100vh;
+
+overflow:hidden;
+
+position:relative;
+
+text-align:center;
+
+font-family:'Fredoka',sans-serif;
+
+background:
+linear-gradient(-45deg,
+#ff9a9e,
+#fad0c4,
+#ffdde1,
+#a18cd1,
+#fbc2eb,
+#84fab0,
+#8fd3f4);
+
+background-size:500% 500%;
+
+animation:magicBG 15s ease infinite;
+
+transition:1s;
+
+}
+
+/* BACKGROUND ANIMATION */
+
+@keyframes magicBG{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
+/* FLOATING CLOUDS */
+
+.cloud{
+position:absolute;
+font-size:130px;
+opacity:0.35;
+filter:blur(4px);
+animation:cloudMove linear infinite;
+z-index:1;
+}
+
+.cloud1{
+top:5%;
+left:-20%;
+animation-duration:35s;
+}
+
+.cloud2{
+top:25%;
+left:-30%;
+animation-duration:45s;
+}
+
+.cloud3{
+top:55%;
+left:-25%;
+animation-duration:40s;
+}
+
+.cloud4{
+top:78%;
+left:-35%;
+animation-duration:50s;
+}
+
+@keyframes cloudMove{
+
+from{
+transform:translateX(0);
+}
+
+to{
+transform:translateX(150vw);
+}
+
+}
+
+/* FLOATING COLORFUL BALLOONS */
+
+.balloon{
+position:absolute;
+font-size:75px;
+z-index:2;
+animation:balloonFloat linear infinite;
+filter:drop-shadow(0 0 10px rgba(255,255,255,0.6));
+}
+
+.b1{
+left:5%;
+bottom:-20%;
+animation-duration:18s;
+}
+
+.b2{
+left:20%;
+bottom:-25%;
+animation-duration:22s;
+}
+
+.b3{
+left:40%;
+bottom:-18%;
+animation-duration:20s;
+}
+
+.b4{
+left:60%;
+bottom:-28%;
+animation-duration:24s;
+}
+
+.b5{
+left:80%;
+bottom:-20%;
+animation-duration:19s;
+}
+
+.b6{
+left:70%;
+bottom:-22%;
+animation-duration:21s;
+}
+
+.b7{
+left:90%;
+bottom:-18%;
+animation-duration:26s;
+}
+
+@keyframes balloonFloat{
+
+0%{
+transform:translateY(0) rotate(0deg);
+}
+
+50%{
+transform:translateY(-60vh) rotate(5deg);
+}
+
+100%{
+transform:translateY(-130vh) rotate(-5deg);
+}
+
+}
+
+/* MAIN CONTAINER */
+
+.container{
+position:relative;
+z-index:5;
+padding-top:35px;
+}
+
+/* TITLE */
+
+h1{
+
+font-family:'Baloo 2',cursive;
+
+font-size:85px;
+
+font-weight:800;
+
+color:#fff700;
+
+text-shadow:
+4px 4px 0 #ff4081,
+0 0 20px white,
+0 0 35px #ffeb3b;
+
+animation:bounce 2s infinite;
+
+}
+
+/* TITLE BOUNCE */
+
+@keyframes bounce{
+
+0%,100%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-12px);
+}
+
+}
+
+/* SUBTITLE */
+
+.subtitle{
+
+font-size:32px;
+
+font-weight:800;
+
+margin-top:15px;
+margin-bottom:35px;
+
+color:white;
+
+text-shadow:
+3px 3px 10px rgba(0,0,0,0.7);
+
+animation:pulse 2s infinite;
+
+}
+
+/* PULSE EFFECT */
+
+@keyframes pulse{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.05);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+/* BUTTONS */
+
+button{
+
+padding:20px 42px;
+
+margin:12px;
+
+font-size:25px;
+
+font-family:'Baloo 2',cursive;
+
+font-weight:800;
+
+border:none;
+
+border-radius:35px;
+
+background:
+linear-gradient(to right,#fff700,#ff9800);
+
+color:#6a1b9a;
+
+cursor:pointer;
+
+transition:0.4s;
+
+box-shadow:
+0 0 20px rgba(0,0,0,0.4),
+0 0 25px rgba(255,255,255,0.5);
+
+animation:wiggle 2s infinite;
+
+}
+
+/* BUTTON WIGGLE */
+
+@keyframes wiggle{
+
+0%,100%{
+transform:rotate(0deg);
+}
+
+25%{
+transform:rotate(2deg);
+}
+
+75%{
+transform:rotate(-2deg);
+}
+
+}
+
+button:hover{
+
+transform:scale(1.12);
+
+background:
+linear-gradient(to right,#00e5ff,#00c853);
+
+color:white;
+
+}
+
+/* STORY BOX */
+
+.story-box{
+
+margin-top:35px;
+
+width:84%;
+
+height:320px;
+
+overflow-y:auto;
+
+margin-left:auto;
+margin-right:auto;
+
+background:rgba(255,255,255,0.25);
+
+border:6px solid rgba(255,255,255,0.5);
+
+padding:35px;
+
+border-radius:40px;
+
+font-size:31px;
+
+font-weight:700;
+
+line-height:2;
+
+color:#ffffff;
+
+text-shadow:
+2px 2px 10px rgba(0,0,0,0.9);
+
+backdrop-filter:blur(14px);
+
+box-shadow:
+0 0 30px rgba(255,255,255,0.5),
+0 0 45px rgba(255,105,180,0.5);
+
+animation:storyGlow 2s infinite;
+
+}
+
+/* STORY GLOW */
+
+@keyframes storyGlow{
+
+0%{
+box-shadow:0 0 15px white;
+}
+
+50%{
+box-shadow:0 0 40px #fff700;
+}
+
+100%{
+box-shadow:0 0 15px white;
+}
+
+}
+
+/* SCROLLBAR */
+
+.story-box::-webkit-scrollbar{
+width:8px;
+}
+
+.story-box::-webkit-scrollbar-thumb{
+background:#fff700;
+border-radius:10px;
+}
+
+/* POPUP */
+
+.popup{
+
+position:fixed;
+
+top:50%;
+left:50%;
+
+transform:translate(-50%,-50%);
+
+background:
+linear-gradient(to right,#fff700,#ff9800);
+
+color:#6a1b9a;
+
+padding:40px 55px;
+
+border-radius:35px;
+
+font-size:42px;
+
+font-family:'Baloo 2',cursive;
+
+font-weight:800;
+
+display:none;
+
+z-index:999;
+
+box-shadow:
+0 0 40px rgba(0,0,0,0.5);
+
+animation:popupAnim 0.5s ease;
+
+}
+
+@keyframes popupAnim{
+
+from{
+transform:translate(-50%,-50%) scale(0.5);
+opacity:0;
+}
+
+to{
+transform:translate(-50%,-50%) scale(1);
+opacity:1;
+}
+
+}
+
+/* OVERLAY */
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+display:none;
+z-index:998;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- CLOUDS -->
+
+<div class="cloud cloud1">☁️☁️☁️</div>
+
+<div class="cloud cloud2">☁️☁️</div>
+
+<div class="cloud cloud3">☁️☁️☁️</div>
+
+<div class="cloud cloud4">☁️☁️</div>
+
+<!-- FLOATING COLORFUL BALLOONS -->
+
+<div class="balloon b1">🔴🎈</div>
+
+<div class="balloon b2">🟡🎈</div>
+
+<div class="balloon b3">🟢🎈</div>
+
+<div class="balloon b4">🔵🎈</div>
+
+<div class="balloon b5">🟣🎈</div>
+
+<div class="balloon b6">🟠🎈</div>
+
+<div class="balloon b7">🩷🎈</div>
+
+<!-- POPUP -->
+
+<div class="overlay" id="overlay"></div>
+
+<div class="popup" id="popup">
+
+✨ NOW LET'S DIVE INTO STORY WORLD ✨
+
+</div>
+
+<!-- MAIN CONTENT -->
+
+<div class="container">
+
+<h1>📖 Magical Story World 📖</h1>
+
+<div class="subtitle">
+
+📖 Listen and read magical stories with cartoons! ✨🌈
+
+</div>
+
+<button onclick="showStory('small')">
+
+Tiny Kids 👶
+
+</button>
+
+<button onclick="showStory('medium')">
+
+Smart Kids 😄
+
+</button>
+
+<button onclick="showStory('big')">
+
+Super Readers 🚀
+
+</button>
+
+<div class="story-box" id="storyBox">
+
+🌈 CLICK ANY AGE GROUP TO START AMAZING MAGICAL STORIES 🌈
+
+</div>
+
+</div>
+
+<script>
+
+function showPopup(){
+
+document.getElementById('popup').style.display='block';
+
+document.getElementById('overlay').style.display='block';
+
+setTimeout(function(){
+
+document.getElementById('popup').style.display='none';
+
+document.getElementById('overlay').style.display='none';
+
+},2500);
+
+}
+
+function showStory(age){
+
+showPopup();
+
+let story="";
+
+/* CHANGE BACKGROUND */
+
+if(age==='small'){
+
+document.body.style.background=
+"linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=1600&auto=format&fit=crop') center/cover";
+
+}
+
+if(age==='medium'){
+
+document.body.style.background=
+"linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop') center/cover";
+
+}
+
+if(age==='big'){
+
+document.body.style.background=
+"linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1600&auto=format&fit=crop') center/cover";
+
+}
+
+/* STORY DELAY */
+
+setTimeout(function(){
+
+/* SMALL KIDS STORY */
+
+if(age==='small'){
+
+story=`
+
+🐻 <span style="
+color:#fff700;
+font-size:40px;
+font-weight:900;
+text-shadow:0 0 12px #000;
+">
+
+THE MAGICAL HONEY POT
+
+</span><br><br>
+
+Once upon a time, in a colorful jungle full of flowers and singing birds 🌸🐦,
+there lived a cute little bear named Bobo 🐻
+
+Bobo loved eating honey more than anything in the world 🍯✨
+
+Every morning he danced happily through the jungle looking for sweet honeycombs 🎶🌈
+
+One sunny day, while exploring near a magical rainbow waterfall 🌈💦,
+Bobo discovered a glowing golden honey pot hidden under a giant rainbow tree ✨🌳
+
+As soon as he touched the pot,
+the whole jungle began sparkling! ⭐
+
+Suddenly colorful balloons floated into the sky 🎈🎈
+and magical lights filled the air ✨
+
+Then the honey pot magically spoke:
+
+<span style="color:#fff700;">
+“Dear Bobo, this is the Magic Honey Pot.
+Only kind-hearted animals can unlock its power!”
+</span>
+
+Bobo became very excited 😄
+
+The pot gave endless honey,
+but only if Bobo promised to share it with everyone ❤️
+
+So Bobo invited all his jungle friends 🐵🐰🦁🐘
+
+Everyone ate delicious honey together while dancing and singing happily 🎶💃
+
+Even the little birds joined the party 🐦✨
+
+That night,
+the sky filled with sparkling stars ⭐
+and Bobo realized something important:
+
+<span style="color:#00ffea;">
+“Sharing happiness makes life magical!”
+</span>
+
+From that day,
+Bobo became the kindest and happiest bear in the jungle 🌈🐻❤️
+
+🌟 THE END 🌟
+
+`;
+
+}
+
+/* MEDIUM KIDS STORY */
+
+if(age==='medium'){
+
+story=`
+
+🦁 <span style="
+color:#00ffea;
+font-size:40px;
+font-weight:900;
+text-shadow:0 0 12px #000;
+">
+
+LEO'S JUNGLE ADVENTURE
+
+</span><br><br>
+
+Deep inside the magical green jungle 🌴🌿,
+there lived a brave lion named Leo 🦁
+
+Leo loved adventures more than sleeping 😄
+
+His best friend was a funny monkey named Miko 🐵🍌
+
+One morning,
+they discovered an old treasure map hidden inside a tree trunk 🗺️✨
+
+The map showed the path to a secret treasure cave 💎
+
+Excitedly,
+Leo and Miko started their adventure 🚶🌈
+
+They crossed a wobbly wooden bridge above a rushing river 🌉🌊
+
+They climbed giant jungle trees 🌳
+and solved funny riddles written on glowing rocks 🧩😂
+
+Suddenly,
+a colorful talking parrot flew down from the sky 🦜✨
+
+The parrot shouted loudly:
+
+<span style="color:#fff700;">
+“Follow the glowing bananas to find the hidden treasure!”
+</span> 🍌🍌
+
+Leo and Miko followed the magical glowing bananas through the jungle 🌟
+
+After a long journey,
+they reached a mysterious sparkling cave 💎✨
+
+Inside the cave,
+they discovered magical fruits,
+golden stars,
+and glowing crystals 🌈⭐🍇
+
+Miko became super excited and started dancing happily 😂💃
+
+But Leo smiled and said:
+
+<span style="color:#fff700;">
+“The greatest treasure is friendship and teamwork!”
+</span>
+
+Suddenly the whole cave lit up with rainbow lights 🌈✨
+
+All the jungle animals arrived and celebrated together 🎉🐘🐰🦁
+
+There was music,
+dancing,
+games,
+and delicious jungle fruits 🍍🎶
+
+That day,
+Leo and Miko learned that adventures become more magical when shared with friends ❤️
+
+🌟 THE END 🌟
+
+`;
+
+}
+
+/* BIG KIDS STORY */
+
+if(age==='big'){
+
+story=`
+
+🚀 <span style="
+color:#ffeb3b;
+font-size:40px;
+font-weight:900;
+text-shadow:0 0 12px #000;
+">
+
+MISSION PLANET X
+
+</span><br><br>
+
+Far away in outer space 🌌,
+there lived a fearless space explorer named Captain Nova 🚀
+
+Nova loved discovering mysterious planets and hidden galaxies ⭐🛸
+
+One evening,
+while working inside his space station,
+Nova received a strange glowing signal from a distant planet 👽✨
+
+The message said:
+
+<span style="color:#00ffea;">
+“Planet X is losing its magical energy.
+Please help us!”
+</span>
+
+Without wasting any time,
+Nova jumped into his powerful rocket ship 🚀⚡
+
+He travelled across colorful galaxies,
+sparkling stars,
+and giant asteroids ☄️🌈
+
+Along the journey,
+Nova faced dangerous space storms 🌪️
+and dark meteor fields 🌑
+
+But he bravely continued his mission 💪✨
+
+Finally,
+he reached Planet X 🌌🛸
+
+The planet looked beautiful,
+but its magical crystal tower had stopped glowing 💎
+
+Friendly tiny aliens welcomed Nova 👽❤️
+
+They explained that the planet's crystal energy machine was broken ⚡
+
+Nova carefully entered the giant crystal laboratory 🧪✨
+
+Using science,
+teamwork,
+and clever thinking,
+he repaired the magical machine 🔧⚙️
+
+Suddenly,
+the entire planet lit up with rainbow lights 🌈✨
+
+The sky sparkled brightly,
+and magical fireworks exploded everywhere 🎆⭐
+
+The aliens cheered happily and thanked Nova 👏👽
+
+As a reward,
+they gifted him a glowing friendship crystal ❤️💎
+
+Before leaving,
+the alien king said:
+
+<span style="color:#fff700;">
+“True heroes use knowledge and kindness to help others.”
+</span>
+
+Nova smiled proudly and flew back home through the stars 🚀🌌
+
+From that day,
+Captain Nova became known as:
+
+<span style="color:#00ffea;">
+“The Hero of Planet X!”
+</span>
+
+🌟 THE END 🌟
+
+`;
+
+}
+
+document.getElementById('storyBox').innerHTML=story;
+
+},2500);
+
+}
+
+</script>
+
+</body>
+</html>
