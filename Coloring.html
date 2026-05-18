@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gyaan Setu – Colouring Adventure!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Quicksand:wght@400;600;700;800&display=swap');
+ 
+:root {
+  --blush:    #FFB3C6;
+  --peach:    #FFCBA4;
+  --butter:   #FFF0A0;
+  --sage:     #B5E8C0;
+  --sky:      #A8D8EA;
+  --lilac:    #D4B8E0;
+  --coral:    #FF8C69;
+  --teal:     #5ECFBF;
+  --plum:     #9B59B6;
+  --gold:     #F4C430;
+  --cream:    #FFFDF5;
+  --ink:      #2D2340;
+  --shadow:   rgba(45,35,64,0.14);
+}
+ 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+ 
+body {
+  font-family: 'Quicksand', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(255,179,198,0.45) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 10%, rgba(168,216,234,0.40) 0%, transparent 45%),
+    radial-gradient(ellipse at 10% 85%, rgba(212,184,224,0.38) 0%, transparent 45%),
+    radial-gradient(ellipse at 88% 88%, rgba(181,232,192,0.38) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,240,160,0.28) 0%, transparent 60%),
+    linear-gradient(145deg, #fff5fa 0%, #f5f0ff 30%, #f0faff 60%, #f5fff8 100%);
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='10' fill='%23FFB3C6' stroke='%232D2340' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%232D2340'/%3E%3C/svg%3E") 16 16, auto;
+}
+ 
+.hidden { display: none !important; }
+ 
+/* ── WATERCOLOUR WASH DECORATIONS ── */
+.deco-layer {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.wash {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.18;
+  animation: washFloat ease-in-out infinite alternate;
+}
+@keyframes washFloat {
+  from { transform: scale(1) translate(0,0); }
+  to   { transform: scale(1.12) translate(10px,-14px); }
+}
+.petal {
+  position: absolute;
+  font-size: 1.6rem;
+  opacity: 0.25;
+  animation: petalDrift linear infinite;
+}
+@keyframes petalDrift {
+  0%   { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.3; }
+  90%  { opacity: 0.2; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.15);
+  animation: bubbleRise ease-in-out infinite;
+}
+@keyframes bubbleRise {
+  0%   { transform: translateY(0) scale(1); opacity: 0.5; }
+  50%  { transform: translateY(-30px) scale(1.05); opacity: 0.7; }
+  100% { transform: translateY(0) scale(1); opacity: 0.5; }
+}
+ 
+/* ── SCREENS ── */
+.screen {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 16px;
+}
+ 
+/* ══════════════════════════════════════
+   SCREEN 1 – LEVEL SELECT
+══════════════════════════════════════ */
+.brand-title {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  color: var(--plum);
+  text-shadow: 3px 3px 0 var(--blush), 5px 5px 0 rgba(0,0,0,.06);
+  letter-spacing: 2px;
+  animation: bounceIn .8s both;
+  text-align: center;
+}
+.brand-sub {
+  font-size: clamp(.88rem, 2.2vw, 1.1rem);
+  color: var(--coral);
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.colour-banner {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: clamp(1.25rem, 3.5vw, 1.9rem);
+  color: #fff;
+  background: linear-gradient(90deg, var(--coral), var(--blush), var(--lilac), var(--sky), var(--sage));
+  border-radius: 50px;
+  padding: 10px 30px;
+  margin: 12px 0 16px;
+  box-shadow: 0 6px 22px rgba(255,140,105,.32);
+  animation: bannerPulse 2.8s ease-in-out infinite;
+  text-align: center;
+}
+@keyframes bannerPulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.032); }
+}
+ 
+/* crayon palette preview */
+.crayon-row {
+  display: flex; gap: 8px; justify-content: center;
+  margin: 8px 0 18px;
+}
+.crayon {
+  width: 22px; height: 60px;
+  border-radius: 4px 4px 3px 3px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  animation: crayonWiggle 3s ease-in-out infinite alternate;
+}
+.crayon::after {
+  content: '';
+  position: absolute;
+  bottom: -7px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 8px solid inherit;
+}
+.crayon:nth-child(odd)  { animation-direction: alternate; }
+.crayon:nth-child(even) { animation-direction: alternate-reverse; }
+@keyframes crayonWiggle {
+  0%   { transform: rotate(-4deg) translateY(0); }
+  100% { transform: rotate(4deg) translateY(-5px); }
+}
+ 
+/* level cards */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 18px;
+  width: 100%; max-width: 780px;
+  margin: 6px 0;
+}
+.level-card {
+  background: #fff;
+  border-radius: 28px;
+  padding: 28px 16px 22px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 28px var(--shadow);
+  transition: transform .22s, box-shadow .22s;
+  border: 3.5px solid transparent;
+  position: relative;
+  overflow: hidden;
+  animation: bounceIn .6s both;
+}
+.level-card:nth-child(1) { animation-delay:.05s; border-color: var(--blush);  }
+.level-card:nth-child(2) { animation-delay:.15s; border-color: var(--sage);   }
+.level-card:nth-child(3) { animation-delay:.25s; border-color: var(--sky);    }
+.level-card:nth-child(4) { animation-delay:.35s; border-color: var(--lilac);  }
+.level-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  border-radius: 28px 28px 0 0;
+}
+.level-card:nth-child(1)::before { background: linear-gradient(90deg,var(--blush),var(--peach)); }
+.level-card:nth-child(2)::before { background: linear-gradient(90deg,var(--sage),var(--teal)); }
+.level-card:nth-child(3)::before { background: linear-gradient(90deg,var(--sky),var(--lilac)); }
+.level-card:nth-child(4)::before { background: linear-gradient(90deg,var(--lilac),var(--blush)); }
+.level-card:hover {
+  transform: translateY(-9px) scale(1.05);
+  box-shadow: 0 20px 44px rgba(45,35,64,.18);
+}
+.level-card.selected { transform: translateY(-11px) scale(1.07); }
+.level-card:nth-child(1).selected { background: #fff5f8; }
+.level-card:nth-child(2).selected { background: #f3fff6; }
+.level-card:nth-child(3).selected { background: #f0f9ff; }
+.level-card:nth-child(4).selected { background: #f7f0ff; }
+ 
+.level-icon { font-size: 3rem; display: block; margin-bottom: 10px; animation: iconBob 3s ease-in-out infinite; }
+@keyframes iconBob { 0%,100%{transform:translateY(0) rotate(-4deg);} 50%{transform:translateY(-6px) rotate(4deg);} }
+.level-name { font-family:'Bubblegum Sans',cursive; font-size:1.22rem; display:block; }
+.level-card:nth-child(1) .level-name { color:var(--coral); }
+.level-card:nth-child(2) .level-name { color:#2aaa7a; }
+.level-card:nth-child(3) .level-name { color:#3a86c8; }
+.level-card:nth-child(4) .level-name { color:var(--plum); }
+.level-desc { font-size:.78rem; color:#aaa; margin-top:4px; font-weight:700; }
+ 
+.btn-start {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1.35rem;
+  background: linear-gradient(90deg,var(--coral),var(--blush),var(--lilac));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 52px;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(255,140,105,.4);
+  transition: transform .18s;
+  animation: startGlow 2.5s ease-in-out infinite;
+  margin-top: 14px;
+}
+.btn-start:hover { transform: scale(1.08) translateY(-3px); }
+@keyframes startGlow {
+  0%,100%{box-shadow:0 8px 28px rgba(255,140,105,.4);}
+  50%{box-shadow:0 8px 44px rgba(212,184,224,.7);}
+}
+ 
+/* ══════════════════════════════════════
+   SCREEN 2 – INTRO
+══════════════════════════════════════ */
+#screen-intro {
+  background: linear-gradient(145deg,#0d0820 0%,#1a0f2e 40%,#0a1a28 70%,#0d1a10 100%);
+}
+.intro-content { text-align:center; z-index:2; position:relative; }
+.intro-msg {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: clamp(1.8rem,5vw,3.2rem);
+  color: #fff;
+  text-shadow: 0 0 24px var(--blush), 0 0 48px var(--lilac);
+  margin-bottom: 10px;
+  animation: fadeSlideDown .8s both;
+}
+.intro-class-badge {
+  display: inline-block;
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg,var(--butter),var(--peach));
+  color: var(--ink);
+  border-radius: 50px;
+  padding: 8px 28px;
+  margin: 12px 0;
+  box-shadow: 0 4px 18px rgba(244,196,48,.4);
+  animation: fadeSlideDown .8s .2s both;
+}
+.intro-crayons {
+  font-size: clamp(2rem,6vw,4rem);
+  letter-spacing: 14px;
+  display: block;
+  margin: 18px 0;
+  animation: rainbowCrayon 3s linear infinite, fadeSlideDown .8s .4s both;
+}
+@keyframes rainbowCrayon {
+  0%{filter:hue-rotate(0deg);} 100%{filter:hue-rotate(360deg);}
+}
+.floating-crayon {
+  position: absolute;
+  font-size: clamp(1.2rem,2.5vw,2rem);
+  opacity: 0;
+  animation: floatUp 5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes floatUp {
+  0%   { opacity:0; transform:translateY(50px) scale(.4) rotate(-20deg); }
+  20%  { opacity:1; transform:translateY(-10px) scale(1) rotate(5deg); }
+  80%  { opacity:1; transform:translateY(-55px) scale(1.05) rotate(-3deg); }
+  100% { opacity:0; transform:translateY(-100px) scale(.7) rotate(10deg); }
+}
+.glow-dot {
+  position: absolute;
+  border-radius: 50%;
+  animation: glowPulse 2.5s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  from{opacity:.15;transform:scale(.7);}
+  to  {opacity:.6; transform:scale(1.3);}
+}
+.btn-next {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg,var(--teal),var(--sky));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 48px;
+  cursor: pointer;
+  box-shadow: 0 8px 26px rgba(94,207,191,.45);
+  transition: transform .18s;
+  margin-top: 22px;
+  animation: fadeSlideDown .8s .6s both;
+}
+.btn-next:hover { transform:scale(1.08) translateY(-3px); }
+ 
+/* ══════════════════════════════════════
+   SCREEN 3 – COLOURING ACTIVITY
+══════════════════════════════════════ */
+#screen-quiz {
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(255,179,198,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(168,216,234,.15) 0%, transparent 50%),
+    linear-gradient(160deg,#fffaf5 0%,#f8f5ff 50%,#f0fff8 100%);
+  padding: 16px;
+}
+ 
+.quiz-header {
+  width: 100%; max-width: 860px;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 14px;
+}
+.progress-track {
+  flex:1; height:18px;
+  background: rgba(45,35,64,.08);
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.1);
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg,var(--coral),var(--blush),var(--lilac),var(--sky),var(--teal));
+  border-radius: 50px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 12px rgba(255,140,105,.45);
+}
+.stars-counter {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1.2rem; color: var(--ink); white-space: nowrap;
+}
+.q-number-badge {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1rem;
+  background: var(--coral); color: #fff;
+  border-radius: 50px; padding: 5px 16px;
+  white-space: nowrap;
+}
+ 
+/* The main activity card */
+.activity-card {
+  background: #fff;
+  border-radius: 32px;
+  padding: 22px 20px 20px;
+  max-width: 860px;
+  width: 100%;
+  box-shadow: 0 14px 44px rgba(45,35,64,.12);
+  position: relative;
+  overflow: hidden;
+  animation: cardPop .45s cubic-bezier(.36,.07,.19,.97);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 660px) {
+  .activity-card { grid-template-columns: 1fr; }
+}
+@keyframes cardPop {
+  from{transform:scale(.86) translateY(22px);opacity:0;}
+  to  {transform:scale(1) translateY(0);opacity:1;}
+}
+.activity-card::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:8px;
+  background: linear-gradient(90deg,var(--coral),var(--peach),var(--butter),var(--sage),var(--sky),var(--lilac));
+  border-radius:32px 32px 0 0;
+}
+ 
+/* LEFT PANEL – picture + colouring */
+.picture-panel { display:flex; flex-direction:column; align-items:center; gap:10px; padding-top:4px; }
+ 
+.picture-label {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 1.1rem; color: var(--plum);
+  background: linear-gradient(90deg,rgba(212,184,224,.3),rgba(168,216,234,.3));
+  border-radius: 50px; padding:4px 18px;
+  border: 2px solid rgba(212,184,224,.5);
+}
+ 
+/* SVG colouring canvas */
+.colour-canvas {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  background: #fafafa;
+  border: 3px dashed rgba(212,184,224,.5);
+  box-shadow: inset 0 2px 12px rgba(45,35,64,.06), 0 4px 16px rgba(45,35,64,.08);
+  overflow: visible;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ccircle cx='14' cy='14' r='9' fill='%23FFB3C6' stroke='%232D2340' stroke-width='2'/%3E%3C/svg%3E") 14 14, pointer;
+}
+.colour-canvas path, .colour-canvas circle, .colour-canvas ellipse,
+.colour-canvas rect, .colour-canvas polygon {
+  transition: fill .35s ease, filter .2s;
+  cursor: pointer;
+}
+.colour-canvas path:hover, .colour-canvas circle:hover,
+.colour-canvas ellipse:hover, .colour-canvas polygon:hover {
+  filter: brightness(1.12) drop-shadow(0 0 6px rgba(255,140,105,.5));
+}
+ 
+/* colour palette picker */
+.palette-title {
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: .95rem; color: #888;
+  text-align: center;
+}
+.colour-palette {
+  display: flex; flex-wrap: wrap;
+  gap: 8px; justify-content: center;
+  max-width: 300px;
+}
+.colour-swatch {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,.18);
+  border: 3px solid transparent;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  position: relative;
+}
+.colour-swatch:hover { transform: scale(1.2); }
+.colour-swatch.active {
+  border-color: var(--ink);
+  transform: scale(1.28);
+  box-shadow: 0 4px 16px rgba(45,35,64,.35);
+}
+.colour-swatch.active::after {
+  content: '✓';
+  position: absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.9rem; color:#fff; font-weight:900;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+ 
+/* eraser / reset */
+.tool-row {
+  display: flex; gap: 8px; justify-content: center;
+}
+.tool-btn {
+  font-family: 'Quicksand', sans-serif;
+  font-size: .82rem; font-weight: 800;
+  background: #f5f5f5; color: var(--ink);
+  border: 2px solid #ddd; border-radius: 50px;
+  padding: 6px 16px; cursor: pointer;
+  transition: background .18s, transform .15s;
+}
+.tool-btn:hover { background:#eee; transform:scale(1.06); }
+.tool-btn.active-tool { background:var(--ink); color:#fff; border-color:var(--ink); }
+ 
+/* RIGHT PANEL – question + options */
+.question-panel { display:flex; flex-direction:column; gap:14px; padding-top:8px; }
+ 
+.q-type-badge {
+  display:inline-block;
+  font-size:.76rem; font-weight:800;
+  text-transform:uppercase; letter-spacing:1.5px;
+  background:linear-gradient(90deg,var(--coral),var(--blush));
+  color:#fff; border-radius:50px; padding:4px 14px;
+  width:fit-content;
+}
+.q-emoji { font-size:2.2rem; }
+.q-text {
+  font-family:'Bubblegum Sans',cursive;
+  font-size:clamp(1.05rem,2.5vw,1.5rem);
+  color:var(--ink); line-height:1.45;
+}
+ 
+/* colouring task instruction */
+.task-box {
+  background: linear-gradient(135deg,#fff5f8,#f5f0ff);
+  border: 2.5px dashed var(--blush);
+  border-radius: 18px;
+  padding: 13px 16px;
+  font-size: .9rem; font-weight: 700; color: #5a3050;
+}
+.task-box .task-label {
+  font-family:'Bubblegum Sans',cursive;
+  font-size:1rem; color:var(--coral);
+  display:block; margin-bottom:4px;
+}
+ 
+/* answer options */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.opt-btn {
+  font-family:'Quicksand',sans-serif;
+  font-size:clamp(.88rem,2vw,1.05rem);
+  font-weight:800;
+  background:linear-gradient(135deg,#fff8fb,#f5f0ff);
+  color:var(--ink);
+  border:2.5px solid transparent;
+  border-radius:16px;
+  padding:13px 14px;
+  cursor:pointer;
+  transition:transform .18s, box-shadow .18s, background .18s;
+  box-shadow:0 3px 10px rgba(0,0,0,.07);
+  text-align:left;
+  display:flex; align-items:center; gap:8px;
+}
+.opt-btn:hover:not(:disabled) {
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 7px 20px rgba(255,140,105,.25);
+  background:linear-gradient(135deg,#ffe8f0,#ead8ff);
+  border-color:var(--coral);
+}
+.opt-btn:disabled { cursor:not-allowed; }
+.opt-btn.correct {
+  background:linear-gradient(135deg,#c6f7df,#96edcc) !important;
+  border-color:#2aaa7a !important; color:#0a4d2e;
+  animation:correctPop .4s ease;
+}
+.opt-btn.wrong {
+  background:linear-gradient(135deg,#ffd6e0,#ffb3c4) !important;
+  border-color:var(--coral) !important; color:#6b0020;
+  animation:wrongShake .4s;
+}
+@keyframes correctPop  { 0%,100%{transform:scale(1);} 40%{transform:scale(1.07);} }
+@keyframes wrongShake  { 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-7px);} 40%,80%{transform:translateX(7px);} }
+ 
+/* colour dot in option */
+.opt-colour-dot {
+  width:18px; height:18px;
+  border-radius:50%;
+  border:2px solid rgba(0,0,0,.12);
+  flex-shrink:0;
+  display:inline-block;
+}
+ 
+/* ══════════════════════════════════════
+   FEEDBACK OVERLAY
+══════════════════════════════════════ */
+.feedback-overlay {
+  position:fixed;inset:0;
+  background:rgba(13,8,32,.5);
+  z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
+}
+.feedback-box {
+  background:#fff;
+  border-radius:36px;
+  padding:38px 40px;
+  text-align:center;
+  max-width:420px;
+  width:92%;
+  box-shadow:0 24px 64px rgba(0,0,0,.28);
+  animation:popIn .4s cubic-bezier(.36,.07,.19,.97);
+  position:relative;overflow:hidden;
+}
+@keyframes popIn {
+  from{transform:scale(.45) rotate(-8deg);opacity:0;}
+  to  {transform:scale(1) rotate(0deg);opacity:1;}
+}
+.feedback-box::before {
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:8px;
+  border-radius:36px 36px 0 0;
+}
+.feedback-box.correct-box::before { background:linear-gradient(90deg,var(--teal),var(--sky)); }
+.feedback-box.wrong-box::before   { background:linear-gradient(90deg,var(--coral),var(--peach)); }
+ 
+.feedback-emoji { font-size:4.5rem;display:block;margin-bottom:10px;animation:bounceEmoji .5s ease-in-out infinite alternate; }
+@keyframes bounceEmoji { from{transform:translateY(0) rotate(-5deg);} to{transform:translateY(-12px) rotate(5deg);} }
+.feedback-title { font-family:'Bubblegum Sans',cursive;font-size:2rem;margin-bottom:8px; }
+.correct-box .feedback-title { color:#1a6e4a; }
+.wrong-box   .feedback-title { color:#c0392b; }
+ 
+.feedback-colour-reveal {
+  margin:10px auto 14px;
+  padding:10px 18px;
+  background:linear-gradient(135deg,#fff9f0,#f5f0ff);
+  border:2.5px dashed var(--peach);
+  border-radius:14px;
+  font-size:.9rem;font-weight:700;color:#6b3a00;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.reveal-swatch {
+  width:24px;height:24px;border-radius:50%;
+  border:2px solid rgba(0,0,0,.15);
+  flex-shrink:0;
+}
+ 
+.feedback-quote { font-size:.92rem;font-weight:700;color:#888;margin-bottom:22px;font-style:italic; }
+ 
+.btn-next-q {
+  font-family:'Bubblegum Sans',cursive;
+  font-size:1.2rem;
+  background:linear-gradient(90deg,var(--coral),var(--blush));
+  color:#fff;border:none;
+  border-radius:50px;padding:13px 42px;
+  cursor:pointer;
+  box-shadow:0 6px 22px rgba(255,140,105,.4);
+  transition:transform .18s;
+}
+.btn-next-q:hover { transform:scale(1.07); }
+ 
+/* confetti */
+.confetti-piece {
+  position:fixed; pointer-events:none;
+  animation:confettiFall linear forwards;
+  z-index:200; border-radius:3px;
+}
+@keyframes confettiFall {
+  0%  {transform:translateY(-20px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0;}
+}
+ 
+/* ══════════════════════════════════════
+   COMPLETION SCREEN
+══════════════════════════════════════ */
+#screen-complete {
+  background:linear-gradient(145deg,#0d0820 0%,#1a0f1a 40%,#081428 70%,#0d1a0d 100%);
+}
+.complete-content { text-align:center;z-index:2;position:relative; }
+.trophy-wrap {
+  font-size:7.5rem;display:block;
+  animation:trophyBounce 1s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 22px var(--gold));
+}
+@keyframes trophyBounce {
+  from{transform:scale(1) rotate(-5deg);}
+  to  {transform:scale(1.12) rotate(5deg);}
+}
+.complete-title {
+  font-family:'Bubblegum Sans',cursive;
+  font-size:clamp(1.8rem,5vw,3.2rem);
+  color:#fff;text-shadow:0 0 24px var(--blush);
+  margin:14px 0 8px;
+}
+.complete-sub { font-size:1.1rem;font-weight:700;color:var(--peach);margin-bottom:18px; }
+.stars-display { display:flex;gap:10px;justify-content:center;font-size:2.8rem;margin:14px 0; }
+.star-slot { animation:starPop .5s both; }
+.star-slot.earned { filter:drop-shadow(0 0 8px var(--gold)); }
+@keyframes starPop { from{transform:scale(0) rotate(-30deg);}to{transform:scale(1) rotate(0);} }
+.score-badge {
+  font-family:'Bubblegum Sans',cursive;
+  font-size:1.5rem;
+  background:linear-gradient(90deg,var(--butter),var(--peach));
+  color:var(--ink);border-radius:50px;
+  padding:10px 36px;margin:10px auto;
+  display:inline-block;
+  box-shadow:0 6px 22px rgba(244,196,48,.4);
+}
+.complete-msg { font-size:1.05rem;font-weight:700;color:rgba(255,255,255,.82);margin:14px 0 28px;font-style:italic; }
+.certificate-frame {
+  border:4px solid var(--gold);border-radius:28px;
+  padding:26px 30px;max-width:480px;width:92%;
+  margin:0 auto 24px;
+  box-shadow:0 0 32px rgba(255,215,0,.28),inset 0 0 22px rgba(255,215,0,.05);
+  background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,179,198,.04));
+}
+.btn-replay {
+  font-family:'Bubblegum Sans',cursive;font-size:1.2rem;
+  background:linear-gradient(90deg,var(--teal),var(--sky));
+  color:#fff;border:none;border-radius:50px;padding:14px 46px;
+  cursor:pointer;box-shadow:0 8px 26px rgba(94,207,191,.4);
+  transition:transform .18s;margin:6px;
+}
+.btn-replay:hover{transform:scale(1.07);}
+.btn-home {
+  font-family:'Bubblegum Sans',cursive;font-size:1.1rem;
+  background:linear-gradient(90deg,var(--coral),var(--blush));
+  color:#fff;border:none;border-radius:50px;padding:12px 40px;
+  cursor:pointer;box-shadow:0 6px 22px rgba(255,140,105,.4);
+  transition:transform .18s;margin:6px;
+}
+.btn-home:hover{transform:scale(1.07);}
+ 
+/* bridge transition */
+.bridge-transition {
+  position:fixed;inset:0;z-index:300;
+  background:linear-gradient(90deg,var(--coral),var(--peach),var(--butter),var(--sage),var(--sky),var(--lilac));
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  animation:bridgeIn .3s ease-in forwards;
+}
+.bridge-transition.out{animation:bridgeOut .4s ease-out forwards;}
+.bridge-transition .bt-text {
+  font-family:'Bubblegum Sans',cursive;font-size:1.8rem;
+  color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.3);margin-top:8px;
+}
+.bridge-icon-anim{font-size:4.5rem;animation:bounceIn .5s both;}
+@keyframes bridgeIn  {from{clip-path:circle(0% at 50% 50%);}to{clip-path:circle(150% at 50% 50%);}}
+@keyframes bridgeOut {from{clip-path:circle(150% at 50% 50%);opacity:1;}to{clip-path:circle(0% at 50% 50%);opacity:0;}}
+ 
+@keyframes bounceIn {
+  from{transform:scale(0.5);opacity:0;} 70%{transform:scale(1.05);}
+  to{transform:scale(1);opacity:1;}
+}
+@keyframes fadeSlideDown {
+  from{transform:translateY(-30px);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
+}
+ 
+@media(max-width:480px){
+  .options-grid{grid-template-columns:1fr;}
+  .level-grid  {grid-template-columns:1fr 1fr;}
+  .feedback-box{padding:26px 18px;}
+}
+</style>
+</head>
+<body>
+ 
+<!-- ── WATERCOLOUR DECORATIONS ── -->
+<div class="deco-layer">
+  <div class="wash" style="width:380px;height:380px;background:var(--blush);top:-10%;left:-8%;animation-duration:8s;"></div>
+  <div class="wash" style="width:300px;height:300px;background:var(--sky);top:5%;right:-6%;animation-duration:11s;animation-delay:2s;"></div>
+  <div class="wash" style="width:280px;height:280px;background:var(--sage);bottom:5%;left:-4%;animation-duration:9s;animation-delay:1s;"></div>
+  <div class="wash" style="width:340px;height:340px;background:var(--lilac);bottom:-8%;right:-5%;animation-duration:10s;animation-delay:3s;"></div>
+  <div class="wash" style="width:220px;height:220px;background:var(--butter);top:45%;left:38%;animation-duration:7s;animation-delay:4s;"></div>
+ 
+  <!-- floating petals -->
+  <div class="petal" style="left:8%;animation-duration:14s;animation-delay:0s;">🌸</div>
+  <div class="petal" style="left:22%;animation-duration:18s;animation-delay:3s;">🌼</div>
+  <div class="petal" style="left:42%;animation-duration:12s;animation-delay:6s;">🌺</div>
+  <div class="petal" style="left:65%;animation-duration:16s;animation-delay:1.5s;">🌸</div>
+  <div class="petal" style="left:80%;animation-duration:20s;animation-delay:4s;">🌷</div>
+  <div class="petal" style="left:91%;animation-duration:13s;animation-delay:7s;">🌼</div>
+ 
+  <!-- bubbles -->
+  <div class="bubble" style="width:40px;height:40px;bottom:15%;left:6%;animation-duration:5s;"></div>
+  <div class="bubble" style="width:24px;height:24px;bottom:30%;left:15%;animation-duration:7s;animation-delay:1s;"></div>
+  <div class="bubble" style="width:32px;height:32px;bottom:20%;right:8%;animation-duration:6s;animation-delay:2s;"></div>
+  <div class="bubble" style="width:18px;height:18px;bottom:40%;right:18%;animation-duration:4s;animation-delay:3s;"></div>
+</div>
+ 
+<!-- ══════════════ SCREEN 1: LEVEL SELECT ══════════════ -->
+<div class="screen" id="screen-select">
+  <div class="brand-title">🖍️ GYAAN SETU</div>
+  <div class="brand-sub">✨ The Bridge of Knowledge ✨</div>
+ 
+  <div class="colour-banner">🌈 Colouring Adventure 🌈</div>
+ 
+  <!-- crayon row -->
+  <div class="crayon-row">
+    <div class="crayon" style="background:var(--coral);"></div>
+    <div class="crayon" style="background:var(--peach);animation-delay:.3s;"></div>
+    <div class="crayon" style="background:var(--butter);animation-delay:.6s;"></div>
+    <div class="crayon" style="background:var(--sage);animation-delay:.9s;"></div>
+    <div class="crayon" style="background:var(--sky);animation-delay:1.2s;"></div>
+    <div class="crayon" style="background:var(--lilac);animation-delay:1.5s;"></div>
+    <div class="crayon" style="background:var(--blush);animation-delay:1.8s;"></div>
+  </div>
+ 
+  <p style="font-weight:800;color:#888;font-size:1.05rem;margin-bottom:10px;">Choose Your Colouring Level!</p>
+ 
+  <div class="level-grid">
+    <div class="level-card" data-level="kg" onclick="selectLevel(this)">
+      <span class="level-icon">🌸</span>
+      <span class="level-name">Kindergarten</span>
+      <span class="level-desc">Flowers & Fruits</span>
+    </div>
+    <div class="level-card" data-level="1st" onclick="selectLevel(this)">
+      <span class="level-icon">🦋</span>
+      <span class="level-name">1st Standard</span>
+      <span class="level-desc">Animals & Nature</span>
+    </div>
+    <div class="level-card" data-level="2nd" onclick="selectLevel(this)">
+      <span class="level-icon">🏡</span>
+      <span class="level-name">2nd Standard</span>
+      <span class="level-desc">Scenes & Stories</span>
+    </div>
+    <div class="level-card" data-level="3rd" onclick="selectLevel(this)">
+      <span class="level-icon">🌍</span>
+      <span class="level-name">3rd Standard</span>
+      <span class="level-desc">Patterns & Culture</span>
+    </div>
+  </div>
+ 
+  <button class="btn-start" onclick="startJourney()">🖍️ Start Colouring!</button>
+  <p id="selectWarning" style="color:var(--coral);font-weight:800;margin-top:10px;display:none;">👆 Please select a level first!</p>
+</div>
+ 
+<!-- ══════════════ SCREEN 2: INTRO ══════════════ -->
+<div class="screen hidden" id="screen-intro">
+  <div class="intro-content">
+    <div class="intro-class-badge" id="introBadge">🌸 Kindergarten</div>
+    <div class="intro-msg" id="introMsg">Pick up your crayons! 🖍️</div>
+    <span class="intro-crayons" id="introCrayons">🖍️ 🎨 ✏️</span>
+    <p style="color:rgba(255,255,255,.78);font-size:1.05rem;font-weight:700;margin-bottom:4px;">
+      🌉 Cross the Gyaan Setu — colour every picture!
+    </p>
+    <p style="color:rgba(255,255,255,.62);font-size:.92rem;font-weight:600;margin-bottom:4px;">
+      6 beautiful pictures to fill with lovely colours!
+    </p>
+    <button class="btn-next" onclick="showQuiz()">🖍️ Let's Colour!</button>
+  </div>
+</div>
+ 
+<!-- ══════════════ SCREEN 3: ACTIVITY ══════════════ -->
+<div class="screen hidden" id="screen-quiz">
+  <div class="quiz-header">
+    <span class="q-number-badge" id="qNumBadge">Q 1 / 6</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <span class="stars-counter"><span id="starCount">0</span> ⭐</span>
+  </div>
+ 
+  <div class="activity-card" id="activityCard">
+    <!-- LEFT: picture + palette -->
+    <div class="picture-panel">
+      <div class="picture-label" id="picLabel">🌸 Colour Me!</div>
+      <svg class="colour-canvas" id="colourCanvas" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="palette-title">🎨 Choose a Colour, then click a part!</div>
+      <div class="colour-palette" id="colourPalette"></div>
+      <div class="tool-row">
+        <button class="tool-btn" id="btnEraser" onclick="setEraser()">⬜ Eraser</button>
+        <button class="tool-btn" onclick="resetCanvas()">🔄 Reset</button>
+      </div>
+    </div>
+    <!-- RIGHT: question -->
+    <div class="question-panel">
+      <div>
+        <span class="q-type-badge" id="qTypeBadge">Colouring Activity</span>
+      </div>
+      <div class="q-emoji" id="qEmoji">🌸</div>
+      <div class="q-text"  id="qText">Loading...</div>
+      <div class="task-box">
+        <span class="task-label">🖍️ Your Task:</span>
+        <span id="taskDesc">Colour the picture!</span>
+      </div>
+      <div class="options-grid" id="optionsGrid"></div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════════ SCREEN 4: COMPLETE ══════════════ -->
+<div class="screen hidden" id="screen-complete">
+  <div class="complete-content">
+    <div class="certificate-frame">
+      <span class="trophy-wrap">🏆</span>
+      <div class="complete-title">Master Colourist! 🎨</div>
+      <div class="complete-sub" id="completeClass">Colouring Adventure – Kindergarten</div>
+      <div class="stars-display" id="starsDisplay"></div>
+      <div class="score-badge"  id="scoreBadge">Score: 6 / 6</div>
+      <div class="complete-msg" id="completeMsg">You painted the world with beauty!</div>
+    </div>
+    <button class="btn-replay" onclick="replayLevel()">🔄 Colour Again!</button>
+    <button class="btn-home"   onclick="goHome()">🏠 Choose Another Level</button>
+  </div>
+</div>
+ 
+<!-- ══════════════ FEEDBACK OVERLAY ══════════════ -->
+<div class="feedback-overlay hidden" id="feedbackOverlay">
+  <div class="feedback-box" id="feedbackBox">
+    <span class="feedback-emoji" id="feedbackEmoji">🎉</span>
+    <div class="feedback-title" id="feedbackTitle">Wonderful!</div>
+    <div class="feedback-colour-reveal" id="colourReveal" style="display:none">
+      <div class="reveal-swatch" id="revealSwatch"></div>
+      <span id="revealText"></span>
+    </div>
+    <div class="feedback-quote" id="feedbackQuote">Colours make the world brighter!</div>
+    <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">Next Picture ➡️</button>
+  </div>
+</div>
+ 
+<script>
+// ═══════════════════════════════════════════════════════════
+//  SVG PICTURE LIBRARY  –  each picture is an object with:
+//    svgContent  : the raw SVG inner HTML (paths, shapes)
+//    regions     : array of { id, label, defaultFill }
+//    defaultFills: map of id → starting colour (uncoloured = #f0f0f0 or white)
+// ═══════════════════════════════════════════════════════════
+ 
+const PICTURES = {
+ 
+  // ── KINDERGARTEN ──────────────────────────────────────────
+  sunflower: {
+    label:"🌻 Sunflower",
+    svg:`
+      <!-- stem -->
+      <rect id="stem" x="94" y="130" width="12" height="55" rx="6" fill="#c8e6a0"/>
+      <!-- leaves -->
+      <ellipse id="leaf-l" cx="72" cy="155" rx="22" ry="10" transform="rotate(-30 72 155)" fill="#c8e6a0"/>
+      <ellipse id="leaf-r" cx="128" cy="160" rx="22" ry="10" transform="rotate(30 128 160)" fill="#c8e6a0"/>
+      <!-- petals ring -->
+      <ellipse id="petal-1" cx="100" cy="62"  rx="13" ry="22" fill="#f0f0f0"/>
+      <ellipse id="petal-2" cx="100" cy="62"  rx="13" ry="22" transform="rotate(45 100 100)"  fill="#f0f0f0"/>
+      <ellipse id="petal-3" cx="100" cy="62"  rx="13" ry="22" transform="rotate(90 100 100)"  fill="#f0f0f0"/>
+      <ellipse id="petal-4" cx="100" cy="62"  rx="13" ry="22" transform="rotate(135 100 100)" fill="#f0f0f0"/>
+      <ellipse id="petal-5" cx="100" cy="62"  rx="13" ry="22" transform="rotate(180 100 100)" fill="#f0f0f0"/>
+      <ellipse id="petal-6" cx="100" cy="62"  rx="13" ry="22" transform="rotate(225 100 100)" fill="#f0f0f0"/>
+      <ellipse id="petal-7" cx="100" cy="62"  rx="13" ry="22" transform="rotate(270 100 100)" fill="#f0f0f0"/>
+      <ellipse id="petal-8" cx="100" cy="62"  rx="13" ry="22" transform="rotate(315 100 100)" fill="#f0f0f0"/>
+      <!-- centre -->
+      <circle id="centre" cx="100" cy="100" r="28" fill="#f0f0f0"/>
+      <!-- seeds pattern (decorative, non-interactive) -->
+      <circle cx="100" cy="100" r="5" fill="rgba(0,0,0,.08)" pointer-events="none"/>
+      <circle cx="90"  cy="96"  r="3" fill="rgba(0,0,0,.07)" pointer-events="none"/>
+      <circle cx="110" cy="96"  r="3" fill="rgba(0,0,0,.07)" pointer-events="none"/>
+      <circle cx="95"  cy="110" r="3" fill="rgba(0,0,0,.07)" pointer-events="none"/>
+      <circle cx="105" cy="108" r="3" fill="rgba(0,0,0,.07)" pointer-events="none"/>
+    `,
+    regions:["petal-1","petal-2","petal-3","petal-4","petal-5","petal-6","petal-7","petal-8","centre","stem","leaf-l","leaf-r"]
+  },
+ 
+  apple: {
+    label:"🍎 Apple",
+    svg:`
+      <!-- body left -->
+      <ellipse id="body-l" cx="82" cy="110" rx="42" ry="50" fill="#f0f0f0"/>
+      <!-- body right -->
+      <ellipse id="body-r" cx="118" cy="110" rx="42" ry="50" fill="#f0f0f0"/>
+      <!-- highlight -->
+      <ellipse id="highlight" cx="80" cy="85" rx="14" ry="10" fill="rgba(255,255,255,0.6)" pointer-events="none"/>
+      <!-- stem -->
+      <rect id="stem" x="97" y="55" width="6" height="20" rx="3" fill="#c8e6a0"/>
+      <!-- leaf -->
+      <ellipse id="leaf" cx="116" cy="60" rx="16" ry="9" transform="rotate(-20 116 60)" fill="#c8e6a0"/>
+    `,
+    regions:["body-l","body-r","stem","leaf"]
+  },
+ 
+  butterfly: {
+    label:"🦋 Butterfly",
+    svg:`
+      <!-- upper wings -->
+      <ellipse id="wing-ul" cx="72"  cy="85" rx="38" ry="30" transform="rotate(-25 72 85)"  fill="#f0f0f0"/>
+      <ellipse id="wing-ur" cx="128" cy="85" rx="38" ry="30" transform="rotate(25 128 85)"  fill="#f0f0f0"/>
+      <!-- lower wings -->
+      <ellipse id="wing-ll" cx="72"  cy="128" rx="26" ry="22" transform="rotate(20 72 128)"  fill="#f0f0f0"/>
+      <ellipse id="wing-lr" cx="128" cy="128" rx="26" ry="22" transform="rotate(-20 128 128)" fill="#f0f0f0"/>
+      <!-- body -->
+      <ellipse id="body" cx="100" cy="108" rx="7" ry="28" fill="#f0f0f0"/>
+      <!-- head -->
+      <circle  id="head"  cx="100" cy="76"  r="9"  fill="#f0f0f0"/>
+      <!-- antennae -->
+      <line x1="97" y1="68" x2="84" y2="52" stroke="#999" stroke-width="2" stroke-linecap="round" pointer-events="none"/>
+      <circle cx="83" cy="50" r="3" fill="#f0f0f0" id="ant-l"/>
+      <line x1="103" y1="68" x2="116" y2="52" stroke="#999" stroke-width="2" stroke-linecap="round" pointer-events="none"/>
+      <circle cx="117" cy="50" r="3" fill="#f0f0f0" id="ant-r"/>
+      <!-- wing spots (non-interactive) -->
+      <circle cx="80"  cy="82"  r="6" fill="rgba(0,0,0,.05)" pointer-events="none"/>
+      <circle cx="120" cy="82"  r="6" fill="rgba(0,0,0,.05)" pointer-events="none"/>
+    `,
+    regions:["wing-ul","wing-ur","wing-ll","wing-lr","body","head","ant-l","ant-r"]
+  },
+ 
+  // ── 1ST STANDARD ──────────────────────────────────────────
+  fish: {
+    label:"🐟 Fish",
+    svg:`
+      <!-- body -->
+      <ellipse id="body" cx="96" cy="105" rx="52" ry="35" fill="#f0f0f0"/>
+      <!-- tail -->
+      <polygon id="tail" points="148,105 175,75 175,135" fill="#f0f0f0"/>
+      <!-- belly stripe -->
+      <ellipse id="belly" cx="90" cy="115" rx="34" ry="16" fill="rgba(255,255,255,0.4)" pointer-events="none"/>
+      <!-- dorsal fin -->
+      <polygon id="fin-top" points="80,70 100,45 120,70" fill="#f0f0f0"/>
+      <!-- pectoral fin -->
+      <ellipse id="fin-side" cx="85" cy="120" rx="18" ry="10" transform="rotate(20 85 120)" fill="#f0f0f0"/>
+      <!-- eye ring -->
+      <circle cx="58" cy="97" r="10" fill="#fff" stroke="#ddd" stroke-width="1.5" pointer-events="none"/>
+      <circle id="eye" cx="58" cy="97" r="6" fill="#f0f0f0"/>
+      <!-- pupil -->
+      <circle cx="59" cy="96" r="2.5" fill="rgba(0,0,0,.7)" pointer-events="none"/>
+      <!-- scales lines (decorative) -->
+      <path d="M90,85 Q105,78 120,85" stroke="rgba(0,0,0,.08)" stroke-width="1.5" fill="none" pointer-events="none"/>
+      <path d="M85,97 Q103,90 121,97" stroke="rgba(0,0,0,.08)" stroke-width="1.5" fill="none" pointer-events="none"/>
+      <path d="M88,109 Q105,102 122,109" stroke="rgba(0,0,0,.08)" stroke-width="1.5" fill="none" pointer-events="none"/>
+    `,
+    regions:["body","tail","fin-top","fin-side","eye"]
+  },
+ 
+  tree: {
+    label:"🌲 Tree",
+    svg:`
+      <!-- trunk -->
+      <rect id="trunk" x="87" y="148" width="26" height="42" rx="6" fill="#c8a878"/>
+      <!-- bottom foliage -->
+      <ellipse id="foliage-b" cx="100" cy="140" rx="55" ry="38" fill="#f0f0f0"/>
+      <!-- middle foliage -->
+      <ellipse id="foliage-m" cx="100" cy="110" rx="44" ry="35" fill="#f0f0f0"/>
+      <!-- top foliage -->
+      <ellipse id="foliage-t" cx="100" cy="82"  rx="33" ry="30" fill="#f0f0f0"/>
+      <!-- peak -->
+      <ellipse id="peak"      cx="100" cy="58"  rx="22" ry="22" fill="#f0f0f0"/>
+      <!-- fruits -->
+      <circle id="fruit-1" cx="80"  cy="125" r="8" fill="#f0f0f0"/>
+      <circle id="fruit-2" cx="118" cy="118" r="8" fill="#f0f0f0"/>
+      <circle id="fruit-3" cx="100" cy="100" r="8" fill="#f0f0f0"/>
+    `,
+    regions:["trunk","foliage-b","foliage-m","foliage-t","peak","fruit-1","fruit-2","fruit-3"]
+  },
+ 
+  house: {
+    label:"🏡 House",
+    svg:`
+      <!-- sky bg -->
+      <rect id="sky" x="5" y="5" width="190" height="195" rx="12" fill="#f0f0f0"/>
+      <!-- sun -->
+      <circle id="sun" cx="162" cy="36" r="18" fill="#f0f0f0"/>
+      <!-- grass -->
+      <ellipse id="grass" cx="100" cy="195" rx="100" ry="22" fill="#f0f0f0"/>
+      <!-- house wall -->
+      <rect id="wall" x="35" y="115" width="130" height="80" rx="4" fill="#f0f0f0"/>
+      <!-- roof -->
+      <polygon id="roof" points="20,115 100,48 180,115" fill="#f0f0f0"/>
+      <!-- door -->
+      <rect id="door" x="83" y="148" width="34" height="47" rx="4" fill="#f0f0f0"/>
+      <!-- window-l -->
+      <rect id="win-l" x="45"  y="128" width="28" height="24" rx="4" fill="#f0f0f0"/>
+      <!-- window-r -->
+      <rect id="win-r" x="127" y="128" width="28" height="24" rx="4" fill="#f0f0f0"/>
+      <!-- chimney -->
+      <rect id="chimney" x="130" y="58" width="18" height="35" rx="3" fill="#f0f0f0"/>
+      <!-- cloud -->
+      <ellipse id="cloud" cx="48" cy="38" rx="28" ry="14" fill="#f0f0f0"/>
+    `,
+    regions:["sky","sun","grass","wall","roof","door","win-l","win-r","chimney","cloud"]
+  },
+ 
+  // ── 2ND STANDARD ──────────────────────────────────────────
+  elephant: {
+    label:"🐘 Elephant",
+    svg:`
+      <!-- body -->
+      <ellipse id="body" cx="108" cy="118" rx="60" ry="48" fill="#f0f0f0"/>
+      <!-- head -->
+      <circle  id="head"  cx="60" cy="82" r="36" fill="#f0f0f0"/>
+      <!-- ear -->
+      <ellipse id="ear"   cx="36" cy="78" rx="20" ry="26" fill="#f0f0f0"/>
+      <!-- trunk -->
+      <path id="trunk" d="M44,100 Q20,120 30,148 Q34,158 42,148 Q38,128 52,112" fill="#f0f0f0"/>
+      <!-- eye -->
+      <circle id="eye" cx="68" cy="74" r="6" fill="#f0f0f0"/>
+      <circle cx="69" cy="73" r="2.5" fill="rgba(0,0,0,.75)" pointer-events="none"/>
+      <!-- tusk -->
+      <ellipse id="tusk" cx="50" cy="108" rx="9" ry="4" transform="rotate(-20 50 108)" fill="#f0f0f0"/>
+      <!-- legs -->
+      <rect id="leg-fl" x="68"  y="158" width="22" height="30" rx="8" fill="#f0f0f0"/>
+      <rect id="leg-fr" x="96"  y="160" width="22" height="28" rx="8" fill="#f0f0f0"/>
+      <rect id="leg-bl" x="124" y="158" width="20" height="30" rx="8" fill="#f0f0f0"/>
+      <!-- tail -->
+      <path d="M165,118 Q182,112 178,130" stroke="#ccc" stroke-width="4" fill="none" stroke-linecap="round" pointer-events="none"/>
+    `,
+    regions:["body","head","ear","trunk","eye","tusk","leg-fl","leg-fr","leg-bl"]
+  },
+ 
+  // ── 3RD STANDARD ──────────────────────────────────────────
+  rangoli: {
+    label:"🌺 Rangoli",
+    svg:`
+      <!-- outer ring -->
+      <circle id="ring-outer" cx="100" cy="100" r="90" fill="#f0f0f0" stroke="none"/>
+      <!-- petal ring 8 -->
+      <ellipse id="pet8-1" cx="100" cy="22"  rx="10" ry="18" fill="#f0f0f0"/>
+      <ellipse id="pet8-2" cx="100" cy="22"  rx="10" ry="18" transform="rotate(45  100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet8-3" cx="100" cy="22"  rx="10" ry="18" transform="rotate(90  100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet8-4" cx="100" cy="22"  rx="10" ry="18" transform="rotate(135 100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet8-5" cx="100" cy="22"  rx="10" ry="18" transform="rotate(180 100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet8-6" cx="100" cy="22"  rx="10" ry="18" transform="rotate(225 100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet8-7" cx="100" cy="22"  rx="10" ry="18" transform="rotate(270 100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet8-8" cx="100" cy="22"  rx="10" ry="18" transform="rotate(315 100 100)" fill="#f0f0f0"/>
+      <!-- middle ring -->
+      <circle id="ring-mid" cx="100" cy="100" r="50" fill="#f0f0f0"/>
+      <!-- inner petals 6 -->
+      <ellipse id="pet6-1" cx="100" cy="62"  rx="8" ry="14" fill="#f0f0f0"/>
+      <ellipse id="pet6-2" cx="100" cy="62"  rx="8" ry="14" transform="rotate(60  100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet6-3" cx="100" cy="62"  rx="8" ry="14" transform="rotate(120 100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet6-4" cx="100" cy="62"  rx="8" ry="14" transform="rotate(180 100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet6-5" cx="100" cy="62"  rx="8" ry="14" transform="rotate(240 100 100)" fill="#f0f0f0"/>
+      <ellipse id="pet6-6" cx="100" cy="62"  rx="8" ry="14" transform="rotate(300 100 100)" fill="#f0f0f0"/>
+      <!-- core -->
+      <circle id="core" cx="100" cy="100" r="18" fill="#f0f0f0"/>
+      <circle cx="100" cy="100" r="6" fill="rgba(0,0,0,.06)" pointer-events="none"/>
+    `,
+    regions:["ring-outer","pet8-1","pet8-2","pet8-3","pet8-4","pet8-5","pet8-6","pet8-7","pet8-8","ring-mid","pet6-1","pet6-2","pet6-3","pet6-4","pet6-5","pet6-6","core"]
+  },
+ 
+  peacock: {
+    label:"🦚 Peacock",
+    svg:`
+      <!-- tail fan -->
+      <ellipse id="fan-1" cx="100" cy="100" rx="16" ry="55" fill="#f0f0f0"/>
+      <ellipse id="fan-2" cx="100" cy="100" rx="16" ry="55" transform="rotate(25 100 100)"  fill="#f0f0f0"/>
+      <ellipse id="fan-3" cx="100" cy="100" rx="16" ry="55" transform="rotate(-25 100 100)" fill="#f0f0f0"/>
+      <ellipse id="fan-4" cx="100" cy="100" rx="16" ry="55" transform="rotate(50 100 100)"  fill="#f0f0f0"/>
+      <ellipse id="fan-5" cx="100" cy="100" rx="16" ry="55" transform="rotate(-50 100 100)" fill="#f0f0f0"/>
+      <!-- fan spots (eye patterns) -->
+      <circle id="spot-1" cx="100" cy="52"  r="7" fill="#f0f0f0"/>
+      <circle id="spot-2" cx="122" cy="62"  r="6" fill="#f0f0f0"/>
+      <circle id="spot-3" cx="78"  cy="62"  r="6" fill="#f0f0f0"/>
+      <circle id="spot-4" cx="136" cy="82"  r="5" fill="#f0f0f0"/>
+      <circle id="spot-5" cx="64"  cy="82"  r="5" fill="#f0f0f0"/>
+      <!-- body -->
+      <ellipse id="body" cx="100" cy="140" rx="20" ry="30" fill="#f0f0f0"/>
+      <!-- neck -->
+      <rect id="neck" x="92" y="108" width="16" height="28" rx="8" fill="#f0f0f0"/>
+      <!-- head -->
+      <circle id="head" cx="100" cy="101" r="12" fill="#f0f0f0"/>
+      <!-- beak -->
+      <polygon id="beak" points="100,98 112,100 100,106" fill="#f0f0f0"/>
+      <!-- crest -->
+      <line x1="100" y1="89" x2="94" y2="76" stroke="#bbb" stroke-width="2" stroke-linecap="round" pointer-events="none"/>
+      <circle id="crest-l" cx="93" cy="74" r="4" fill="#f0f0f0"/>
+      <line x1="100" y1="89" x2="100" y2="74" stroke="#bbb" stroke-width="2" stroke-linecap="round" pointer-events="none"/>
+      <circle id="crest-m" cx="100" cy="72" r="4" fill="#f0f0f0"/>
+      <line x1="100" y1="89" x2="106" y2="76" stroke="#bbb" stroke-width="2" stroke-linecap="round" pointer-events="none"/>
+      <circle id="crest-r" cx="107" cy="74" r="4" fill="#f0f0f0"/>
+    `,
+    regions:["fan-1","fan-2","fan-3","fan-4","fan-5","spot-1","spot-2","spot-3","spot-4","spot-5","body","neck","head","beak","crest-l","crest-m","crest-r"]
+  }
+};
+ 
+// ═══════════════════════════════════════════════════════════
+//  QUESTION BANK – per level, 6 questions each
+// ═══════════════════════════════════════════════════════════
+const questionBank = {
+  kg: [
+    {
+      picture:"sunflower",
+      type:"Colour the Sunflower!",
+      emoji:"🌻",
+      question:"A sunflower has bright petals. What colour should you colour the PETALS?",
+      task:"Click all 8 petals of the sunflower and colour them the right colour! Then colour the centre brown.",
+      options:[
+        {label:"🟡 Yellow",  colour:"#FFD700", correct:true },
+        {label:"🔵 Blue",    colour:"#6EA8D8", correct:false},
+        {label:"🔴 Red",     colour:"#E74C3C", correct:false},
+        {label:"⚫ Black",   colour:"#2D2D2D", correct:false}
+      ],
+      correctColour:"#FFD700", correctName:"Yellow",
+      hint:"Sunflowers have beautiful golden-yellow petals! 🌻"
+    },
+    {
+      picture:"apple",
+      type:"Colour the Apple!",
+      emoji:"🍎",
+      question:"A ripe apple is a bright, warm colour. What colour is a RED apple?",
+      task:"Colour the apple body RED and the leaf & stem GREEN — just like a real apple!",
+      options:[
+        {label:"🔴 Red",     colour:"#E74C3C", correct:true },
+        {label:"🟣 Purple",  colour:"#9B59B6", correct:false},
+        {label:"🟠 Orange",  colour:"#E67E22", correct:false},
+        {label:"⚫ Black",   colour:"#2D2D2D", correct:false}
+      ],
+      correctColour:"#E74C3C", correctName:"Red",
+      hint:"A ripe apple is RED — like a firetruck! 🍎🔴"
+    },
+    {
+      picture:"butterfly",
+      type:"Colour the Butterfly!",
+      emoji:"🦋",
+      question:"Butterflies have colourful wings. What colour are the UPPER wings of a monarch butterfly?",
+      task:"Colour the upper wings orange, lower wings yellow, and the body black — just like a monarch butterfly!",
+      options:[
+        {label:"🟠 Orange",  colour:"#E67E22", correct:true },
+        {label:"⬜ White",   colour:"#F5F5F5", correct:false},
+        {label:"🟢 Green",   colour:"#27AE60", correct:false},
+        {label:"🩷 Pink",    colour:"#FF69B4", correct:false}
+      ],
+      correctColour:"#E67E22", correctName:"Orange",
+      hint:"A monarch butterfly has brilliant ORANGE upper wings! 🦋"
+    },
+    {
+      picture:"apple",
+      type:"Colour the Leaf!",
+      emoji:"🍃",
+      question:"The leaf on top of the apple should be which colour?",
+      task:"Colour the leaf and stem of the apple the correct colour of real leaves!",
+      options:[
+        {label:"🟢 Green",   colour:"#27AE60", correct:true },
+        {label:"🔴 Red",     colour:"#E74C3C", correct:false},
+        {label:"🟡 Yellow",  colour:"#FFD700", correct:false},
+        {label:"🔵 Blue",    colour:"#6EA8D8", correct:false}
+      ],
+      correctColour:"#27AE60", correctName:"Green",
+      hint:"Leaves are GREEN because of chlorophyll — just like grass! 🌿"
+    },
+    {
+      picture:"sunflower",
+      type:"Colour the Centre!",
+      emoji:"🌻",
+      question:"The round CENTRE (middle part) of a sunflower is which colour?",
+      task:"Colour the big round centre of the sunflower — it's a dark, earthy colour!",
+      options:[
+        {label:"🟤 Brown",   colour:"#8B4513", correct:true },
+        {label:"⬜ White",   colour:"#F0F0F0", correct:false},
+        {label:"🔵 Blue",    colour:"#6EA8D8", correct:false},
+        {label:"🟣 Purple",  colour:"#9B59B6", correct:false}
+      ],
+      correctColour:"#8B4513", correctName:"Brown",
+      hint:"The sunflower's seed-filled centre is a rich dark BROWN! 🌻"
+    },
+    {
+      picture:"butterfly",
+      type:"Rainbow Butterfly!",
+      emoji:"🌈",
+      question:"You can colour a butterfly with any colours! Which COLOUR MIX makes the most beautiful rainbow butterfly?",
+      task:"Colour all parts of the butterfly using bright, joyful colours — make it as beautiful as you can! 🌈",
+      options:[
+        {label:"🌈 Bright rainbow colours",     colour:"#FF6B9D", correct:true },
+        {label:"⬛⬜ Only black and white",      colour:"#888888", correct:false},
+        {label:"🟤🟤 Only brown shades",         colour:"#8B6347", correct:false},
+        {label:"No colours — keep it blank",     colour:"#f0f0f0", correct:false}
+      ],
+      correctColour:"#FF6B9D", correctName:"Rainbow Colours",
+      hint:"Butterflies are nature's most colourful creatures — use ALL the colours! 🦋🌈"
+    }
+  ],
+ 
+  "1st": [
+    {
+      picture:"fish",
+      type:"Colour the Fish!",
+      emoji:"🐟",
+      question:"Goldfish and clownfish are famous for being which bright colour?",
+      task:"Colour the body of the fish orange and the fins a lighter shade — like a beautiful tropical fish!",
+      options:[
+        {label:"🟠 Orange",  colour:"#E67E22", correct:true },
+        {label:"🟣 Purple",  colour:"#9B59B6", correct:false},
+        {label:"⬛ Black",   colour:"#2D2D2D", correct:false},
+        {label:"🟤 Brown",   colour:"#8B6347", correct:false}
+      ],
+      correctColour:"#E67E22", correctName:"Orange",
+      hint:"Clownfish (like Nemo!) are bright ORANGE! 🐠🟠"
+    },
+    {
+      picture:"tree",
+      type:"Colour the Tree!",
+      emoji:"🌳",
+      question:"What colour should you colour the LEAVES (foliage) of a healthy green tree?",
+      task:"Colour all the foliage parts of the tree green and the trunk brown — like a real tree!",
+      options:[
+        {label:"🟢 Green",   colour:"#27AE60", correct:true },
+        {label:"🔴 Red",     colour:"#E74C3C", correct:false},
+        {label:"🔵 Blue",    colour:"#6EA8D8", correct:false},
+        {label:"🟡 Yellow",  colour:"#FFD700", correct:false}
+      ],
+      correctColour:"#27AE60", correctName:"Green",
+      hint:"Healthy tree leaves are lush GREEN — full of life! 🌳"
+    },
+    {
+      picture:"fish",
+      type:"Colour the Ocean!",
+      emoji:"🌊",
+      question:"The TAIL of a fish is usually the same colour as its body. For a blue ocean fish, what colour is the tail?",
+      task:"Colour the tail and dorsal fin of the fish to match its body — create a matching fish!",
+      options:[
+        {label:"🔵 Blue",    colour:"#3498DB", correct:true },
+        {label:"🔴 Red",     colour:"#E74C3C", correct:false},
+        {label:"⬛ Black",   colour:"#2D2D2D", correct:false},
+        {label:"🟡 Yellow",  colour:"#FFD700", correct:false}
+      ],
+      correctColour:"#3498DB", correctName:"Blue",
+      hint:"Ocean fish are often shades of BLUE to blend with the sea! 🌊🐟"
+    },
+    {
+      picture:"tree",
+      type:"Colour the Trunk!",
+      emoji:"🌴",
+      question:"The TRUNK of a tree (the woody part) is which colour?",
+      task:"Colour the trunk of the tree. This is the tall wooden part that holds everything up!",
+      options:[
+        {label:"🟤 Brown",   colour:"#8B4513", correct:true },
+        {label:"🟢 Green",   colour:"#27AE60", correct:false},
+        {label:"🔵 Blue",    colour:"#6EA8D8", correct:false},
+        {label:"🩷 Pink",    colour:"#FF69B4", correct:false}
+      ],
+      correctColour:"#8B4513", correctName:"Brown",
+      hint:"Tree trunks are BROWN — made of wood and bark! 🌳🟤"
+    },
+    {
+      picture:"fish",
+      type:"Colour the Eye!",
+      emoji:"👁️",
+      question:"The EYE of a fish is usually black with a white ring around it. What colour is the PUPIL (black dot)?",
+      task:"Colour the eye of the fish — give it a dark, shiny pupil to make it look alive!",
+      options:[
+        {label:"⬛ Black",   colour:"#1A1A1A", correct:true },
+        {label:"🔴 Red",     colour:"#E74C3C", correct:false},
+        {label:"🟡 Yellow",  colour:"#FFD700", correct:false},
+        {label:"🟢 Green",   colour:"#27AE60", correct:false}
+      ],
+      correctColour:"#1A1A1A", correctName:"Black",
+      hint:"The dark PUPIL in the eye helps animals see — it's black! 👁️"
+    },
+    {
+      picture:"tree",
+      type:"Colour the Fruits!",
+      emoji:"🍎",
+      question:"The tree has 3 round fruits hanging on it. What colour should you colour them to show RIPE apples?",
+      task:"Colour all 3 fruits on the tree bright RED — juicy ripe apples ready to eat!",
+      options:[
+        {label:"🔴 Red",     colour:"#E74C3C", correct:true },
+        {label:"🔵 Blue",    colour:"#3498DB", correct:false},
+        {label:"⬛ Black",   colour:"#2D2D2D", correct:false},
+        {label:"🟣 Purple",  colour:"#9B59B6", correct:false}
+      ],
+      correctColour:"#E74C3C", correctName:"Red",
+      hint:"Ripe apples hanging on a tree are bright RED! 🍎🔴"
+    }
+  ],
+ 
+  "2nd": [
+    {
+      picture:"house",
+      type:"Colour the Sky!",
+      emoji:"☁️",
+      question:"The BACKGROUND SKY of the house picture should be which colour on a beautiful day?",
+      task:"Colour the sky background of the house picture — think of a clear sunny day!",
+      options:[
+        {label:"🔵 Sky Blue",  colour:"#87CEEB", correct:true },
+        {label:"⬛ Black",     colour:"#2D2D2D", correct:false},
+        {label:"🔴 Red",       colour:"#E74C3C", correct:false},
+        {label:"🟤 Brown",     colour:"#8B4513", correct:false}
+      ],
+      correctColour:"#87CEEB", correctName:"Sky Blue",
+      hint:"On a sunny day the sky is a beautiful LIGHT BLUE! ☀️🔵"
+    },
+    {
+      picture:"house",
+      type:"Colour the Roof!",
+      emoji:"🏠",
+      question:"The ROOF of a house (the triangle top) is traditionally which earthy colour?",
+      task:"Colour the triangular roof of the house. Use a warm earthy colour like terracotta or red!",
+      options:[
+        {label:"🟤 Terracotta/Red-brown", colour:"#C0392B", correct:true },
+        {label:"🟡 Yellow",               colour:"#FFD700", correct:false},
+        {label:"🔵 Blue",                 colour:"#3498DB", correct:false},
+        {label:"🟢 Green",                colour:"#27AE60", correct:false}
+      ],
+      correctColour:"#C0392B", correctName:"Terracotta Red",
+      hint:"Traditional house roofs are often terracotta RED-BROWN, like clay tiles! 🏠🟤"
+    },
+    {
+      picture:"elephant",
+      type:"Colour the Elephant!",
+      emoji:"🐘",
+      question:"Elephants are famous for their skin colour. What is the correct colour of an elephant?",
+      task:"Colour the whole elephant — its body, head, ears, trunk and legs! Use the right animal colour.",
+      options:[
+        {label:"🩶 Grey",    colour:"#7F8C8D", correct:true },
+        {label:"🩷 Pink",    colour:"#FF69B4", correct:false},
+        {label:"🟢 Green",   colour:"#27AE60", correct:false},
+        {label:"🟡 Yellow",  colour:"#FFD700", correct:false}
+      ],
+      correctColour:"#7F8C8D", correctName:"Grey",
+      hint:"Elephants have thick wrinkled GREY skin — the largest land animals! 🐘🩶"
+    },
+    {
+      picture:"house",
+      type:"Colour the Sun!",
+      emoji:"☀️",
+      question:"The SUN in the picture should be which bright, warm colour?",
+      task:"Colour the round sun in the corner of the house picture — make it shine bright!",
+      options:[
+        {label:"🟡 Bright Yellow", colour:"#F4D03F", correct:true },
+        {label:"🔵 Blue",          colour:"#3498DB", correct:false},
+        {label:"🟣 Purple",        colour:"#9B59B6", correct:false},
+        {label:"⬛ Black",         colour:"#2D2D2D", correct:false}
+      ],
+      correctColour:"#F4D03F", correctName:"Bright Yellow",
+      hint:"The sun shines YELLOW and warm — brightest thing in the sky! ☀️🟡"
+    },
+    {
+      picture:"elephant",
+      type:"Colour the Tusk!",
+      emoji:"🦷",
+      question:"Elephant TUSKS are long teeth that stick out. What colour are elephant tusks?",
+      task:"Colour the tusk of the elephant — that long curved tooth near the mouth!",
+      options:[
+        {label:"⬜ Ivory White",  colour:"#FFFFF0", correct:true },
+        {label:"🔴 Red",          colour:"#E74C3C", correct:false},
+        {label:"🔵 Blue",         colour:"#3498DB", correct:false},
+        {label:"⬛ Black",        colour:"#2D2D2D", correct:false}
+      ],
+      correctColour:"#FFFFF0", correctName:"Ivory White",
+      hint:"Elephant tusks are made of ivory — a creamy off-WHITE colour! 🦷"
+    },
+    {
+      picture:"house",
+      type:"Colour the Grass!",
+      emoji:"🌿",
+      question:"The GRASS around the house at the bottom should be which colour?",
+      task:"Colour the grass area at the bottom of the house picture — lush and fresh!",
+      options:[
+        {label:"🟢 Green",   colour:"#27AE60", correct:true },
+        {label:"🟡 Yellow",  colour:"#FFD700", correct:false},
+        {label:"🔴 Red",     colour:"#E74C3C", correct:false},
+        {label:"🟣 Purple",  colour:"#9B59B6", correct:false}
+      ],
+      correctColour:"#27AE60", correctName:"Green",
+      hint:"Healthy grass is fresh and lush GREEN — like a beautiful garden! 🌿🟢"
+    }
+  ],
+ 
+  "3rd": [
+    {
+      picture:"rangoli",
+      type:"Colour the Rangoli!",
+      emoji:"🌺",
+      question:"Rangoli is a traditional Indian art. The OUTER RING should be which warm festive colour?",
+      task:"Start from the outside ring and colour inward. Use bright, festive colours — like a real Diwali rangoli!",
+      options:[
+        {label:"🟠 Saffron Orange", colour:"#E67E22", correct:true },
+        {label:"⬛ Black",          colour:"#2D2D2D", correct:false},
+        {label:"🩶 Grey",           colour:"#95A5A6", correct:false},
+        {label:"🟤 Brown",          colour:"#8B4513", correct:false}
+      ],
+      correctColour:"#E67E22", correctName:"Saffron Orange",
+      hint:"Rangoli outer rings are often SAFFRON ORANGE — a colour sacred in Indian festivals! 🌺"
+    },
+    {
+      picture:"peacock",
+      type:"Colour the Peacock!",
+      emoji:"🦚",
+      question:"A peacock's beautiful tail feathers are which stunning colour?",
+      task:"Colour the large fan tail of the peacock — the feathers should be the jewel of India's national bird!",
+      options:[
+        {label:"💚 Peacock Green-Blue", colour:"#00827F", correct:true },
+        {label:"🔴 Red",               colour:"#E74C3C", correct:false},
+        {label:"🟡 Yellow",            colour:"#FFD700", correct:false},
+        {label:"🩷 Pink",              colour:"#FF69B4", correct:false}
+      ],
+      correctColour:"#00827F", correctName:"Peacock Green-Blue",
+      hint:"The peacock — India's national bird — has stunning TEAL/GREEN-BLUE feathers! 🦚"
+    },
+    {
+      picture:"rangoli",
+      type:"Colour the Inner Petals!",
+      emoji:"🌸",
+      question:"The inner 6 smaller petals of the rangoli should be which colour to contrast with orange?",
+      task:"Colour the 6 smaller petals inside the rangoli. Use a contrasting colour to make it pop!",
+      options:[
+        {label:"🩷 Pink / Magenta", colour:"#E91E8C", correct:true },
+        {label:"🟤 Brown",          colour:"#8B4513", correct:false},
+        {label:"⬜ White only",     colour:"#EDEDED", correct:false},
+        {label:"⬛ Black",          colour:"#2D2D2D", correct:false}
+      ],
+      correctColour:"#E91E8C", correctName:"Pink / Magenta",
+      hint:"Rangoli inner petals often use PINK or MAGENTA to contrast beautifully with orange! 💕"
+    },
+    {
+      picture:"peacock",
+      type:"Colour the Eye Spots!",
+      emoji:"👁️",
+      question:"The round eye-like SPOTS on a peacock's tail feathers are which colour?",
+      task:"Colour all 5 circular eye spots on the peacock's fan — these are the most beautiful part!",
+      options:[
+        {label:"💙 Deep Blue",  colour:"#1A5276", correct:true },
+        {label:"🔴 Red",        colour:"#E74C3C", correct:false},
+        {label:"🟡 Yellow",     colour:"#FFD700", correct:false},
+        {label:"⬛ Black",      colour:"#2D2D2D", correct:false}
+      ],
+      correctColour:"#1A5276", correctName:"Deep Blue",
+      hint:"The eye spots on peacock feathers are a rich, deep BLUE surrounded by green! 👁️💙"
+    },
+    {
+      picture:"rangoli",
+      type:"Colour the Core!",
+      emoji:"⭕",
+      question:"The CENTRE CIRCLE (the core/heart) of a rangoli is usually which auspicious colour?",
+      task:"Colour the small centre circle of the rangoli — this is the most important part, the heart!",
+      options:[
+        {label:"🔴 Bright Red", colour:"#C0392B", correct:true },
+        {label:"🔵 Blue",       colour:"#3498DB", correct:false},
+        {label:"🩶 Grey",       colour:"#95A5A6", correct:false},
+        {label:"🟤 Brown",      colour:"#8B4513", correct:false}
+      ],
+      correctColour:"#C0392B", correctName:"Bright Red",
+      hint:"The centre of rangoli is often RED — red is auspicious and sacred in Indian tradition! 🔴❤️"
+    },
+    {
+      picture:"peacock",
+      type:"Colour the Body!",
+      emoji:"🦚",
+      question:"The BODY and NECK of a peacock is a deep, rich colour. What colour is it?",
+      task:"Colour the peacock's body, neck and head — the whole bird should be majestic and colourful!",
+      options:[
+        {label:"💙💚 Iridescent Blue-Green", colour:"#1ABC9C", correct:true },
+        {label:"🟤 Brown",                   colour:"#8B4513", correct:false},
+        {label:"🟡 Yellow",                  colour:"#FFD700", correct:false},
+        {label:"🔴 Red",                     colour:"#E74C3C", correct:false}
+      ],
+      correctColour:"#1ABC9C", correctName:"Iridescent Blue-Green",
+      hint:"The peacock's body shimmers in gorgeous BLUE-GREEN — like an emerald jewel! 💎🦚"
+    }
+  ]
+};
+ 
+// ═══════════════════════════════════════════
+//  COLOUR PALETTE SWATCHES
+// ═══════════════════════════════════════════
+const PALETTE = [
+  "#E74C3C","#C0392B","#E91E8C","#FF69B4","#E67E22","#F4D03F",
+  "#FFD700","#27AE60","#1ABC9C","#00827F","#3498DB","#1A5276",
+  "#87CEEB","#9B59B6","#6C3483","#7F8C8D","#8B4513","#FFFFF0",
+  "#F5F5F5","#1A1A1A"
+];
+ 
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let selectedLevel   = null;
+let currentQIndex   = 0;
+let starsEarned     = 0;
+let answeredCorrect = 0;
+let questions       = [];
+let selectedColour  = "#E74C3C";
+let eraserActive    = false;
+ 
+const levelNames  = { kg:"Kindergarten","1st":"1st Standard","2nd":"2nd Standard","3rd":"3rd Standard" };
+const levelEmojis = { kg:"🌸","1st":"🦋","2nd":"🏡","3rd":"🌍" };
+ 
+const introMsgs = [
+  "Pick up your crayons! 🖍️",
+  "Time to fill the world with colour! 🌈",
+  "Every picture needs YOUR colours! 🎨",
+  "Let's paint beautiful pictures today! ✨"
+];
+const introCrayonSets = {
+  kg:    "🌸 🌺 🌼 🌻 🌷",
+  "1st": "🦋 🐟 🌲 🐦 🌿",
+  "2nd": "🏡 🐘 ☀️ 🌈 🏠",
+  "3rd": "🌍 🦚 🌺 🎨 🕌"
+};
+ 
+// ═══════════════════════════════════════════
+//  LEVEL SELECTION
+// ═══════════════════════════════════════════
+function selectLevel(card) {
+  document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedLevel = card.dataset.level;
+  document.getElementById('selectWarning').style.display = 'none';
+}
+ 
+function startJourney() {
+  if (!selectedLevel) { document.getElementById('selectWarning').style.display='block'; return; }
+  bridgeTransition(() => { showScreen('screen-intro'); setupIntro(); });
+}
+ 
+// ═══════════════════════════════════════════
+//  INTRO
+// ═══════════════════════════════════════════
+function setupIntro() {
+  const msg = introMsgs[Math.floor(Math.random()*introMsgs.length)];
+  document.getElementById('introBadge').textContent   = levelEmojis[selectedLevel]+' '+levelNames[selectedLevel];
+  document.getElementById('introMsg').textContent     = msg;
+  document.getElementById('introCrayons').textContent = introCrayonSets[selectedLevel];
+ 
+  const intro = document.getElementById('screen-intro');
+  intro.querySelectorAll('.floating-crayon,.glow-dot').forEach(e=>e.remove());
+ 
+  const crayons = ['🖍️','🎨','✏️','🌈','⭐','🌸','🌺','💛','💜','💙','🩷','🍓'];
+  for (let i=0;i<20;i++){
+    const el=document.createElement('span');
+    el.className='floating-crayon';
+    el.textContent=crayons[Math.floor(Math.random()*crayons.length)];
+    el.style.left=Math.random()*88+'%';
+    el.style.bottom='-50px';
+    el.style.animationDelay=(Math.random()*6)+'s';
+    el.style.animationDuration=(4+Math.random()*5)+'s';
+    intro.appendChild(el);
+  }
+  const glowColors=['#FFB3C6','#A8D8EA','#D4B8E0','#B5E8C0','#FFF0A0'];
+  for(let i=0;i<25;i++){
+    const g=document.createElement('div');
+    g.className='glow-dot';
+    g.style.left=Math.random()*100+'%';
+    g.style.top=Math.random()*100+'%';
+    const sz=(4+Math.random()*10)+'px';
+    g.style.width=sz; g.style.height=sz;
+    g.style.background=glowColors[Math.floor(Math.random()*glowColors.length)];
+    g.style.animationDelay=(Math.random()*3)+'s';
+    g.style.animationDuration=(1.5+Math.random()*2.5)+'s';
+    intro.appendChild(g);
+  }
+}
+ 
+// ═══════════════════════════════════════════
+//  SHOW QUIZ
+// ═══════════════════════════════════════════
+function showQuiz() {
+  questions = questionBank[selectedLevel];
+  currentQIndex=0; starsEarned=0; answeredCorrect=0;
+  bridgeTransition(()=>{ showScreen('screen-quiz'); renderQuestion(); });
+}
+ 
+// ═══════════════════════════════════════════
+//  RENDER QUESTION + PICTURE
+// ═══════════════════════════════════════════
+function renderQuestion() {
+  if(currentQIndex>=questions.length){ showCompletion(); return; }
+ 
+  const q = questions[currentQIndex];
+  document.getElementById('qNumBadge').textContent    = `Q ${currentQIndex+1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = (currentQIndex/questions.length*100)+'%';
+  document.getElementById('starCount').textContent    = starsEarned;
+  document.getElementById('qTypeBadge').textContent   = q.type;
+  document.getElementById('qEmoji').textContent       = q.emoji;
+  document.getElementById('qText').textContent        = q.question;
+  document.getElementById('taskDesc').textContent     = q.task;
+ 
+  // Load SVG picture
+  const pic = PICTURES[q.picture];
+  document.getElementById('picLabel').textContent = pic.label;
+  const canvas = document.getElementById('colourCanvas');
+  canvas.innerHTML = pic.svg;
+ 
+  // Make regions clickable
+  pic.regions.forEach(id=>{
+    const el=canvas.querySelector('#'+id);
+    if(el){ el.addEventListener('click',()=>paintRegion(el)); el.style.cursor='pointer'; }
+  });
+ 
+  // Reset selected colour & eraser
+  selectedColour = "#E74C3C";
+  eraserActive   = false;
+  document.getElementById('btnEraser').classList.remove('active-tool');
+ 
+  // Build palette
+  buildPalette();
+ 
+  // Animate card
+  const card = document.getElementById('activityCard');
+  card.style.animation='none'; void card.offsetWidth;
+  card.style.animation='cardPop .45s cubic-bezier(.36,.07,.19,.97)';
+ 
+  // Build answer options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML='';
+  const opts = [...q.options].sort(()=>Math.random()-.5);
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML=`<span class="opt-colour-dot" style="background:${opt.colour}"></span>${opt.label}`;
+    btn.dataset.correct=opt.correct;
+    btn.onclick=()=>checkAnswer(btn,opt,q);
+    grid.appendChild(btn);
+  });
+}
+ 
+function buildPalette() {
+  const palette=document.getElementById('colourPalette');
+  palette.innerHTML='';
+  PALETTE.forEach((c,i)=>{
+    const sw=document.createElement('div');
+    sw.className='colour-swatch'+(i===0?' active':'');
+    sw.style.background=c;
+    sw.title=c;
+    sw.onclick=()=>{
+      document.querySelectorAll('.colour-swatch').forEach(s=>s.classList.remove('active'));
+      sw.classList.add('active');
+      selectedColour=c;
+      eraserActive=false;
+      document.getElementById('btnEraser').classList.remove('active-tool');
+    };
+    palette.appendChild(sw);
+  });
+}
+ 
+function paintRegion(el) {
+  el.style.fill = eraserActive ? '#f0f0f0' : selectedColour;
+}
+ 
+function setEraser() {
+  eraserActive = !eraserActive;
+  document.getElementById('btnEraser').classList.toggle('active-tool', eraserActive);
+  if(eraserActive){ document.querySelectorAll('.colour-swatch').forEach(s=>s.classList.remove('active')); }
+}
+ 
+function resetCanvas() {
+  const pic = PICTURES[questions[currentQIndex].picture];
+  const canvas = document.getElementById('colourCanvas');
+  pic.regions.forEach(id=>{
+    const el=canvas.querySelector('#'+id);
+    if(el) el.style.fill='#f0f0f0';
+  });
+}
+ 
+// ═══════════════════════════════════════════
+//  CHECK ANSWER
+// ═══════════════════════════════════════════
+function checkAnswer(btn, opt, q) {
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  const isCorrect = opt.correct===true;
+ 
+  // Auto-apply correct colour to canvas regions
+  const canvas=document.getElementById('colourCanvas');
+  const pic=PICTURES[q.picture];
+  if(isCorrect){
+    pic.regions.slice(0,3).forEach(id=>{
+      const el=canvas.querySelector('#'+id);
+      if(el && el.style.fill==='rgb(240, 240, 240)') el.style.fill=q.correctColour;
+    });
+    starsEarned++; answeredCorrect++;
+    document.getElementById('starCount').textContent=starsEarned;
+    launchConfetti();
+  } else {
+    // highlight correct
+    document.querySelectorAll('.opt-btn').forEach(b=>{
+      if(b.dataset.correct==='true') b.classList.add('correct');
+    });
+  }
+  btn.classList.add(isCorrect?'correct':'wrong');
+  setTimeout(()=>showFeedback(isCorrect,q),420);
+}
+ 
+// ═══════════════════════════════════════════
+//  FEEDBACK
+// ═══════════════════════════════════════════
+const correctMsgs=[
+  ["🎨","Brilliant Colourist!","You know your colours perfectly!"],
+  ["🌈","Rainbow Star!","Your colouring makes the world shine!"],
+  ["🏆","Colour Champion!","Every colour in the right place!"],
+  ["✨","Spectacular!","You are painting with knowledge!"],
+  ["🌸","Beautiful!","Your colours are full of life!"]
+];
+const wrongMsgs=[
+  ["🖍️","Keep Colouring!","Mistakes teach us the most beautiful lessons!"],
+  ["🌺","Try Again!","Every artist learns by trying — keep going!"],
+  ["💛","Don't Stop!","The best colourists never give up!"]
+];
+ 
+function showFeedback(isCorrect, q) {
+  const data = isCorrect
+    ? correctMsgs[Math.floor(Math.random()*correctMsgs.length)]
+    : wrongMsgs  [Math.floor(Math.random()*wrongMsgs.length)];
+ 
+  document.getElementById('feedbackEmoji').textContent = data[0];
+  document.getElementById('feedbackTitle').textContent = data[1];
+  document.getElementById('feedbackQuote').textContent = data[2];
+ 
+  // colour reveal box
+  const reveal=document.getElementById('colourReveal');
+  document.getElementById('revealSwatch').style.background=q.correctColour;
+  document.getElementById('revealText').textContent=`The correct colour is: ${q.correctName}  — ${q.hint}`;
+  reveal.style.display='flex';
+ 
+  document.getElementById('feedbackBox').className='feedback-box '+(isCorrect?'correct-box':'wrong-box');
+ 
+  const isLast=(currentQIndex===questions.length-1);
+  document.getElementById('btnNextQ').textContent=isLast?'🏁 See Results!':'Next Picture ➡️';
+  document.getElementById('feedbackOverlay').classList.remove('hidden');
+}
+ 
+function nextQuestion() {
+  document.getElementById('feedbackOverlay').classList.add('hidden');
+  currentQIndex++;
+  if(currentQIndex>=questions.length) bridgeTransition(showCompletion);
+  else renderQuestion();
+}
+ 
+// ═══════════════════════════════════════════
+//  COMPLETION
+// ═══════════════════════════════════════════
+function showCompletion() {
+  showScreen('screen-complete');
+  document.getElementById('completeClass').textContent='Colouring Adventure – '+levelNames[selectedLevel];
+  document.getElementById('scoreBadge').textContent=`Score: ${answeredCorrect} / ${questions.length}`;
+ 
+  const sd=document.getElementById('starsDisplay');
+  sd.innerHTML='';
+  for(let i=1;i<=6;i++){
+    const s=document.createElement('span');
+    s.className='star-slot'+(i<=starsEarned?' earned':'');
+    s.textContent=i<=starsEarned?'⭐':'☆';
+    s.style.animationDelay=(i*.14)+'s';
+    sd.appendChild(s);
+  }
+ 
+  const msgs=[
+    "Keep exploring colours — you're learning!",
+    "Good colouring — your palette is growing!",
+    "Well done! Your colours are lovely!",
+    "Great work! You have a wonderful eye for colour!",
+    "Amazing! Nearly a master colourist!",
+    "Perfect! You are the Colouring Champion of Gyaan Setu! 🏆🎨"
+  ];
+  document.getElementById('completeMsg').textContent=msgs[Math.min(starsEarned,msgs.length-1)];
+ 
+  setTimeout(launchConfetti,300);
+  setTimeout(launchConfetti,750);
+  setTimeout(launchConfetti,1200);
+}
+ 
+function replayLevel() {
+  bridgeTransition(()=>{ showScreen('screen-intro'); setupIntro(); });
+}
+function goHome() {
+  selectedLevel=null;
+  document.querySelectorAll('.level-card').forEach(c=>c.classList.remove('selected'));
+  bridgeTransition(()=>showScreen('screen-select'));
+}
+ 
+// ═══════════════════════════════════════════
+//  BRIDGE TRANSITION
+// ═══════════════════════════════════════════
+function bridgeTransition(callback) {
+  const div=document.createElement('div');
+  div.className='bridge-transition';
+  div.innerHTML=`<span class="bridge-icon-anim">🖍️</span><span class="bt-text">Adding Colours…</span>`;
+  document.body.appendChild(div);
+  setTimeout(()=>{ callback(); div.classList.add('out'); setTimeout(()=>div.remove(),500); },620);
+}
+ 
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+ 
+// ═══════════════════════════════════════════
+//  CONFETTI
+// ═══════════════════════════════════════════
+function launchConfetti() {
+  const colors=['#FFB3C6','#FFCBA4','#FFF0A0','#B5E8C0','#A8D8EA','#D4B8E0','#FF8C69','#5ECFBF'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.left=(Math.random()*100)+'vw';
+    el.style.top='-20px';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    const sz=(6+Math.random()*11)+'px';
+    el.style.width=sz; el.style.height=sz;
+    el.style.borderRadius=Math.random()>.4?'50%':'3px';
+    el.style.animationDuration=(1.6+Math.random()*2.2)+'s';
+    el.style.animationDelay=(Math.random()*.9)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3800);
+  }
+}
+ 
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+(function(){ showScreen('screen-select'); })();
+</script>
+</body>
+</html>
