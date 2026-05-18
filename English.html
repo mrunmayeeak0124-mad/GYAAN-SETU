@@ -3,17 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gyaan Setu – English Adventure!</title>
+<title>English Adventure!</title>
 <style>
-/* ============================================================
-   GYAAN SETU – ENGLISH ADVENTURE
-   One-file: HTML + CSS + JS
-   ============================================================ */
-
-/* ---------- GOOGLE FONTS (self-hosted fallback via @import) ---------- */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
 
-/* ---------- CSS VARIABLES ---------- */
 :root {
   --sky:      #6BD4F8;
   --sun:      #FFD93D;
@@ -31,7 +24,6 @@
   --shadow:   rgba(0,0,0,0.18);
 }
 
-/* ---------- RESET & BASE ---------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; }
 body {
@@ -41,11 +33,10 @@ body {
   overflow-x: hidden;
 }
 
-/* ---------- UTILITY ---------- */
 .hidden { display: none !important; }
 
 /* ============================================================
-   FLOATING DECORATIONS (shared across screens)
+   FLOATING DECORATIONS
    ============================================================ */
 .deco-layer {
   position: fixed; inset: 0;
@@ -112,139 +103,7 @@ body {
 }
 
 /* ============================================================
-   SCREEN 1 – LEVEL SELECTION
-   ============================================================ */
-#screen-select { background: transparent; }
-
-.brand-header {
-  text-align: center;
-  margin-bottom: 10px;
-}
-.brand-title {
-  font-family: 'Fredoka One', cursive;
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  color: var(--purple);
-  text-shadow: 3px 3px 0 var(--pink), 6px 6px 0 rgba(0,0,0,.08);
-  letter-spacing: 2px;
-  animation: bounceIn .8s cubic-bezier(.36,.07,.19,.97);
-}
-.brand-sub {
-  font-size: clamp(.9rem, 2.5vw, 1.15rem);
-  color: var(--bridge);
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-.bridge-banner {
-  font-family: 'Fredoka One', cursive;
-  font-size: clamp(1.3rem, 3.5vw, 2rem);
-  color: var(--white);
-  background: linear-gradient(90deg, var(--purple), var(--pink), var(--teal));
-  border-radius: 50px;
-  padding: 10px 30px;
-  margin: 14px 0;
-  box-shadow: 0 6px 20px rgba(155,93,229,.35);
-  text-align: center;
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.035);} }
-
-/* level cards grid */
-.level-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 18px;
-  width: 100%;
-  max-width: 780px;
-  margin: 18px 0;
-}
-.level-card {
-  background: var(--white);
-  border-radius: 24px;
-  padding: 28px 16px 22px;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 8px 24px var(--shadow);
-  transition: transform .22s, box-shadow .22s;
-  border: 3px solid transparent;
-  position: relative;
-  overflow: hidden;
-  animation: bounceIn .6s both;
-}
-.level-card:nth-child(1){animation-delay:.05s; border-color:#FF6B35;}
-.level-card:nth-child(2){animation-delay:.15s; border-color:#9B5DE5;}
-.level-card:nth-child(3){animation-delay:.25s; border-color:#F15BB5;}
-.level-card:nth-child(4){animation-delay:.35s; border-color:#00BBF9;}
-
-.level-card::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0) 60%, rgba(255,255,255,.5));
-  border-radius: 24px;
-  opacity: 0;
-  transition: opacity .22s;
-}
-.level-card:hover::before { opacity: 1; }
-.level-card:hover {
-  transform: translateY(-8px) scale(1.04);
-  box-shadow: 0 18px 40px rgba(0,0,0,.18);
-}
-.level-card.selected {
-  transform: translateY(-10px) scale(1.07);
-  box-shadow: 0 20px 50px rgba(0,0,0,.22);
-}
-.level-card:nth-child(1).selected { background: #FFF0EA; }
-.level-card:nth-child(2).selected { background: #F3EEFF; }
-.level-card:nth-child(3).selected { background: #FFF0F9; }
-.level-card:nth-child(4).selected { background: #E6F9FF; }
-
-.level-icon { font-size: 3rem; display: block; margin-bottom: 10px; animation: wobble 3s ease-in-out infinite; }
-@keyframes wobble { 0%,100%{transform:rotate(-3deg);} 50%{transform:rotate(3deg);} }
-.level-name {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.25rem;
-  color: var(--dark);
-  display: block;
-}
-.level-desc { font-size: .8rem; color: #888; margin-top: 4px; }
-
-.level-card:nth-child(1) .level-name { color: #FF6B35; }
-.level-card:nth-child(2) .level-name { color: #9B5DE5; }
-.level-card:nth-child(3) .level-name { color: #F15BB5; }
-.level-card:nth-child(4) .level-name { color: #00BBF9; }
-
-/* bridge progress graphic */
-.bridge-graphic {
-  width: 100%;
-  max-width: 600px;
-  height: 70px;
-  position: relative;
-  margin: 8px 0;
-}
-.bridge-graphic svg { width: 100%; height: 100%; }
-
-/* START button */
-.btn-start {
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.35rem;
-  background: linear-gradient(90deg, var(--bridge), var(--pink));
-  color: var(--white);
-  border: none;
-  border-radius: 50px;
-  padding: 16px 50px;
-  cursor: pointer;
-  box-shadow: 0 8px 25px rgba(255,107,53,.4);
-  transition: transform .18s, box-shadow .18s;
-  animation: glowPulse 2.5s ease-in-out infinite;
-  margin-top: 10px;
-}
-.btn-start:hover { transform: scale(1.07) translateY(-3px); box-shadow: 0 14px 35px rgba(255,107,53,.55); }
-@keyframes glowPulse {
-  0%,100% { box-shadow: 0 8px 25px rgba(255,107,53,.4); }
-  50%      { box-shadow: 0 8px 40px rgba(241,91,181,.7); }
-}
-
-/* ============================================================
-   SCREEN 2 – ANIMATED INTRO
+   SCREEN 1 – ANIMATED INTRO
    ============================================================ */
 #screen-intro {
   background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
@@ -274,7 +133,6 @@ body {
   animation: fadeSlideDown .8s .2s both;
 }
 
-/* floating alphabets */
 .alpha-float {
   position: absolute;
   font-family: 'Fredoka One', cursive;
@@ -324,7 +182,6 @@ body {
   50%{box-shadow:0 8px 40px rgba(0,187,249,.65);}
 }
 
-/* stars in intro */
 .star-intro {
   position: absolute;
   width: 6px; height: 6px;
@@ -335,13 +192,12 @@ body {
 @keyframes starBlink { from{opacity:.2; transform:scale(.6);} to{opacity:1; transform:scale(1.3);} }
 
 /* ============================================================
-   SCREEN 3 – QUIZ
+   SCREEN 2 – QUIZ
    ============================================================ */
 #screen-quiz {
   background: linear-gradient(150deg, #f8f9ff 0%, #eef2ff 50%, #fff0f9 100%);
 }
 
-/* progress bar */
 .quiz-header {
   width: 100%;
   max-width: 720px;
@@ -383,7 +239,6 @@ body {
   white-space: nowrap;
 }
 
-/* question card */
 .question-card {
   background: var(--white);
   border-radius: 28px;
@@ -426,7 +281,6 @@ body {
 }
 .q-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
 
-/* option buttons */
 .options-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -549,7 +403,6 @@ body {
 }
 .btn-next-q:hover { transform: scale(1.06); }
 
-/* confetti pieces */
 .confetti-piece {
   position: fixed;
   width: 10px; height: 10px;
@@ -651,7 +504,6 @@ body {
 }
 .btn-home:hover { transform: scale(1.07); }
 
-/* certificate */
 .certificate-frame {
   border: 4px solid var(--gold);
   border-radius: 24px;
@@ -663,7 +515,7 @@ body {
 }
 
 /* ============================================================
-   ANIMATIONS KEYFRAMES (shared)
+   SHARED KEYFRAMES
    ============================================================ */
 @keyframes bounceIn {
   from { transform: scale(0.5); opacity: 0; }
@@ -676,7 +528,7 @@ body {
 }
 
 /* ============================================================
-   BRIDGE CROSSING ANIMATION (transition effect)
+   BRIDGE TRANSITION
    ============================================================ */
 .bridge-transition {
   position: fixed; inset: 0; z-index: 300;
@@ -701,116 +553,38 @@ body {
    ============================================================ */
 @media (max-width: 480px) {
   .options-grid { grid-template-columns: 1fr; }
-  .level-grid { grid-template-columns: 1fr 1fr; }
   .feedback-box { padding: 28px 20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ====================================================
-     FLOATING DECORATIONS (always visible)
-     ==================================================== -->
+<!-- FLOATING DECORATIONS -->
 <div class="deco-layer" id="decoLayer">
   <div class="cloud cloud-1"></div>
   <div class="cloud cloud-2"></div>
   <div class="cloud cloud-3"></div>
   <div class="cloud cloud-4"></div>
-
-  <!-- stars -->
   <div class="star-deco" style="top:10%; left:5%; animation-delay:.3s;"></div>
   <div class="star-deco" style="top:18%; right:8%; animation-delay:.9s;"></div>
   <div class="star-deco" style="top:45%; left:3%; animation-delay:1.5s;"></div>
   <div class="star-deco" style="top:70%; right:5%; animation-delay:.6s;"></div>
   <div class="star-deco" style="bottom:15%; left:12%; animation-delay:1.2s;"></div>
   <div class="star-deco" style="bottom:25%; right:15%; animation-delay:.4s;"></div>
-
-  <!-- balloons -->
   <div class="balloon" style="background:#FF6B35; bottom:5%; left:4%; animation-delay:0s;"></div>
   <div class="balloon" style="background:#9B5DE5; bottom:8%; left:10%; animation-delay:1.5s;"></div>
   <div class="balloon" style="background:#F15BB5; bottom:6%; right:6%; animation-delay:.8s;"></div>
   <div class="balloon" style="background:#6BCB77; bottom:10%; right:13%; animation-delay:2.2s;"></div>
 </div>
 
-<!-- ====================================================
-     SCREEN 1: LEVEL SELECTION
-     ==================================================== -->
-<div class="screen" id="screen-select">
-
-  <div class="brand-header">
-    <div class="brand-title">🌉 GYAAN SETU</div>
-    <div class="brand-sub">✨ The Bridge of Knowledge ✨</div>
-  </div>
-
-  <div class="bridge-banner">🔤 English Adventure 🔤</div>
-
-  <p style="font-weight:800; color:#555; font-size:1.05rem; margin-bottom:6px;">Choose Your Level to Begin!</p>
-
-  <div class="level-grid">
-    <div class="level-card" data-level="kg" onclick="selectLevel(this)">
-      <span class="level-icon">🌱</span>
-      <span class="level-name">Kindergarten</span>
-      <span class="level-desc">ABCs & Phonics</span>
-    </div>
-    <div class="level-card" data-level="1st" onclick="selectLevel(this)">
-      <span class="level-icon">⭐</span>
-      <span class="level-name">1st Standard</span>
-      <span class="level-desc">Words & Spelling</span>
-    </div>
-    <div class="level-card" data-level="2nd" onclick="selectLevel(this)">
-      <span class="level-icon">🚀</span>
-      <span class="level-name">2nd Standard</span>
-      <span class="level-desc">Sentences & Grammar</span>
-    </div>
-    <div class="level-card" data-level="3rd" onclick="selectLevel(this)">
-      <span class="level-icon">🏆</span>
-      <span class="level-name">3rd Standard</span>
-      <span class="level-desc">Paragraphs & Tenses</span>
-    </div>
-  </div>
-
-  <!-- Simple bridge SVG -->
-  <div class="bridge-graphic">
-    <svg viewBox="0 0 600 70" xmlns="http://www.w3.org/2000/svg">
-      <!-- water -->
-      <rect x="0" y="55" width="600" height="15" rx="4" fill="#6BD4F8" opacity=".5"/>
-      <!-- bridge deck -->
-      <rect x="30" y="40" width="540" height="12" rx="6" fill="#FF6B35"/>
-      <!-- pillars -->
-      <rect x="90"  y="40" width="12" height="22" rx="3" fill="#E8571A"/>
-      <rect x="210" y="40" width="12" height="22" rx="3" fill="#E8571A"/>
-      <rect x="330" y="40" width="12" height="22" rx="3" fill="#E8571A"/>
-      <rect x="450" y="40" width="12" height="22" rx="3" fill="#E8571A"/>
-      <!-- arch cables -->
-      <path d="M30 40 Q150 8 300 40" stroke="#9B5DE5" stroke-width="2.5" fill="none"/>
-      <path d="M300 40 Q450 8 570 40" stroke="#F15BB5" stroke-width="2.5" fill="none"/>
-      <!-- stars on bridge -->
-      <text x="60"  y="36" font-size="14" fill="#FFD93D">★</text>
-      <text x="180" y="36" font-size="14" fill="#FFD93D">★</text>
-      <text x="300" y="36" font-size="14" fill="#FFD93D">★</text>
-      <text x="420" y="36" font-size="14" fill="#FFD93D">★</text>
-      <text x="540" y="36" font-size="14" fill="#FFD93D">★</text>
-    </svg>
-  </div>
-
-  <button class="btn-start" id="btnStart" onclick="startJourney()">🚀 Start Learning Journey!</button>
-
-  <p id="selectWarning" style="color:#FF6B35; font-weight:800; margin-top:10px; display:none;">
-    👆 Please select a class first!
-  </p>
-</div>
-
-<!-- ====================================================
-     SCREEN 2: ANIMATED INTRO
-     ==================================================== -->
-<div class="screen hidden" id="screen-intro">
-  <!-- floating alpha letters generated by JS -->
+<!-- SCREEN 1: ANIMATED INTRO -->
+<div class="screen" id="screen-intro">
   <div class="intro-content">
     <div class="intro-class-badge" id="introBadge">🌱 Kindergarten</div>
     <div class="intro-msg" id="introMsg">Hey! Let's Have Fun With English!</div>
     <span class="intro-abc" id="introAbc">A B C</span>
     <p style="color:rgba(255,255,255,.75); font-size:1.05rem; font-weight:700; margin-bottom:4px;">
-      🌉 Cross the Gyaan Setu Bridge of Knowledge! 🌉
+      🌉 Cross the Bridge of Knowledge! 🌉
     </p>
     <p style="color:rgba(255,255,255,.6); font-size:.92rem; font-weight:600; margin-bottom:6px;">
       6 amazing questions await you!
@@ -819,9 +593,7 @@ body {
   </div>
 </div>
 
-<!-- ====================================================
-     SCREEN 3: QUIZ
-     ==================================================== -->
+<!-- SCREEN 2: QUIZ -->
 <div class="screen hidden" id="screen-quiz">
   <div class="quiz-header">
     <span class="q-number-badge" id="qNumBadge">Q 1 / 6</span>
@@ -839,9 +611,7 @@ body {
   </div>
 </div>
 
-<!-- ====================================================
-     SCREEN 4: COMPLETION
-     ==================================================== -->
+<!-- SCREEN 3: COMPLETION -->
 <div class="screen hidden" id="screen-complete">
   <div class="complete-content">
     <div class="certificate-frame">
@@ -857,9 +627,7 @@ body {
   </div>
 </div>
 
-<!-- ====================================================
-     FEEDBACK OVERLAY
-     ==================================================== -->
+<!-- FEEDBACK OVERLAY -->
 <div class="feedback-overlay hidden" id="feedbackOverlay">
   <div class="feedback-box" id="feedbackBox">
     <span class="feedback-emoji" id="feedbackEmoji">🎉</span>
@@ -869,9 +637,6 @@ body {
   </div>
 </div>
 
-<!-- ============================================================
-     JAVASCRIPT
-     ============================================================ -->
 <script>
 // =============================================================
 //  QUESTION DATA BANK
@@ -1129,28 +894,22 @@ const introMessages = [
   "Hey! Let's Have Fun With English! 🎉",
   "Welcome to the English Adventure! 🌈",
   "Learning English is Super Fun! ✨",
-  "Cross the Gyaan Setu Bridge of Knowledge! 🌉"
+  "Cross the Bridge of Knowledge! 🌉"
 ];
 
 // =============================================================
-//  LEVEL SELECTION
+//  READ LEVEL FROM URL PARAMETER
+//  Usage: english-adventure.html?level=kg
+//         english-adventure.html?level=1st
+//         english-adventure.html?level=2nd
+//         english-adventure.html?level=3rd
 // =============================================================
-function selectLevel(card) {
-  document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
-  card.classList.add('selected');
-  selectedLevel = card.dataset.level;
-  document.getElementById('selectWarning').style.display = 'none';
-}
-
-function startJourney() {
-  if (!selectedLevel) {
-    document.getElementById('selectWarning').style.display = 'block';
-    return;
-  }
-  bridgeTransition(() => {
-    showScreen('screen-intro');
-    setupIntro();
-  });
+function getLevelFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const level = params.get('level');
+  if (level && questionBank[level]) return level;
+  // fallback: default to kg if not provided or invalid
+  return 'kg';
 }
 
 // =============================================================
@@ -1162,7 +921,6 @@ function setupIntro() {
     levelEmojis[selectedLevel] + ' ' + levelNames[selectedLevel];
   document.getElementById('introMsg').textContent = msg;
 
-  // animated ABC letters based on level
   const abcSets = {
     kg:    "A B C D E F",
     "1st": "G H I J K L",
@@ -1171,9 +929,7 @@ function setupIntro() {
   };
   document.getElementById('introAbc').textContent = abcSets[selectedLevel];
 
-  // floating alphabets
   const intro = document.getElementById('screen-intro');
-  // remove old floating letters
   intro.querySelectorAll('.alpha-float').forEach(el => el.remove());
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   for (let i = 0; i < 20; i++) {
@@ -1188,7 +944,6 @@ function setupIntro() {
     intro.appendChild(el);
   }
 
-  // star particles
   intro.querySelectorAll('.star-intro').forEach(el => el.remove());
   for (let i = 0; i < 30; i++) {
     const s = document.createElement('span');
@@ -1228,27 +983,22 @@ function renderQuestion() {
 
   const q = questions[currentQIndex];
 
-  // Update header
   document.getElementById('qNumBadge').textContent = `Q ${currentQIndex + 1} / ${questions.length}`;
   document.getElementById('progressFill').style.width = (currentQIndex / questions.length * 100) + '%';
   document.getElementById('starCount').textContent = starsEarned;
 
-  // Update card
   document.getElementById('qTypeBadge').textContent = q.type;
   document.getElementById('qEmoji').textContent = q.emoji;
   document.getElementById('qText').textContent = q.question;
 
-  // animate card
   const card = document.getElementById('questionCard');
   card.style.animation = 'none';
-  void card.offsetWidth; // reflow
+  void card.offsetWidth;
   card.style.animation = 'cardPop .45s cubic-bezier(.36,.07,.19,.97)';
 
-  // Render options
   const grid = document.getElementById('optionsGrid');
   grid.innerHTML = '';
 
-  // Shuffle options for fun
   const shuffled = [...q.options].sort(() => Math.random() - 0.5);
 
   shuffled.forEach((opt, idx) => {
@@ -1265,7 +1015,6 @@ function renderQuestion() {
 //  CHECK ANSWER
 // =============================================================
 function checkAnswer(btn, chosen, correct) {
-  // disable all buttons
   document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
 
   if (chosen === correct) {
@@ -1277,7 +1026,6 @@ function checkAnswer(btn, chosen, correct) {
     launchConfetti();
   } else {
     btn.classList.add('wrong');
-    // highlight correct
     document.querySelectorAll('.opt-btn').forEach(b => {
       if (b.dataset.value === correct) b.classList.add('correct');
     });
@@ -1317,11 +1065,7 @@ function showFeedback(isCorrect) {
   box.className = 'feedback-box ' + (isCorrect ? 'correct-box' : 'wrong-box');
 
   const btnNext = document.getElementById('btnNextQ');
-  if (isLast) {
-    btnNext.textContent = '🏁 See Results!';
-  } else {
-    btnNext.textContent = 'Next Question ➡️';
-  }
+  btnNext.textContent = isLast ? '🏁 See Results!' : 'Next Question ➡️';
 
   overlay.classList.remove('hidden');
 }
@@ -1349,7 +1093,6 @@ function showCompletion() {
   document.getElementById('scoreBadge').textContent =
     `Score: ${answeredCorrect} / ${total}`;
 
-  // Stars display
   const starsDiv = document.getElementById('starsDisplay');
   starsDiv.innerHTML = '';
   for (let i = 1; i <= 6; i++) {
@@ -1360,7 +1103,6 @@ function showCompletion() {
     starsDiv.appendChild(s);
   }
 
-  // Rank message
   const msgs = [
     "Keep practising – you're learning!",
     "Good effort – keep it up!",
@@ -1372,7 +1114,6 @@ function showCompletion() {
   document.getElementById('completeMsg').textContent =
     msgs[Math.min(starsEarned, msgs.length - 1)];
 
-  // Confetti celebration
   setTimeout(launchConfetti, 300);
   setTimeout(launchConfetti, 700);
   setTimeout(launchConfetti, 1100);
@@ -1385,10 +1126,9 @@ function replayLevel() {
   });
 }
 
+// "Choose Another Level" goes back to your existing selection page
 function goHome() {
-  selectedLevel = null;
-  document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
-  bridgeTransition(() => showScreen('screen-select'));
+  window.history.back();
 }
 
 // =============================================================
@@ -1449,10 +1189,12 @@ function randomColor() {
 }
 
 // =============================================================
-//  INIT
+//  INIT — read level from URL, then go straight to intro
 // =============================================================
 (function init() {
-  showScreen('screen-select');
+  selectedLevel = getLevelFromURL();
+  showScreen('screen-intro');
+  setupIntro();
 })();
 </script>
 </body>
