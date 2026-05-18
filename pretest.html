@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fun Pre-Test - Gyaan Setu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+body{
+
+    font-family:'Baloo 2', cursive;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    overflow-y:auto;
+
+    position:relative;
+
+    padding:30px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #FFDEE9 0%,
+    #B5FFFC 35%,
+    #FFF6B7 70%,
+    #FFD6A5 100%);
+}
+
+/* QUIZ BOX */
+
+.quiz-container{
+
+    max-width:750px;
+
+    margin:20px auto;
+
+    background:white;
+
+    border-radius:40px;
+
+    padding:40px;
+
+    position:relative;
+
+    z-index:10;
+
+    border:8px dashed #FF9800;
+
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+
+    animation:bounceIn 1s ease;
+}
+
+@keyframes bounceIn{
+
+    0%{
+        transform:scale(0.5);
+        opacity:0;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+/* TITLE */
+
+.quiz-title{
+
+    text-align:center;
+
+    font-size:50px;
+
+    color:#FF4081;
+
+    text-shadow:3px 3px #FFE082;
+
+    margin-bottom:10px;
+}
+
+.quiz-subtitle{
+
+    text-align:center;
+
+    font-size:24px;
+
+    color:#555;
+
+    margin-bottom:30px;
+}
+
+/* QUESTION */
+
+.question{
+
+    font-size:32px;
+
+    color:#333;
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+/* OPTIONS */
+
+.option{
+
+    background:#E1F5FE;
+
+    padding:18px;
+
+    margin:15px 0;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    font-size:24px;
+
+    border:4px solid transparent;
+
+    box-shadow:0 6px 0 #81D4FA;
+}
+
+.option:hover{
+
+    background:#FFF59D;
+
+    transform:translateX(10px) scale(1.03);
+
+    border-color:#FF9800;
+}
+
+/* STARS */
+
+.stars{
+
+    text-align:center;
+
+    margin-bottom:20px;
+}
+
+.star{
+
+    font-size:45px;
+
+    display:inline-block;
+
+    margin:0 5px;
+
+    animation:starPop 0.5s ease;
+}
+
+@keyframes starPop{
+
+    0%{
+        transform:scale(0);
+        opacity:0;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+/* TROPHY */
+
+.trophy{
+
+    font-size:90px;
+
+    animation:bounce 1s infinite;
+}
+
+@keyframes bounce{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-12px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+
+}
+
+/* BUTTON */
+
+.next-btn{
+
+    background:#4CAF50;
+
+    color:white;
+
+    padding:18px 45px;
+
+    border:none;
+
+    border-radius:50px;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    margin-top:20px;
+
+    box-shadow:0 8px 0 #1B5E20;
+
+    transition:0.2s;
+}
+
+.next-btn:hover{
+
+    transform:scale(1.05);
+}
+
+/* RESULT */
+
+.result-message{
+
+    font-size:28px;
+
+    color:#FF4081;
+
+    margin-top:15px;
+}
+
+/* DECORATION */
+
+.balloon{
+
+    position:absolute;
+
+    font-size:50px;
+
+    animation:floatBalloon 5s infinite ease-in-out;
+}
+
+.balloon1{
+    left:40px;
+    top:300px;
+}
+
+.balloon2{
+    right:50px;
+    top:350px;
+    animation-delay:2s;
+}
+
+@keyframes floatBalloon{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-20px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SUN -->
+
+<div class="sun"></div>
+
+<!-- CLOUDS -->
+
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud cloud1">
+
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud cloud2">
+
+<!-- BALLOONS -->
+
+<div class="balloon balloon1">🎈</div>
+
+<div class="balloon balloon2">🎉</div>
+
+<!-- QUIZ -->
+
+<div class="quiz-container" id="quizContainer">
+
+    <div class="quiz-title">
+        Fun Learning Test 🌟
+    </div>
+
+    <div class="quiz-subtitle">
+        Let's play and learn together!
+    </div>
+
+    <div class="stars" id="starsDisplay"></div>
+
+    <div id="questionArea"></div>
+
+</div>
+
+<script>
+
+/* LOAD QUESTIONS ACCORDING TO USER GRADE */
+const user =
+JSON.parse(localStorage.getItem('gyaanSetuUser'));
+
+const ageGroup = user.ageGroup;
+
+const grade = user.grade;
+
+/* QUESTIONS ACCORDING TO STANDARD */
+
+const questions = {
+
+    "Kindergarten":[
+
+        {
+            text:"How many apples are there? 🍎🍎🍎",
+            options:["1","2","3","4"],
+            correct:2
+        },
+
+        {
+            text:"Which animal says Moo? 🐄",
+            options:["🐱 Cat","🐶 Dog","🐮 Cow","🐔 Hen"],
+            correct:2
+        },
+
+        {
+            text:"What color is the Sun? ☀️",
+            options:["🔴 Red","💛 Yellow","💙 Blue","💚 Green"],
+            correct:1
+        }
+
+    ],
+
+    "1st Standard":[
+
+        {
+            text:"What is 2 + 3 ? ➕",
+            options:["4","5","6","7"],
+            correct:1
+        },
+
+        {
+            text:"Which word starts with A? 🅰️",
+            options:["Ball","Apple","Dog","Cat"],
+            correct:1
+        },
+
+        {
+            text:"Which one can fly? 🕊️",
+            options:["🐟 Fish","🐘 Elephant","🐦 Bird","🐄 Cow"],
+            correct:2
+        }
+
+    ],
+
+    "2nd Standard":[
+
+        {
+            text:"What is 7 + 5 ? ➕",
+            options:["10","11","12","13"],
+            correct:2
+        },
+
+        {
+            text:"Which is the national animal of India? 🇮🇳",
+            options:["🐘 Elephant","🐅 Tiger","🦁 Lion","🐄 Cow"],
+            correct:1
+        },
+
+        {
+            text:"Fill the missing letter: C _ T",
+            options:["A","E","I","O"],
+            correct:0
+        }
+
+    ],
+
+    "3rd Standard":[
+
+        {
+            text:"What is 15 - 7 ? ➖",
+            options:["6","7","8","9"],
+            correct:2
+        },
+
+        {
+            text:"Which planet do we live on? 🌍",
+            options:["Mars","Venus","Earth","Jupiter"],
+            correct:2
+        },
+
+        {
+            text:"Choose the correct spelling ✏️",
+            options:["APLLE","APPLE","APPEL","APLE"],
+            correct:1
+        }
+
+    ]
+
+};
+
+/* LOAD QUESTIONS ACCORDING TO USER GRADE */
+
+const currentQuestions = questions[grade];
+
+let currentIndex = 0;
+
+let score = 0;
+/* LOAD QUESTION */
+
+function loadQuestion(){
+
+    if(currentIndex >= currentQuestions.length){
+
+        showResults();
+
+        return;
+    }
+
+    const q =
+    currentQuestions[currentIndex];
+
+    document
+    .getElementById('questionArea')
+    .innerHTML = `
+
+    <div class="question">
+
+        ${q.text}
+
+    </div>
+
+    ${q.options.map((opt,idx)=>
+
+    `<div class="option"
+    onclick="checkAnswer(${idx})">
+
+    ${opt}
+
+    </div>`
+
+    ).join('')}
+
+    `;
+}
+
+/* CHECK ANSWER */
+
+function checkAnswer(selected){
+
+    const q =
+    currentQuestions[currentIndex];
+
+    if(selected === q.correct){
+
+        score++;
+
+        document
+        .getElementById('starsDisplay')
+        .innerHTML +=
+        '<span class="star">⭐</span>';
+    }
+
+    currentIndex++;
+
+    setTimeout(()=>{
+
+        loadQuestion();
+
+    },500);
+}
+
+/* SHOW RESULTS */
+
+function showResults(){
+
+    let message = "";
+
+    if(score === 3){
+
+        message =
+        "🎉 Amazing! You are a Superstar! 🎉";
+    }
+
+    else if(score === 2){
+
+        message =
+        "👏 Wow! Great Learning Friend! 👏";
+    }
+
+    else{
+
+        message =
+        "💪 Good Try! Let's Learn More Together! 💪";
+    }
+
+    document
+    .getElementById('questionArea')
+    .innerHTML = `
+
+    <div style="text-align:center;">
+
+        <div class="trophy">
+        🏆
+        </div>
+
+        <h1 style="
+        color:#FF9800;
+        font-size:45px;
+        ">
+        You Scored ${score}/3
+        </h1>
+
+        <div class="stars">
+
+        ${'⭐'.repeat(score)}
+        ${'☆'.repeat(3-score)}
+
+        </div>
+
+        <div class="result-message">
+
+        ${message}
+
+        </div>
+
+        <button class="next-btn"
+        onclick="Roadmap()">
+
+        Let's Create Your Roadmap 🌉
+
+        </button>
+
+    </div>
+
+    `;
+
+    user.pretestScore = score;
+
+    localStorage
+    .setItem(
+    'gyaanSetuUser',
+    JSON.stringify(user)
+    );
+}
+
+/* REDIRECT */
+
+function Roadmap(){
+
+    window.location.href =
+    'roadmap.html';
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+
+</html>

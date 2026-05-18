@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Off! - Gyaan Setu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Baloo 2', cursive, sans-serif;
+            min-height: 100vh;
+            overflow: hidden; /* Locks screen viewports to stop scrollbars during flight */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 20px;
+            
+            /* High-vibrancy cinematic open sky backdrop */
+            background: linear-gradient(to bottom, #81D4FA 0%, #B5FFFC 50%, #FFF6B7 100%);
+        }
+
+        /* --- GIANT WORDS CINEMA BANNER --- */
+        .announcement-container {
+            z-index: 10;
+            text-align: center;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .giant-headline {
+            font-size: 5.5rem;
+            color: #FF4081; /* High energy hot pink */
+            line-height: 1.1;
+            font-weight: 700;
+            text-transform: uppercase;
+            /* Extra thick chocolate stroke shadows make words punch out cleanly */
+            text-shadow: 
+                4px 4px 0px #4E342E,
+                -4px -4px 0px #4E342E,
+                4px -4px 0px #4E342E,
+                -4px 4px 0px #4E342E,
+                0px 15px 30px rgba(78,52,46,0.4);
+            animation: textPulse 1s infinite ease-in-out alternate;
+        }
+
+        @keyframes textPulse {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1.03); }
+        }
+
+        .sub-banner {
+            font-size: 2.2rem;
+            color: #4E342E;
+            font-weight: bold;
+            margin-top: 15px;
+            text-shadow: 2px 2px 0px #FFFFFF, 0px 5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- DYNAMIC MULTI-PLANE RUNWAY ENGINE --- */
+        .sky-runway {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Background Little Plane */
+        .little-plane {
+            position: absolute;
+            top: 20%;
+            left: -100px;
+            font-size: 3.5rem;
+            opacity: 0.8;
+            animation: littleFlight 12s linear infinite;
+        }
+
+        @keyframes littleFlight {
+            0% { left: -100px; transform: translateY(0) rotate(5deg); }
+            100% { left: 110vw; transform: translateY(-80px) rotate(5deg); }
+        }
+
+        /* Foreground Giant Taking-off Jetliner */
+        .giant-plane {
+            position: absolute;
+            bottom: -200px;
+            left: -300px;
+            font-size: 14rem; /* Massive plane scale footprint */
+            filter: drop-shadow(0 25px 30px rgba(0, 0, 0, 0.2));
+            animation: takeOffLaunch 7s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+        }
+
+        /* Flight path arcs upwards cutting completely across screen angles */
+        @keyframes takeOffLaunch {
+            0% { bottom: -200px; left: -300px; transform: scale(0.7) rotate(15deg); }
+            35% { bottom: 15%; left: 20%; transform: scale(1) rotate(18deg); }
+            70% { bottom: 55%; left: 65%; transform: scale(0.9) rotate(22deg); }
+            100% { bottom: 110vh; left: 110vw; transform: scale(0.6) rotate(25deg); }
+        }
+
+        /* --- GIANT 3D BUTTON LAYER --- */
+        .action-deck {
+            z-index: 10;
+            width: 100%;
+            max-width: 450px;
+            margin-bottom: 30px;
+        }
+
+        .btn-launch {
+            width: 100%;
+            padding: 22px;
+            border: none;
+            border-radius: 60px;
+            background: #e099cf; /* Vibrant emerald cockpit green */
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Baloo 2', cursive;
+            box-shadow: 0 12px 0px #f37ad7, 0 15px 30px rgba(0,0,0,0.25);
+            transition: all 0.1s ease;
+        }
+
+        .btn-launch:hover {
+            background: #66bb6a;
+            transform: scale(1.03);
+        }
+
+        .btn-launch:active {
+            transform: translateY(6px);
+            box-shadow: 0 6px 0px #1B5E20;
+        }
+
+        /* --- SCROLLING CLOUDS --- */
+        .cloud-drift {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 100px;
+            pointer-events: none;
+            z-index: 1;
+            animation: cloudScroll linear infinite;
+        }
+
+        .cloud-drift::before {
+            content: ''; position: absolute; background: inherit;
+            border-radius: 50%; width: 100px; height: 100px; top: -50px; left: 40px;
+        }
+
+        .cd1 { width: 250px; height: 80px; top: 40%; left: -300px; animation-duration: 22s; }
+        .cd2 { width: 300px; height: 95px; top: 75%; left: -350px; animation-duration: 32s; animation-delay: -8s; }
+
+        @keyframes cloudScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 400px)); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Infinite Clouds Drift Matrix -->
+    <div class="cloud-drift cd1"></div>
+    <div class="cloud-drift cd2"></div>
+
+    <!-- ================= GIANT FREE-FLOATING TEXT HEADLINES ================= -->
+    <div class="announcement-container">
+        <div class="giant-headline">Let's Take Off<br>For Our Journey!</div>
+        <div class="sub-banner" id="welcomeMessage">Welcome Aboard, Explorer! 🗺️✨</div>
+    </div>
+
+    <!-- ================= MULTI-PLANE ANIMATED LAYER ================= -->
+    <div class="sky-runway">
+        <!-- Background little plane cruising -->
+        <div class="little-plane">🛩️</div>
+        
+        <!-- Foreground massive plane lifting off right into space -->
+        <div class="giant-plane">✈️</div>
+    </div>
+
+    <!-- ================= GIANT TAKE OFF CONTROL BUTTON ================= -->
+    <div class="action-deck">
+        <button class="btn-launch" onclick="startAdventure()">
+            Let's Go! 🚀
+        </button>
+    </div>
+
+    <!-- RUNTIME MODULE CONTROLLERS -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Read registration keys securely
+            const sessionData = JSON.parse(localStorage.getItem('gyaanSetuUser'));
+            
+            if(sessionData && sessionData.name) {
+                document.getElementById('welcomeMessage').innerText = `Welcome Aboard, ${sessionData.name}! 🗺️✨`;
+            }
+        });
+
+        function startAdventure() {
+            // Direct launch route directly onto target age bubble cluster grid page
+            window.location.href = 'age-select.html';
+        }
+    </script>
+</body>
+
+</html>

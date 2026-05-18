@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gyaan Setu Roadmap</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    height:100vh;
+    font-family:'Baloo 2', cursive;
+}
+
+/* SKY */
+
+.sky{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:45vh;
+
+    background:
+    linear-gradient(
+    to bottom,
+    #87CEEB 0%,
+    #B3E5FC 50%,
+    #E1F5FE 100%);
+}
+
+/* SEA SURFACE / CONTAINER LAYER */
+
+.sea{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:55vh;
+    overflow:visible; 
+
+    background:
+    linear-gradient(
+    to bottom,
+    #29B6F6 0%,
+    #0288D1 30%,
+    #0277BD 60%,
+    #01579B 100%);
+}
+
+/* ================= THE LIVING SEA SURFACE WAVE LINE ================= */
+
+.surface-waves-container {
+    position: absolute;
+    top: -45px; 
+    left: 0;
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.wave-crests {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%; 
+    height: 100%;
+    background: repeat-x url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60 C150,100 350,20 500,60 C650,100 850,20 1000,60 C1150,100 1350,20 1500,60 L1500,120 L0,120 Z" fill="%2329B6F6"/></svg>');
+    animation: surfaceWaveMove 6s linear infinite;
+}
+
+.wave-crests.back-layer {
+    top: -5px;
+    opacity: 0.4;
+    background: repeat-x url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,50 C200,90 400,10 600,50 C800,90 1000,10 1200,50 L1200,120 L0,120 Z" fill="%23FFF"/></svg>');
+    animation: surfaceWaveMove 9s linear infinite reverse;
+}
+
+@keyframes surfaceWaveMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* SUN (UPGRADED MAGICAL CARTOON GLOW) */
+
+.sun{
+    position:absolute;
+    top:40px;
+    right:80px;
+
+    width:120px;
+    height:120px;
+
+    background: radial-gradient(circle, #FFEB3B 50%, #FF9800 100%);
+    border-radius:50%;
+    box-shadow: 0 0 40px #FFEB3B, 0 0 80px #FF9800;
+
+    animation:sunMove 4s infinite ease-in-out;
+    z-index: 2;
+}
+
+@keyframes sunMove{
+    0%, 100% { transform:translateY(0); }
+    50% { transform:translateY(-10px); }
+}
+
+/* CLOUDS */
+
+.cloud{
+    position:absolute;
+    width:180px;
+    opacity:0.9;
+    animation:cloudMove 25s linear infinite;
+}
+
+.cloud1{ top:60px; left:-200px; }
+.cloud2{ top:150px; left:-350px; animation-delay:10s; }
+
+@keyframes cloudMove{
+    0% { transform:translateX(0); }
+    100% { transform:translateX(1800px); }
+}
+
+/* INTRO */
+
+#intro-overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(255,255,255,0.85);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:100;
+}
+
+.intro-card{
+    background:white;
+    padding:40px;
+    border-radius:30px;
+    border:6px dashed #FF9800;
+    text-align:center;
+    box-shadow:0 15px 30px rgba(0,0,0,0.2);
+    animation:bounceIn 1s ease;
+}
+
+@keyframes bounceIn{
+    0% { transform:scale(0.3); opacity:0; }
+    100% { transform:scale(1); opacity:1; }
+}
+
+/* TITLE */
+
+.title-box{
+    position:absolute;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:10;
+    text-align:center;
+}
+
+.title-box h1{
+    font-size:55px;
+    color:#FFF176;
+    text-shadow:4px 4px #E65100;
+}
+
+.title-box p{
+    color:#004D40;
+    font-size:24px;
+    font-weight:bold;
+}
+
+/* FLOATING STONES */
+
+#floating-container{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:45vh; /* Bounds tracking directly to the sky sector */
+    z-index:5;
+    pointer-events:none;
+}
+
+.stone-island{
+    position:absolute;
+    width:160px;
+    height:95px;
+    background: linear-gradient(145deg,#BDBDBD,#757575);
+    border-radius:60% 40% 60% 40%;
+    border:4px solid #424242;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    font-size:18px; /* Slightly reduced to keep long strings elegant */
+    font-weight:bold;
+    padding:10px;
+    cursor:pointer;
+    box-shadow:0 10px 0 #212121;
+    transition: transform 0.1s, opacity 0.3s;
+    pointer-events:auto;
+    z-index:6;
+}
+
+.stone-island:hover{
+    transform:scale(1.12);
+    border-color:#FFEB3B;
+}
+
+/* DEEP WATER INTERNAL SHIMMER WAVES */
+
+.wave {
+    position: absolute;
+    width: 250vw;
+    height: 250vw;
+    left: -75vw;
+    border-radius: 43%;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.wave1 { top: -242vw; background: rgba(255, 255, 255, 0.12); animation: waveSpin1 14s infinite; z-index: 1; }
+.wave2 { top: -240vw; background: rgba(41, 182, 246, 0.25); animation: waveSpin2 18s infinite; z-index: 2; }
+
+@keyframes waveSpin1 { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes waveSpin2 { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
+
+/* SETU BRIDGE */
+
+.setu-bridge{
+    position:absolute;
+    top:40px; 
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    z-index:20;
+}
+
+/* STONES IN WATER (UPGRADED MAGICAL GREEN) */
+
+.placed-stone{
+    width:140px;
+    height:90px;
+    background: linear-gradient(135deg, #A7F3D0, #10B981);
+    border: 4px solid #047857;
+    box-shadow: 0 8px 0 #064E3B;
+    border-radius:50% 40% 50% 40%;
+    margin:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+    font-weight:bold;
+    font-size: 15px;
+    animation: waterFloat 3s infinite ease-in-out, stoneAppear 0.5s ease;
+}
+
+@keyframes waterFloat{
+    0%, 100% { transform:translateY(0px); }
+    50% { transform:translateY(-8px); }
+}
+
+@keyframes stoneAppear{
+    0% { transform:scale(0); }
+    100% { transform:scale(1); }
+}
+
+/* ================= UPGRADED CARTOONISH ARROW CSS ================= */
+
+.arrow{
+    font-size: 38px;
+    color: #FFEB3B; /* Bright Sun Yellow */
+    text-shadow: 3px 3px 0px #E65100, -1px -1px 0px #E65100, 1px -1px 0px #E65100, -1px 1px 0px #E65100; /* Rich Orange Border */
+    margin: 0 4px;
+    display: inline-block;
+    z-index: 25;
+    animation: arrowMove 1s infinite ease-in-out;
+}
+
+@keyframes arrowMove{
+    0%, 100% { transform: translateX(0) scale(1); }
+    50% { transform: translateX(8px) scale(1.1); }
+}
+
+/* BUTTON */
+
+.btn{
+    background:#f6844f;
+    color:white;
+    padding:18px 45px;
+    border-radius:50px;
+    text-decoration:none;
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 8px 0 #b34a19; /* Updated border to seamlessly lock with brand colors */
+    display:inline-block;
+    margin-top:20px;
+    transition: all 0.1s;
+}
+
+.btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0 #b34a19;
+}
+
+/* SUCCESS */
+
+#victory-box{
+    position:absolute;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+    z-index:50;
+}
+
+.hidden{
+    display:none !important;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SKY -->
+<div class="sky"></div>
+
+<!-- SEA -->
+<div class="sea">
+
+    <!-- SCROLLING SURFACE WAVE CONTAINER -->
+    <div class="surface-waves-container">
+        <div class="wave-crests back-layer"></div>
+        <div class="wave-crests"></div>
+    </div>
+
+    <div class="setu-bridge" id="bridge-container"></div>
+
+    <div id="victory-box" class="hidden">
+        <h1 style="color:#FFEB3B; font-size:50px; text-shadow:4px 4px #E65100;">Yahhh!! Your Setu Is Ready 🎉</h1>
+        <a href="home.html" class="btn">Continue Journey ➡️</a>
+    </div>
+
+    <!-- INTERNAL WATER SHIMMERS -->
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+
+</div>
+
+<!-- SUN -->
+<div class="sun"></div>
+
+<!-- CLOUDS -->
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud cloud1">
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud cloud2">
+
+<!-- INTRO OVERLAY -->
+<div id="intro-overlay">
+    <div class="intro-card">
+        <h1 style="font-size:55px; color:#FF6F00;">Welcome Friend ✨</h1>
+        <p style="font-size:28px; margin-top:20px;">Let's Create Your Magical Setu 🌉</p>
+        <button onclick="startRoadmapBuilder()" style="background:#FF9800; color:white; border:none; padding:18px 40px; border-radius:50px; font-size:24px; font-weight:bold; margin-top:25px; cursor:pointer; box-shadow:0 8px 0 #E65100;">Let's Build 🚀</button>
+    </div>
+</div>
+
+<!-- TITLE BOX -->
+<div class="title-box">
+    <h1>Your Gyaan Setu Bridge 🌉</h1>
+    <p>Build Your Learning Journey</p>
+</div>
+
+<!-- FLOATING SKY ZONE CONTAINER -->
+<div id="floating-container"></div>
+
+<script>
+
+const taskPool = [
+    { id:1, label:"🔢 Math Magic" },
+    { id:2, label:"🅰️ English Fun" },
+    { id:3, label:"🐯 Animal World" },
+    { id:4, label:"🎨 Art & Crafts" },
+    { id:5, label:"📖 Story Time" },
+    { id:6, label:"🌍 General Knowledge" }, // Fixed formatting typo string syntax seamlessly
+    { id:7, label:"🎮 Fun Time" },
+    { id:8, label:"🌈 Coloring Zone" }
+];
+
+let totalStonesCount = taskPool.length;
+let selectedCount = 0;
+let flightEngineStones = []; // Dynamic vector storage coordinate array
+
+function startRoadmapBuilder(){
+    const overlay = document.getElementById('intro-overlay');
+    overlay.style.opacity='0';
+    setTimeout(()=>{
+        overlay.style.display='none';
+    },500);
+
+    generateFloatingStones();
+    
+    // Fire real-time continuous movement updates loop execution frame frequencies
+    requestAnimationFrame(updateStonesPhysicsLoop);
+}
+
+function generateFloatingStones(){
+    const container = document.getElementById('floating-container');
+    const skyHeight = window.innerHeight * 0.45; // Strictly bounded inside 45vh sky line layer limits
+    const screenWidth = window.innerWidth;
+
+    taskPool.forEach((task, index) => {
+        const stone = document.createElement('div');
+        stone.className = 'stone-island';
+        stone.innerHTML = task.label;
+        stone.id = `stone-${task.id}`;
+
+        // Distribute coordinates across client window innerWidth safely
+        let initialX = 40 + (index * ((screenWidth - 200) / totalStonesCount));
+        let initialY = 120 + (Math.random() * (skyHeight - 240));
+
+        // Inject directional speed momentum factors (- paths switch directions organically)
+        let speedVectorX = (Math.random() * 1.0 + 0.5) * (Math.random() > 0.5 ? 1 : -1);
+        let speedVectorY = (Math.random() * 0.8 + 0.4) * (Math.random() > 0.5 ? 1 : -1);
+
+        stone.style.left = `${initialX}px`;
+        stone.style.top = `${initialY}px`;
+
+        stone.onclick = () => placeStone(task, stone.id);
+        container.appendChild(stone);
+
+        flightEngineStones.push({
+            id: stone.id,
+            element: stone,
+            x: initialX,
+            y: initialY,
+            vx: speedVectorX,
+            vy: speedVectorY,
+            width: 160,
+            height: 95,
+            isPlaced: false
+        });
+    });
+}
+
+function updateStonesPhysicsLoop() {
+    const screenWidth = window.innerWidth;
+    const skyHeight = window.innerHeight * 0.45; // 45vh threshold barrier boundary line marker
+
+    flightEngineStones.forEach(stone => {
+        if (stone.isPlaced) return;
+
+        stone.x += stone.vx;
+        stone.y += stone.vy;
+
+        // Bouncing engine mechanics off left/right monitor boundaries
+        if (stone.x <= 10) {
+            stone.x = 10;
+            stone.vx *= -1;
+        } else if (stone.x + stone.width >= screenWidth - 10) {
+            stone.x = screenWidth - stone.width - 10;
+            stone.vx *= -1;
+        }
+
+        // Bouncing engine mechanics off top of page or sea wave horizon limit line
+        if (stone.y <= 110) { 
+            stone.y = 110;
+            stone.vy *= -1;
+        } else if (stone.y + stone.height >= skyHeight - 15) { 
+            stone.y = skyHeight - stone.height - 15;
+            stone.vy *= -1;
+        }
+
+        stone.element.style.left = `${stone.x}px`;
+        stone.element.style.top = `${stone.y}px`;
+    });
+
+    requestAnimationFrame(updateStonesPhysicsLoop);
+}
+
+function placeStone(task, stoneId){
+    let trackerObj = flightEngineStones.find(item => item.id === stoneId);
+    if(trackerObj) trackerObj.isPlaced = true;
+
+    const airStone = document.getElementById(stoneId);
+    airStone.style.opacity='0';
+    airStone.style.transform='scale(0)';
+    airStone.onclick=null;
+
+    selectedCount++;
+
+    const bridge = document.getElementById('bridge-container');
+    const placedStone = document.createElement('div');
+    placedStone.className='placed-stone';
+    placedStone.innerHTML=`
+    <div>
+    <small>Step ${selectedCount}</small>
+    <br>
+    ${task.label}
+    </div>
+    `;
+
+    bridge.appendChild(placedStone);
+
+    /* ARROW */
+    if(selectedCount < totalStonesCount){
+        const arrow = document.createElement('span');
+        arrow.className='arrow';
+        arrow.innerHTML='➔'; 
+        bridge.appendChild(arrow);
+    }
+
+    if(selectedCount===totalStonesCount){
+        document.getElementById('victory-box').classList.remove('hidden');
+    }
+}
+
+</script>
+
+</body>
+</html>

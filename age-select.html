@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Choose Age - Gyaan Setu</title>
+
+    <style>
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+        body {
+
+            background:
+            linear-gradient(
+            135deg,
+            #A1C4FD 0%,
+            #C2E9FB 35%,
+            #FBC2EB 70%,
+            #FFECD2 100%
+            );
+
+            min-height: 100vh;
+
+            font-family: 'Comic Neue', cursive;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            overflow-x: hidden;
+        }
+
+        .container {
+
+            text-align: center;
+
+            padding: 20px;
+        }
+
+        .title {
+
+            font-size: 3rem;
+
+            color: white;
+
+            text-shadow: 3px 3px #7E57C2;
+
+            margin-bottom: 20px;
+
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bubbles {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 50px;
+
+            flex-wrap: wrap;
+
+            margin: 50px 0;
+        }
+
+        .bubble {
+
+            width: 280px;
+
+            height: 280px;
+
+            background:
+            radial-gradient(
+            circle at 30% 30%,
+            rgba(255,255,255,0.95),
+            rgba(255,255,255,0.75),
+            rgba(173,216,230,0.85)
+            );
+
+            border-radius: 50%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            cursor: pointer;
+
+            transition: all 0.3s;
+
+            box-shadow:
+            0 15px 30px rgba(0,0,0,0.15),
+            inset 0 0 20px rgba(255,255,255,0.6);
+
+            animation: floatBubble 3s infinite ease-in-out;
+
+            border: 5px solid rgba(255,255,255,0.7);
+
+            backdrop-filter: blur(3px);
+        }
+
+        .bubble:hover {
+
+            transform: scale(1.08);
+
+            box-shadow:
+            0 25px 40px rgba(0,0,0,0.2),
+            inset 0 0 25px rgba(255,255,255,0.8);
+        }
+
+        @keyframes floatBubble {
+
+            0%,100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .bubble-emoji {
+
+            font-size: 5rem;
+        }
+
+        .bubble-title {
+
+            font-size: 1.8rem;
+
+            font-weight: bold;
+
+            margin: 15px 0;
+
+            color: #6A1B9A;
+        }
+
+        .bubble-subtitle {
+
+            font-size: 1rem;
+
+            color: #555;
+        }
+
+        .back-btn {
+
+            position: fixed;
+
+            top: 20px;
+
+            left: 20px;
+
+            background: white;
+
+            padding: 10px 20px;
+
+            border-radius: 30px;
+
+            text-decoration: none;
+
+            color: #333;
+
+            font-weight: bold;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+
+            transform: scale(1.05);
+
+            background: #F3E5F5;
+        }
+
+        @media (max-width: 768px) {
+
+            .bubble {
+                width: 220px;
+                height: 220px;
+            }
+
+            .bubble-emoji {
+                font-size: 3rem;
+            }
+
+            .bubble-title {
+                font-size: 1.3rem;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="signup.html" class="back-btn">
+        ← Back
+    </a>
+
+    <div class="container">
+
+        <h1 class="title">
+            🎈 Choose Your Age Group 🎈
+        </h1>
+
+        <p style="
+        color:white;
+        font-size:1.3rem;
+        text-shadow:2px 2px rgba(0,0,0,0.15);
+        ">
+        Tap on the magical bubble that matches your age!
+        </p>
+
+        <div class="bubbles">
+
+            <!-- LITTLE STARS -->
+
+            <div class="bubble"
+            onclick="selectAgeGroup('kg')">
+
+                <div class="bubble-emoji">
+                    🎨🍎
+                </div>
+
+                <div class="bubble-title">
+                    Little Stars
+                </div>
+
+                <div class="bubble-subtitle">
+                    Kindergarten - 1st Grade
+                </div>
+
+                <div class="bubble-subtitle">
+                    (5-7 years)
+                </div>
+
+            </div>
+
+            <!-- SHINING STARS -->
+
+            <div class="bubble"
+            onclick="selectAgeGroup('primary')">
+
+                <div class="bubble-emoji">
+                    📚⚡
+                </div>
+
+                <div class="bubble-title">
+                    Shining Stars
+                </div>
+
+                <div class="bubble-subtitle">
+                    2nd Grade - 3rd Grade
+                </div>
+
+                <div class="bubble-subtitle">
+                    (7-10 years)
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- GRADE SELECTOR -->
+
+        <div id="gradeSelector"
+        style="
+        margin-top:40px;
+        display:none;
+        ">
+
+            <h2 style="
+            color:white;
+            text-shadow:2px 2px rgba(0,0,0,0.15);
+            ">
+            Now select your class 🌟
+            </h2>
+
+            <div id="gradeButtons"
+            style="
+            display:flex;
+            gap:20px;
+            justify-content:center;
+            margin-top:20px;
+            flex-wrap:wrap;
+            ">
+            </div>
+
+        </div>
+
+    </div>
+
+<script>
+
+let selectedAgeType = null;
+
+function selectAgeGroup(type) {
+
+    selectedAgeType = type;
+
+    const gradeSelector =
+    document.getElementById('gradeSelector');
+
+    const gradeButtons =
+    document.getElementById('gradeButtons');
+
+    let grades = [];
+
+    if(type === 'kg') {
+
+        grades = [
+            'Kindergarten',
+            '1st Standard'
+        ];
+
+    } else {
+
+        grades = [
+            '2nd Standard',
+            '3rd Standard'
+        ];
+    }
+
+    gradeButtons.innerHTML = '';
+
+    grades.forEach(grade => {
+
+        const btn =
+        document.createElement('button');
+
+        btn.textContent = grade;
+
+        btn.style.cssText = `
+
+            padding:15px 30px;
+
+            font-size:1.2rem;
+
+            background:#7E57C2;
+
+            color:white;
+
+            border:none;
+
+            border-radius:50px;
+
+            cursor:pointer;
+
+            transition:0.3s;
+
+            font-weight:bold;
+
+            box-shadow:0 8px 15px rgba(0,0,0,0.15);
+
+        `;
+
+        btn.onmouseover = () => {
+
+            btn.style.transform =
+            'scale(1.08)';
+        };
+
+        btn.onmouseout = () => {
+
+            btn.style.transform =
+            'scale(1)';
+        };
+
+        btn.onclick = () =>
+        confirmGrade(grade);
+
+        gradeButtons.appendChild(btn);
+    });
+
+    gradeSelector.style.display = 'block';
+
+    gradeSelector.scrollIntoView({
+        behavior:'smooth'
+    });
+}
+
+function confirmGrade(grade) {
+
+    const user =
+    JSON.parse(
+    localStorage.getItem(
+    'gyaanSetuUser'
+    ));
+
+    user.ageGroup =
+    selectedAgeType;
+
+    user.grade = grade;
+
+    localStorage.setItem(
+    'gyaanSetuUser',
+    JSON.stringify(user)
+    );
+
+    window.location.href =
+    'pretest.html';
+}
+
+</script>
+
+</body>
+
+</html>

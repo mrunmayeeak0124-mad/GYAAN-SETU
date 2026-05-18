@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Progress - Gyaan Setu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Baloo 2', cursive;
+
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+    135deg,
+    #B5FFFC 0%,
+    #FFDEE9 50%,
+    #FFF6B7 100%);
+
+    padding:40px;
+
+    overflow-x:hidden;
+}
+
+/* MAIN BOX */
+
+.progress-container{
+
+    max-width:650px;
+
+    margin:auto;
+
+    background:white;
+
+    border-radius:30px;
+
+    padding:25px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+
+    border:6px dashed #FF9800;
+
+    animation:popIn 0.8s ease;
+}
+
+@keyframes popIn{
+
+    0%{
+        transform:scale(0.7);
+        opacity:0;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/* TITLE */
+
+.title{
+
+    text-align:center;
+
+    font-size:38px;
+
+    color:#FF4081;
+
+    margin-bottom:8px;
+
+    text-shadow:2px 2px #FFE082;
+}
+
+.subtitle{
+
+    text-align:center;
+
+    font-size:24px;
+
+    color:#555;
+
+    margin-bottom:40px;
+}
+
+/* SUBJECT CARD */
+
+.subject-card{
+
+    background:#F9F9F9;
+
+    border-radius:20px;
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    box-shadow:0 6px 15px rgba(0,0,0,0.08);
+}
+
+.subject-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+.subject-name{
+
+    font-size:28px;
+
+    color:#333;
+}
+
+.subject-score{
+
+    font-size:22px;
+
+    color:#FF9800;
+
+    font-weight:bold;
+}
+
+/* PROGRESS BAR */
+
+.progress-bar{
+
+    width:100%;
+
+    height:28px;
+
+    background:#E0E0E0;
+
+    border-radius:30px;
+
+    overflow:hidden;
+}
+
+.progress-fill{
+
+    height:100%;
+
+    border-radius:30px;
+
+    transition:1s;
+
+    text-align:center;
+
+    color:white;
+
+    font-weight:bold;
+
+    line-height:28px;
+}
+
+/* COLORS */
+
+.math{
+    background:#42A5F5;
+}
+
+.english{
+    background:#AB47BC;
+}
+
+.gk{
+    background:#FFA726;
+}
+
+.art{
+    background:#EC407A;
+}
+
+.animals{
+    background:#66BB6A;
+}
+
+/* TROPHY */
+
+.trophy-box{
+
+    text-align:center;
+
+    margin-top:40px;
+}
+
+.trophy{
+
+    font-size:90px;
+
+    animation:bounce 1s infinite;
+}
+
+@keyframes bounce{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+}
+
+.total-progress{
+
+    font-size:35px;
+
+    color:#4CAF50;
+
+    margin-top:10px;
+}
+
+/* BACK BUTTON */
+
+.back-btn{
+
+    display:inline-block;
+
+    margin-top:35px;
+
+    background:#42A5F5;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:15px 35px;
+
+    border-radius:50px;
+
+    font-size:22px;
+
+    box-shadow:0 8px 0 #1565C0;
+
+    transition:0.2s;
+}
+
+.back-btn:hover{
+
+    transform:scale(1.05);
+}
+
+.center{
+
+    text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="progress-container">
+
+    <div class="title">
+        Your Learning Progress 📚✨
+    </div>
+
+    <div class="subtitle">
+        Complete quizzes and puzzles to grow your stars!
+    </div>
+
+    <!-- MATH -->
+
+    <div class="subject-card">
+
+        <div class="subject-top">
+
+            <div class="subject-name">
+                ➕ Math Magic
+            </div>
+
+            <div class="subject-score" id="mathScore">
+                0%
+            </div>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill math" id="mathBar" style="width:0%">
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ENGLISH -->
+
+    <div class="subject-card">
+
+        <div class="subject-top">
+
+            <div class="subject-name">
+                📖 English Fun
+            </div>
+
+            <div class="subject-score" id="englishScore">
+                0%
+            </div>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill english" id="englishBar" style="width:0%">
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GK -->
+
+    <div class="subject-card">
+
+        <div class="subject-top">
+
+            <div class="subject-name">
+                🌍 General Knowledge
+            </div>
+
+            <div class="subject-score" id="gkScore">
+                0%
+            </div>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill gk" id="gkBar" style="width:0%">
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ART -->
+
+    <div class="subject-card">
+
+        <div class="subject-top">
+
+            <div class="subject-name">
+                🎨 Art & Craft
+            </div>
+
+            <div class="subject-score" id="artScore">
+                0%
+            </div>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill art" id="artBar" style="width:0%">
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ANIMALS -->
+
+    <div class="subject-card">
+
+        <div class="subject-top">
+
+            <div class="subject-name">
+                🐼 Animal World
+            </div>
+
+            <div class="subject-score" id="animalScore">
+                0%
+            </div>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill animals" id="animalBar" style="width:0%">
+                0%
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- COLORING ZONE -->
+
+<div class="subject-card">
+
+    <div class="subject-top">
+
+        <div class="subject-name">
+            🖍️ Coloring Zone
+        </div>
+
+        <div class="subject-score" id="coloringScore">
+            0%
+        </div>
+
+    </div>
+
+    <div class="progress-bar">
+
+        <div class="progress-fill art" id="coloringBar" style="width:0%">
+            0%
+        </div>
+
+    </div>
+
+</div>
+
+<!-- STORY TIME -->
+
+<div class="subject-card">
+
+    <div class="subject-top">
+
+        <div class="subject-name">
+            📚 Story Time
+        </div>
+
+        <div class="subject-score" id="storyScore">
+            0%
+        </div>
+
+    </div>
+
+    <div class="progress-bar">
+
+        <div class="progress-fill english" id="storyBar" style="width:0%">
+            0%
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FUN TIME -->
+
+<div class="subject-card">
+
+    <div class="subject-top">
+
+        <div class="subject-name">
+            🎮 Fun Time
+        </div>
+
+        <div class="subject-score" id="funScore">
+            0%
+        </div>
+
+    </div>
+
+    <div class="progress-bar">
+
+        <div class="progress-fill gk" id="funBar" style="width:0%">
+            0%
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- TOTAL -->
+
+    <div class="trophy-box">
+
+        <div class="trophy">
+            🏆
+        </div>
+
+        <div class="total-progress" id="overallProgress">
+            Overall Progress : 0%
+        </div>
+
+    </div>
+
+    <div class="center">
+
+        <a href="home.html" class="back-btn">
+            ⬅ Back to Home
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+/* GET USER DATA */
+
+let user =
+JSON.parse(localStorage.getItem('gyaanSetuUser')) || {};
+
+/* SUBJECT PROGRESS */
+
+let progressData = {
+
+    math: Number(user.mathProgress) || 0,
+
+    english: Number(user.englishProgress) || 0,
+
+    gk: Number(user.gkProgress) || 0,
+
+    art: Number(user.artProgress) || 0,
+
+    animals: Number(user.animalProgress) || 0,
+
+    coloringzone: Number(user.mathProgress) || 0,
+
+    storytime: Number(user.mathProgress) || 0,
+
+    funtime: Number(user.mathProgress) || 0
+};
+
+/* UPDATE BARS */
+
+function updateProgress(){
+
+    // MATH
+    document.getElementById('mathBar').style.width =
+    progressData.math + "%";
+
+    document.getElementById('mathBar').innerHTML =
+    progressData.math + "%";
+
+    document.getElementById('mathScore').innerHTML =
+    progressData.math + "%";
+
+    // ENGLISH
+    document.getElementById('englishBar').style.width =
+    progressData.english + "%";
+
+    document.getElementById('englishBar').innerHTML =
+    progressData.english + "%";
+
+    document.getElementById('englishScore').innerHTML =
+    progressData.english + "%";
+
+    // GK
+    document.getElementById('gkBar').style.width =
+    progressData.gk + "%";
+
+    document.getElementById('gkBar').innerHTML =
+    progressData.gk + "%";
+
+    document.getElementById('gkScore').innerHTML =
+    progressData.gk + "%";
+
+    // ART
+    document.getElementById('artBar').style.width =
+    progressData.art + "%";
+
+    document.getElementById('artBar').innerHTML =
+    progressData.art + "%";
+
+    document.getElementById('artScore').innerHTML =
+    progressData.art + "%";
+
+    // ANIMAL
+    document.getElementById('animalBar').style.width =
+    progressData.animals + "%";
+
+    document.getElementById('animalBar').innerHTML =
+    progressData.animals + "%";
+
+    document.getElementById('animalScore').innerHTML =
+    progressData.animals + "%";
+
+    // COLORING
+    document.getElementById('coloringBar').style.width =
+    progressData.coloringzone + "%";
+
+    document.getElementById('coloringBar').innerHTML =
+    progressData.coloringzone + "%";
+
+    document.getElementById('coloringScore').innerHTML =
+    progressData.coloringzone + "%";
+
+    // STORY
+    document.getElementById('storyBar').style.width =
+    progressData.storytime + "%";
+
+    document.getElementById('storyBar').innerHTML =
+    progressData.storytime + "%";
+
+    document.getElementById('storyScore').innerHTML =
+    progressData.storytime + "%";
+
+    // FUN
+    document.getElementById('funBar').style.width =
+    progressData.funtime + "%";
+
+    document.getElementById('funBar').innerHTML =
+    progressData.funtime + "%";
+
+    document.getElementById('funScore').innerHTML =
+    progressData.funtime + "%";
+
+    // OVERALL
+
+    let total =
+    (
+        progressData.math +
+        progressData.english +
+        progressData.gk +
+        progressData.art +
+        progressData.animals +
+        progressData.coloringzone+
+        progressData.storytime+
+        progressData.funtime
+    ) / 8;
+
+    total = Math.round(total);
+
+    document.getElementById('overallProgress').innerHTML =
+    "Overall Progress : " + total + "%";
+}
+
+updateProgress();
+
+</script>
+
+</body>
+
+</html>
