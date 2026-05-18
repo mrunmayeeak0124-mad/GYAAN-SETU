@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gyaan Setu – Fun Zone!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+ 
+:root {
+  --sky:     #6BD4F8;
+  --sun:     #FFD93D;
+  --grass:   #6BCB77;
+  --bridge:  #FF6B35;
+  --purple:  #9B5DE5;
+  --pink:    #F15BB5;
+  --teal:    #00BBF9;
+  --red:     #FF4757;
+  --yellow:  #FFA502;
+  --mint:    #2ED573;
+  --white:   #FFFFFF;
+  --dark:    #1A1A2E;
+  --correct: #6BCB77;
+  --wrong:   #FF6B6B;
+  --gold:    #FFD700;
+  --shadow:  rgba(0,0,0,0.18);
+}
+ 
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;}
+body{
+  font-family:'Nunito','Segoe UI',sans-serif;
+  background:linear-gradient(160deg,#ffe0f0,#fff4d6 50%,#d6f5ff);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.hidden{display:none!important;}
+ 
+/* ── DECORATIONS ── */
+.deco-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.cloud{position:absolute;background:#fff;border-radius:50px;opacity:.82;animation:driftCloud linear infinite;}
+.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:50%;}
+.cloud::before{width:60%;height:120%;top:-50%;left:15%;}
+.cloud::after{width:40%;height:90%;top:-40%;right:10%;}
+.cloud-1{width:120px;height:40px;top:8%;left:-140px;animation-duration:28s;}
+.cloud-2{width:90px;height:30px;top:22%;left:-110px;animation-duration:22s;animation-delay:6s;}
+.cloud-3{width:150px;height:50px;top:5%;left:-170px;animation-duration:35s;animation-delay:12s;}
+.cloud-4{width:80px;height:28px;top:38%;left:-100px;animation-duration:25s;animation-delay:4s;}
+@keyframes driftCloud{from{transform:translateX(0);}to{transform:translateX(110vw);}}
+ 
+.star-deco{
+  position:absolute;width:10px;height:10px;background:var(--sun);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  animation:twinkle 2s ease-in-out infinite alternate;
+}
+@keyframes twinkle{from{opacity:.3;transform:scale(.8) rotate(0deg);}to{opacity:1;transform:scale(1.2) rotate(20deg);}}
+ 
+.fun-deco{position:absolute;font-size:2rem;animation:floatFun 5s ease-in-out infinite alternate;opacity:.4;}
+@keyframes floatFun{0%{transform:translateY(0) rotate(-6deg);}100%{transform:translateY(-20px) rotate(6deg);}}
+ 
+.balloon{position:absolute;width:34px;height:44px;border-radius:50% 50% 45% 45%;animation:floatBalloon 6s ease-in-out infinite alternate;}
+.balloon::after{content:'';position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);width:1.5px;height:18px;background:rgba(0,0,0,.3);}
+@keyframes floatBalloon{0%{transform:translateY(0) rotate(-4deg);}100%{transform:translateY(-22px) rotate(4deg);}}
+ 
+/* ── SCREENS ── */
+.screen{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;}
+ 
+/* ── SCREEN 1: GAME SELECT ── */
+.brand-header{text-align:center;margin-bottom:10px;}
+.brand-title{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(2.4rem,6vw,4rem);
+  color:var(--red);
+  text-shadow:3px 3px 0 var(--yellow),6px 6px 0 rgba(0,0,0,.08);
+  letter-spacing:2px;
+  animation:bounceIn .8s cubic-bezier(.36,.07,.19,.97);
+}
+.brand-sub{font-size:clamp(.9rem,2.5vw,1.15rem);color:var(--bridge);font-weight:800;letter-spacing:1px;}
+.bridge-banner{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(1.3rem,3.5vw,2rem);
+  color:var(--white);
+  background:linear-gradient(90deg,var(--red),var(--yellow),var(--mint));
+  border-radius:50px;padding:10px 30px;margin:14px 0;
+  box-shadow:0 6px 20px rgba(255,71,87,.35);
+  text-align:center;animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.035);}}
+ 
+.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px;width:100%;max-width:780px;margin:18px 0;}
+.game-card{
+  background:var(--white);border-radius:24px;padding:28px 16px 22px;
+  text-align:center;cursor:pointer;
+  box-shadow:0 8px 24px var(--shadow);
+  transition:transform .22s,box-shadow .22s;
+  border:3px solid transparent;position:relative;overflow:hidden;
+  animation:bounceIn .6s both;
+}
+.game-card:nth-child(1){animation-delay:.05s;border-color:#FF4757;}
+.game-card:nth-child(2){animation-delay:.15s;border-color:#FFA502;}
+.game-card:nth-child(3){animation-delay:.25s;border-color:#2ED573;}
+.game-card:nth-child(4){animation-delay:.35s;border-color:#00BBF9;}
+ 
+.game-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0) 60%,rgba(255,255,255,.5));border-radius:24px;opacity:0;transition:opacity .22s;}
+.game-card:hover::before{opacity:1;}
+.game-card:hover{transform:translateY(-8px) scale(1.04);box-shadow:0 18px 40px rgba(0,0,0,.18);}
+.game-card.selected{transform:translateY(-10px) scale(1.07);box-shadow:0 20px 50px rgba(0,0,0,.22);}
+.game-card:nth-child(1).selected{background:#FFF0F1;}
+.game-card:nth-child(2).selected{background:#FFFAE6;}
+.game-card:nth-child(3).selected{background:#E8FFF3;}
+.game-card:nth-child(4).selected{background:#E6F9FF;}
+ 
+.game-icon{font-size:3rem;display:block;margin-bottom:10px;animation:wobble 3s ease-in-out infinite;}
+@keyframes wobble{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+.game-name{font-family:'Fredoka One',cursive;font-size:1.25rem;color:var(--dark);display:block;}
+.game-desc{font-size:.8rem;color:#888;margin-top:4px;}
+ 
+.game-card:nth-child(1) .game-name{color:#FF4757;}
+.game-card:nth-child(2) .game-name{color:#FFA502;}
+.game-card:nth-child(3) .game-name{color:#2ED573;}
+.game-card:nth-child(4) .game-name{color:#00BBF9;}
+ 
+.bridge-graphic{width:100%;max-width:600px;height:70px;position:relative;margin:8px 0;}
+.bridge-graphic svg{width:100%;height:100%;}
+ 
+.btn-start{
+  font-family:'Fredoka One',cursive;font-size:1.35rem;
+  background:linear-gradient(90deg,var(--red),var(--yellow));
+  color:var(--white);border:none;border-radius:50px;padding:16px 50px;
+  cursor:pointer;box-shadow:0 8px 25px rgba(255,71,87,.4);
+  transition:transform .18s,box-shadow .18s;
+  animation:glowPulse 2.5s ease-in-out infinite;margin-top:10px;
+}
+.btn-start:hover{transform:scale(1.07) translateY(-3px);}
+@keyframes glowPulse{0%,100%{box-shadow:0 8px 25px rgba(255,71,87,.4);}50%{box-shadow:0 8px 40px rgba(255,165,2,.7);}}
+ 
+/* ── SCREEN 2: INTRO ── */
+#screen-intro{background:linear-gradient(135deg,#1a0a2e 0%,#2d1b5e 50%,#0a2a1a 100%);position:relative;}
+.intro-content{text-align:center;z-index:2;position:relative;}
+.intro-msg{font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,5vw,3.5rem);color:var(--white);text-shadow:0 0 20px var(--yellow),0 0 40px var(--red);line-height:1.3;margin-bottom:8px;animation:fadeSlideDown .8s both;}
+.intro-class-badge{display:inline-block;font-family:'Fredoka One',cursive;font-size:1.3rem;background:linear-gradient(90deg,var(--sun),var(--yellow));color:var(--dark);border-radius:50px;padding:8px 28px;margin:12px 0;box-shadow:0 4px 16px rgba(255,217,61,.4);animation:fadeSlideDown .8s .2s both;}
+ 
+.alpha-float{position:absolute;font-family:'Fredoka One',cursive;font-size:clamp(1.4rem,3vw,2.2rem);opacity:0;animation:floatAlpha 4s ease-in-out infinite;pointer-events:none;}
+@keyframes floatAlpha{0%{opacity:0;transform:translateY(40px) scale(.5);}20%{opacity:1;transform:translateY(-10px) scale(1);}80%{opacity:1;transform:translateY(-40px) scale(1.05);}100%{opacity:0;transform:translateY(-80px) scale(.8);}}
+ 
+.intro-abc{font-family:'Fredoka One',cursive;font-size:clamp(2.5rem,7vw,5rem);background:linear-gradient(90deg,var(--sun),var(--red),var(--mint),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:10px;display:block;margin:20px 0;animation:rainbowShift 3s linear infinite,fadeSlideDown .8s .4s both;}
+@keyframes rainbowShift{0%{filter:hue-rotate(0deg);}100%{filter:hue-rotate(360deg);}}
+ 
+.btn-next{font-family:'Fredoka One',cursive;font-size:1.3rem;background:linear-gradient(90deg,var(--red),var(--yellow));color:var(--white);border:none;border-radius:50px;padding:15px 48px;cursor:pointer;box-shadow:0 8px 25px rgba(255,71,87,.45);transition:transform .18s;margin-top:24px;animation:fadeSlideDown .8s .6s both,glowRed 2s ease-in-out infinite;}
+.btn-next:hover{transform:scale(1.08) translateY(-3px);}
+@keyframes glowRed{0%,100%{box-shadow:0 8px 25px rgba(255,71,87,.45);}50%{box-shadow:0 8px 40px rgba(255,165,2,.65);}}
+ 
+.star-intro{position:absolute;width:6px;height:6px;background:var(--sun);border-radius:50%;animation:starBlink 2s ease-in-out infinite alternate;}
+@keyframes starBlink{from{opacity:.2;transform:scale(.6);}to{opacity:1;transform:scale(1.3);}}
+ 
+/* ── SCREEN 3: QUIZ ── */
+#screen-quiz{background:linear-gradient(150deg,#fff9f0 0%,#fff0f9 50%,#f0fff9 100%);}
+ 
+.quiz-header{width:100%;max-width:720px;display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.progress-track{flex:1;height:18px;background:rgba(0,0,0,.08);border-radius:50px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.1);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--mint));border-radius:50px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(255,71,87,.5);}
+.stars-counter{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--dark);white-space:nowrap;}
+.stars-counter span{color:var(--gold);}
+.q-number-badge{font-family:'Fredoka One',cursive;font-size:1rem;background:var(--red);color:var(--white);border-radius:50px;padding:5px 16px;white-space:nowrap;}
+ 
+.question-card{background:var(--white);border-radius:28px;padding:32px 28px 24px;max-width:720px;width:100%;box-shadow:0 12px 40px rgba(255,71,87,.15);position:relative;overflow:hidden;animation:cardPop .45s cubic-bezier(.36,.07,.19,.97);}
+@keyframes cardPop{from{transform:scale(.88) translateY(20px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+.question-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--red),var(--yellow),var(--mint),var(--teal));border-radius:28px 28px 0 0;}
+ 
+.q-type-badge{display:inline-block;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;background:linear-gradient(90deg,var(--red),var(--yellow));color:var(--white);border-radius:50px;padding:4px 14px;margin-bottom:14px;}
+.q-text{font-family:'Fredoka One',cursive;font-size:clamp(1.15rem,3vw,1.65rem);color:var(--dark);line-height:1.4;margin-bottom:22px;}
+.q-emoji{font-size:2rem;display:block;margin-bottom:8px;}
+ 
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.opt-btn{font-family:'Nunito',sans-serif;font-size:clamp(.92rem,2.2vw,1.1rem);font-weight:800;background:linear-gradient(135deg,#fff5f0,#fff0fa);color:var(--dark);border:2.5px solid transparent;border-radius:18px;padding:14px 18px;cursor:pointer;transition:transform .18s,box-shadow .18s,background .18s;box-shadow:0 4px 12px rgba(0,0,0,.08);text-align:left;position:relative;overflow:hidden;}
+.opt-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.4),transparent);border-radius:18px;}
+.opt-btn:hover:not(:disabled){transform:translateY(-3px) scale(1.03);box-shadow:0 8px 22px rgba(255,71,87,.3);background:linear-gradient(135deg,#ffe8e0,#ffe0f5);border-color:var(--red);}
+.opt-btn:disabled{cursor:not-allowed;}
+.opt-btn.correct{background:linear-gradient(135deg,#c8f7c5,#a8e6cf)!important;border-color:var(--correct)!important;color:#1b6b3a;animation:correctShake .4s;}
+.opt-btn.wrong{background:linear-gradient(135deg,#ffd6d6,#ffb3b3)!important;border-color:var(--wrong)!important;color:#8b1a1a;animation:wrongShake .4s;}
+@keyframes correctShake{0%,100%{transform:scale(1);}25%{transform:scale(1.07);}75%{transform:scale(.97);}}
+@keyframes wrongShake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+ 
+/* ── FEEDBACK ── */
+.feedback-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.feedback-box{background:var(--white);border-radius:32px;padding:36px 40px;text-align:center;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:popIn .4s cubic-bezier(.36,.07,.19,.97);position:relative;overflow:hidden;}
+@keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+.feedback-box::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;border-radius:32px 32px 0 0;}
+.feedback-box.correct-box::before{background:linear-gradient(90deg,var(--correct),var(--teal));}
+.feedback-box.wrong-box::before{background:linear-gradient(90deg,var(--wrong),var(--sun));}
+ 
+.feedback-emoji{font-size:4rem;display:block;margin-bottom:10px;animation:bounceEmoji .5s ease-in-out infinite alternate;}
+@keyframes bounceEmoji{from{transform:translateY(0);}to{transform:translateY(-10px);}}
+.feedback-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:8px;}
+.correct-box .feedback-title{color:#2d8a4e;}
+.wrong-box .feedback-title{color:#c0392b;}
+ 
+.feedback-fun{font-size:.88rem;font-weight:700;color:#444;background:#fff9e6;border-left:4px solid var(--yellow);border-radius:10px;padding:10px 14px;margin-bottom:16px;text-align:left;line-height:1.5;}
+.wrong-box .feedback-fun{background:#fff0f9;border-left-color:var(--pink);}
+ 
+.feedback-quote{font-size:.9rem;font-weight:700;color:#666;margin-bottom:22px;font-style:italic;}
+.btn-next-q{font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(90deg,var(--red),var(--yellow));color:var(--white);border:none;border-radius:50px;padding:13px 40px;cursor:pointer;box-shadow:0 6px 20px rgba(255,71,87,.4);transition:transform .18s;}
+.btn-next-q:hover{transform:scale(1.06);}
+ 
+/* ── CONFETTI ── */
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;pointer-events:none;animation:confettiFall linear forwards;z-index:200;}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+ 
+/* ── COMPLETION ── */
+#screen-complete{background:linear-gradient(135deg,#1a0a2e,#2a0a1a);}
+.complete-content{text-align:center;z-index:2;position:relative;}
+.trophy-wrap{font-size:7rem;display:block;animation:trophyBounce 1s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px var(--gold));}
+@keyframes trophyBounce{from{transform:scale(1) rotate(-5deg);}to{transform:scale(1.1) rotate(5deg);}}
+.complete-title{font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,5vw,3.2rem);color:var(--white);text-shadow:0 0 20px var(--sun);margin:14px 0 8px;}
+.complete-sub{font-size:clamp(.95rem,2.5vw,1.2rem);font-weight:700;color:var(--sun);margin-bottom:20px;}
+.stars-display{display:flex;gap:10px;justify-content:center;font-size:2.8rem;margin:14px 0;}
+.star-slot{transition:transform .3s;animation:starPop .5s both;}
+.star-slot.earned{filter:drop-shadow(0 0 8px var(--gold));animation:starPop .5s both;}
+@keyframes starPop{from{transform:scale(0) rotate(-30deg);}to{transform:scale(1) rotate(0deg);}}
+.score-badge{font-family:'Fredoka One',cursive;font-size:1.5rem;background:linear-gradient(90deg,var(--sun),var(--yellow));color:var(--dark);border-radius:50px;padding:10px 34px;margin:10px auto;display:inline-block;box-shadow:0 6px 20px rgba(255,217,61,.4);}
+.complete-msg{font-size:1.05rem;font-weight:700;color:rgba(255,255,255,.85);margin:14px 0 28px;font-style:italic;}
+.btn-replay{font-family:'Fredoka One',cursive;font-size:1.2rem;background:linear-gradient(90deg,var(--mint),var(--teal));color:var(--white);border:none;border-radius:50px;padding:14px 44px;cursor:pointer;box-shadow:0 8px 25px rgba(46,213,115,.4);transition:transform .18s;margin:6px;}
+.btn-replay:hover{transform:scale(1.07);}
+.btn-home{font-family:'Fredoka One',cursive;font-size:1.1rem;background:linear-gradient(90deg,var(--red),var(--yellow));color:var(--white);border:none;border-radius:50px;padding:12px 38px;cursor:pointer;box-shadow:0 6px 20px rgba(255,71,87,.4);transition:transform .18s;margin:6px;}
+.btn-home:hover{transform:scale(1.07);}
+.certificate-frame{border:4px solid var(--gold);border-radius:24px;padding:24px 30px;max-width:460px;width:90%;margin:0 auto 24px;box-shadow:0 0 30px rgba(255,217,61,.3),inset 0 0 20px rgba(255,217,61,.05);}
+ 
+/* ── BRIDGE TRANSITION ── */
+.bridge-transition{position:fixed;inset:0;z-index:300;background:linear-gradient(90deg,var(--red) 0%,var(--yellow) 50%,var(--mint) 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;animation:bridgeIn .3s ease-in forwards;}
+.bridge-transition.out{animation:bridgeOut .4s ease-out forwards;}
+.bridge-transition .bt-text{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--white);text-shadow:0 2px 10px rgba(0,0,0,.3);}
+.bridge-icon-anim{font-size:4rem;animation:bounceIn .5s both;}
+@keyframes bridgeIn{from{clip-path:circle(0% at 50% 50%);}to{clip-path:circle(150% at 50% 50%);}}
+@keyframes bridgeOut{from{clip-path:circle(150% at 50% 50%);opacity:1;}to{clip-path:circle(0% at 50% 50%);opacity:0;}}
+ 
+@keyframes bounceIn{from{transform:scale(.5);opacity:0;}70%{transform:scale(1.05);}to{transform:scale(1);opacity:1;}}
+@keyframes fadeSlideDown{from{transform:translateY(-30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+ 
+@media(max-width:480px){
+  .options-grid{grid-template-columns:1fr;}
+  .game-grid{grid-template-columns:1fr 1fr;}
+  .feedback-box{padding:28px 20px;}
+}
+</style>
+</head>
+<body>
+ 
+<!-- DECORATIONS -->
+<div class="deco-layer">
+  <div class="cloud cloud-1"></div><div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div><div class="cloud cloud-4"></div>
+  <div class="star-deco" style="top:10%;left:5%;animation-delay:.3s;"></div>
+  <div class="star-deco" style="top:18%;right:8%;animation-delay:.9s;"></div>
+  <div class="star-deco" style="top:45%;left:3%;animation-delay:1.5s;"></div>
+  <div class="star-deco" style="top:70%;right:5%;animation-delay:.6s;"></div>
+  <div class="star-deco" style="bottom:15%;left:12%;animation-delay:1.2s;"></div>
+  <div class="star-deco" style="bottom:25%;right:15%;animation-delay:.4s;"></div>
+  <div class="fun-deco" style="top:10%;right:3%;animation-delay:0s;">🎮</div>
+  <div class="fun-deco" style="top:50%;left:2%;animation-delay:1.2s;">🎯</div>
+  <div class="fun-deco" style="bottom:20%;right:4%;animation-delay:.7s;">🎪</div>
+  <div class="fun-deco" style="top:28%;right:2%;animation-delay:2s;">🎠</div>
+  <div class="balloon" style="background:#FF4757;bottom:5%;left:4%;animation-delay:0s;"></div>
+  <div class="balloon" style="background:#FFA502;bottom:8%;left:10%;animation-delay:1.5s;"></div>
+  <div class="balloon" style="background:#2ED573;bottom:6%;right:6%;animation-delay:.8s;"></div>
+  <div class="balloon" style="background:#00BBF9;bottom:10%;right:13%;animation-delay:2.2s;"></div>
+</div>
+ 
+<!-- ══════════════════════════════════════
+     SCREEN 1 – GAME SELECTION
+     ══════════════════════════════════════ -->
+<div class="screen" id="screen-select">
+  <div class="brand-header">
+    <div class="brand-title">🌉 GYAAN SETU</div>
+    <div class="brand-sub">✨ The Bridge of Knowledge ✨</div>
+  </div>
+  <div class="bridge-banner">🎮 Fun Zone – Play & Win Stars! 🌟</div>
+  <p style="font-weight:800;color:#555;font-size:1.05rem;margin-bottom:6px;">Pick a Game to Start Playing!</p>
+ 
+  <div class="game-grid">
+    <div class="game-card" data-game="riddles" onclick="selectGame(this)">
+      <span class="game-icon">🧩</span>
+      <span class="game-name">Riddle Time!</span>
+      <span class="game-desc">Solve fun riddles</span>
+    </div>
+    <div class="game-card" data-game="spotit" onclick="selectGame(this)">
+      <span class="game-icon">🔍</span>
+      <span class="game-name">Spot It!</span>
+      <span class="game-desc">Odd one out</span>
+    </div>
+    <div class="game-card" data-game="truefalse" onclick="selectGame(this)">
+      <span class="game-icon">✅</span>
+      <span class="game-name">True or False?</span>
+      <span class="game-desc">Fact check it!</span>
+    </div>
+    <div class="game-card" data-game="complete" onclick="selectGame(this)">
+      <span class="game-icon">💬</span>
+      <span class="game-name">Fill the Gap!</span>
+      <span class="game-desc">Complete sentences</span>
+    </div>
+  </div>
+ 
+  <div class="bridge-graphic">
+    <svg viewBox="0 0 600 70" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="55" width="600" height="15" rx="4" fill="#6BD4F8" opacity=".5"/>
+      <rect x="30" y="40" width="540" height="12" rx="6" fill="#FF4757"/>
+      <rect x="90"  y="40" width="12" height="22" rx="3" fill="#cc2233"/>
+      <rect x="210" y="40" width="12" height="22" rx="3" fill="#cc2233"/>
+      <rect x="330" y="40" width="12" height="22" rx="3" fill="#cc2233"/>
+      <rect x="450" y="40" width="12" height="22" rx="3" fill="#cc2233"/>
+      <path d="M30 40 Q150 8 300 40" stroke="#FFA502" stroke-width="2.5" fill="none"/>
+      <path d="M300 40 Q450 8 570 40" stroke="#2ED573" stroke-width="2.5" fill="none"/>
+      <text x="60"  y="36" font-size="14" fill="#FFD93D">⭐</text>
+      <text x="180" y="36" font-size="14" fill="#FFD93D">⭐</text>
+      <text x="300" y="36" font-size="14" fill="#FFD93D">⭐</text>
+      <text x="420" y="36" font-size="14" fill="#FFD93D">⭐</text>
+      <text x="540" y="36" font-size="14" fill="#FFD93D">⭐</text>
+    </svg>
+  </div>
+ 
+  <button class="btn-start" onclick="startJourney()">🎮 Play & Win Stars!</button>
+  <p id="selectWarning" style="color:#FF4757;font-weight:800;margin-top:10px;display:none;">👆 Please pick a game first!</p>
+</div>
+ 
+<!-- ══════════════════════════════════════
+     SCREEN 2 – ANIMATED INTRO
+     ══════════════════════════════════════ -->
+<div class="screen hidden" id="screen-intro">
+  <div class="intro-content">
+    <div class="intro-class-badge" id="introBadge">🧩 Riddle Time!</div>
+    <div class="intro-msg" id="introMsg">Get Ready for Some Fun!</div>
+    <span class="intro-abc" id="introAbc">🎮 🌟 🏆</span>
+    <p style="color:rgba(255,255,255,.75);font-size:1.05rem;font-weight:700;margin-bottom:4px;">
+      🌉 Cross the Gyaan Setu Bridge of Knowledge! 🌉
+    </p>
+    <p style="color:rgba(255,255,255,.6);font-size:.92rem;font-weight:600;margin-bottom:6px;">
+      6 fun questions – win as many ⭐ as you can!
+    </p>
+    <button class="btn-next" onclick="showQuiz()">🎯 Let's Play!</button>
+  </div>
+</div>
+ 
+<!-- ══════════════════════════════════════
+     SCREEN 3 – QUIZ
+     ══════════════════════════════════════ -->
+<div class="screen hidden" id="screen-quiz">
+  <div class="quiz-header">
+    <span class="q-number-badge" id="qNumBadge">Q 1 / 6</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="stars-counter"><span id="starCount">0</span> <span>⭐</span></span>
+  </div>
+  <div class="question-card" id="questionCard">
+    <div class="q-type-badge" id="qTypeBadge">Game Type</div>
+    <span class="q-emoji" id="qEmoji">🎮</span>
+    <div class="q-text" id="qText">Loading...</div>
+    <div class="options-grid" id="optionsGrid"></div>
+  </div>
+</div>
+ 
+<!-- ══════════════════════════════════════
+     SCREEN 4 – COMPLETION
+     ══════════════════════════════════════ -->
+<div class="screen hidden" id="screen-complete">
+  <div class="complete-content">
+    <div class="certificate-frame">
+      <span class="trophy-wrap">🏆</span>
+      <div class="complete-title">You Rocked It! 🎉</div>
+      <div class="complete-sub" id="completeClass">Fun Zone – Riddle Time!</div>
+      <div class="stars-display" id="starsDisplay"></div>
+      <div class="score-badge" id="scoreBadge">Score: 6 / 6</div>
+      <div class="complete-msg" id="completeMsg">You are a Fun Zone Champion!</div>
+    </div>
+    <button class="btn-replay" onclick="replayGame()">🔄 Play Again!</button>
+    <button class="btn-home" onclick="goHome()">🏠 Choose Another Game</button>
+  </div>
+</div>
+ 
+<!-- ══════════════════════════════════════
+     FEEDBACK OVERLAY
+     ══════════════════════════════════════ -->
+<div class="feedback-overlay hidden" id="feedbackOverlay">
+  <div class="feedback-box" id="feedbackBox">
+    <span class="feedback-emoji" id="feedbackEmoji">🎉</span>
+    <div class="feedback-title" id="feedbackTitle">Awesome!</div>
+    <div class="feedback-fun" id="feedbackFun">🌟 Fun Fact!</div>
+    <div class="feedback-quote" id="feedbackQuote">Playing makes you smarter!</div>
+    <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">Next Question ➡️</button>
+  </div>
+</div>
+ 
+<script>
+// ═══════════════════════════════════════════════════════
+//  QUESTION DATA BANK – FUN ZONE
+// ═══════════════════════════════════════════════════════
+const questionBank = {
+ 
+  riddles: [
+    {
+      type:"Riddle Time! 🧩",emoji:"🧩",
+      question:"I have hands but I can't clap. I have a face but no eyes. What am I?",
+      options:["A doll","A clock","A robot","A mirror"],
+      answer:"A clock",
+      fun:"⏰ The 'hands' of a clock are called hour hand and minute hand. The oldest clocks used the sun's shadow – called sundials!",
+    },
+    {
+      type:"Riddle Time! 🧩",emoji:"🤔",
+      question:"The more you take, the more you leave behind. What am I?",
+      options:["Water","Money","Footsteps","Clouds"],
+      answer:"Footsteps",
+      fun:"👣 Each person's footprint is unique! Detectives can identify people by their footprints, just like fingerprints!",
+    },
+    {
+      type:"Riddle Time! 🧩",emoji:"🌊",
+      question:"I have a head and a tail but no body. What am I?",
+      options:["A snake","A coin","A kite","A fish"],
+      answer:"A coin",
+      fun:"💰 The first coins were made around 600 BC in Lydia (modern Turkey). The 'head' side of a coin is called 'obverse' and 'tail' side is 'reverse'!",
+    },
+    {
+      type:"Riddle Time! 🧩",emoji:"🌙",
+      question:"I am always in front of you but can't be seen. What am I?",
+      options:["Air","The future","Your shadow","A mirror"],
+      answer:"The future",
+      fun:"🔮 No one can see the future – but scientists use maths and data to predict things like weather and eclipses with amazing accuracy!",
+    },
+    {
+      type:"Riddle Time! 🧩",emoji:"🔥",
+      question:"I get bigger the more you take away from me. What am I?",
+      options:["A balloon","A hole","A cake","A pond"],
+      answer:"A hole",
+      fun:"🕳️ Black holes in space are giant 'holes' where gravity is so strong that even light cannot escape! They were first predicted by Albert Einstein.",
+    },
+    {
+      type:"Riddle Time! 🧩",emoji:"🌧️",
+      question:"I fall but never get hurt, and I run but have no legs. What am I?",
+      options:["A leaf","Rain","A clock","A ball"],
+      answer:"Rain",
+      fun:"🌧️ A single raindrop falls at about 9 km/h. Raindrops are not tear-shaped – they are actually shaped like tiny hamburger buns!",
+    }
+  ],
+ 
+  spotit: [
+    {
+      type:"Spot It! 🔍",emoji:"🔍",
+      question:"Which one does NOT belong? Find the odd one out! 🐾",
+      options:["Dog","Cat","Mango","Rabbit"],
+      answer:"Mango",
+      fun:"🥭 Mango is India's national fruit! It is the only one here that is a fruit – the others are all animals!",
+    },
+    {
+      type:"Spot It! 🔍",emoji:"🎨",
+      question:"Which one does NOT belong? Pick the odd one out! 🎨",
+      options:["Red","Blue","Circle","Green"],
+      answer:"Circle",
+      fun:"⭕ A circle is a shape, not a colour! Did you know there are about 10 million colours the human eye can see?",
+    },
+    {
+      type:"Spot It! 🔍",emoji:"🚗",
+      question:"Which one does NOT belong in this group? 🚦",
+      options:["Car","Bus","Train","Kite"],
+      answer:"Kite",
+      fun:"🪁 A kite flies in the sky using wind power, not an engine! The other three are ground vehicles. Kites were invented in China about 2,800 years ago!",
+    },
+    {
+      type:"Spot It! 🔍",emoji:"🍎",
+      question:"Three are fruits – which one is NOT a fruit? 🌿",
+      options:["Apple","Banana","Carrot","Grapes"],
+      answer:"Carrot",
+      fun:"🥕 Carrots are vegetables that grow underground! They were originally purple – the orange carrot was developed in the Netherlands in the 17th century!",
+    },
+    {
+      type:"Spot It! 🔍",emoji:"🌍",
+      question:"Which one is NOT a planet in our Solar System? 🪐",
+      options:["Mars","Jupiter","Sun","Saturn"],
+      answer:"Sun",
+      fun:"☀️ The Sun is not a planet – it is a STAR! It is so big that about 1.3 million Earths could fit inside it. Our Sun is a medium-sized star.",
+    },
+    {
+      type:"Spot It! 🔍",emoji:"🔢",
+      question:"Which number does NOT belong in this pattern? 2, 4, 6, ?",
+      options:["8","10","7","12"],
+      answer:"7",
+      fun:"🔢 Even numbers are always divisible by 2! The pattern here is +2 each time. 7 is an odd number – it breaks the even pattern!",
+    }
+  ],
+ 
+  truefalse: [
+    {
+      type:"True or False? ✅",emoji:"🌍",
+      question:"TRUE or FALSE? 🌏\n\nThe Earth is flat like a pancake.",
+      options:["TRUE","FALSE","Maybe","I don't know"],
+      answer:"FALSE",
+      fun:"🌍 Earth is not flat! It is a sphere (a ball shape). Astronauts from space have seen and photographed the round Earth. Ancient Greeks figured this out over 2,000 years ago!",
+    },
+    {
+      type:"True or False? ✅",emoji:"🦈",
+      question:"TRUE or FALSE? 🐟\n\nSharks are the only fish that can blink.",
+      options:["TRUE","FALSE","Only some","Only baby sharks"],
+      answer:"TRUE",
+      fun:"🦈 Sharks are the only fish with eyelids! They blink to protect their eyes. But unlike humans, they blink from the bottom up with a special membrane called the nictitating membrane!",
+    },
+    {
+      type:"True or False? ✅",emoji:"🌙",
+      question:"TRUE or FALSE? 🌙\n\nThe Moon makes its own light.",
+      options:["TRUE","FALSE","Only at night","Depends on weather"],
+      answer:"FALSE",
+      fun:"🌕 The Moon does NOT make its own light! It reflects sunlight from the Sun. That's why we see different moon phases – we see different parts of the lit side!",
+    },
+    {
+      type:"True or False? ✅",emoji:"🐘",
+      question:"TRUE or FALSE? 🐘\n\nElephants are the only animals that cannot jump.",
+      options:["TRUE","FALSE","Only female elephants","Only baby elephants"],
+      answer:"TRUE",
+      fun:"🐘 Elephants really cannot jump! Their legs are designed to carry enormous weight (up to 6,000 kg). Hippos and rhinos also cannot jump. But they are fantastic swimmers!",
+    },
+    {
+      type:"True or False? ✅",emoji:"❄️",
+      question:"TRUE or FALSE? ❄️\n\nAll snowflakes have exactly 6 sides.",
+      options:["TRUE","FALSE","Only big ones","Only in cold weather"],
+      answer:"TRUE",
+      fun:"❄️ Every snowflake has exactly 6 sides – always! This is because of how water molecules arrange themselves when they freeze. And no two snowflakes are ever exactly alike!",
+    },
+    {
+      type:"True or False? ✅",emoji:"🌿",
+      question:"TRUE or FALSE? 🌿\n\nBamboo is the fastest growing plant in the world.",
+      options:["TRUE","FALSE","Only in summer","Only in Asia"],
+      answer:"TRUE",
+      fun:"🎋 Bamboo can grow up to 91 cm (3 feet) in just ONE day! That's almost 4 cm per hour. It's technically a grass, not a tree, and is stronger than steel by weight!",
+    }
+  ],
+ 
+  complete: [
+    {
+      type:"Fill the Gap! 💬",emoji:"💬",
+      question:"Complete the proverb:\n'A penny saved is a penny ___.'",
+      options:["lost","spent","earned","found"],
+      answer:"earned",
+      fun:"💰 This famous saying means that saving money is just as valuable as earning it! It is often credited to Benjamin Franklin, one of America's founding fathers.",
+    },
+    {
+      type:"Fill the Gap! 💬",emoji:"🌈",
+      question:"Complete the sentence:\nAfter every storm comes a ___.",
+      options:["tornado","rainbow","flood","drought"],
+      answer:"rainbow",
+      fun:"🌈 Rainbows form when sunlight passes through water droplets in the air and bends into 7 colours: Red, Orange, Yellow, Green, Blue, Indigo, Violet – remember ROYGBIV!",
+    },
+    {
+      type:"Fill the Gap! 💬",emoji:"🧠",
+      question:"Complete the famous quote:\n'Practice makes ___.'",
+      options:["money","noise","perfect","friends"],
+      answer:"perfect",
+      fun:"🧠 Scientists found that to master any skill you need about 10,000 hours of practice! This is called the '10,000 hour rule' by Malcolm Gladwell.",
+    },
+    {
+      type:"Fill the Gap! 💬",emoji:"🐢",
+      question:"Complete the fable moral:\n'Slow and steady wins the ___.' (The Tortoise and the Hare)",
+      options:["game","prize","race","heart"],
+      answer:"race",
+      fun:"🐢 In Aesop's famous fable, the slow tortoise beats the fast hare because it never gives up. Aesop was a Greek storyteller who lived around 620 BC!",
+    },
+    {
+      type:"Fill the Gap! 💬",emoji:"📚",
+      question:"Complete the famous saying:\n'Knowledge is ___.'",
+      options:["money","heavy","dangerous","power"],
+      answer:"power",
+      fun:"📚 'Knowledge is power' was said by Sir Francis Bacon in 1597. It means that the more you learn, the more capable and confident you become in life!",
+    },
+    {
+      type:"Fill the Gap! 💬",emoji:"🌱",
+      question:"Complete the sentence:\nEvery big tree was once a small ___.",
+      options:["branch","cloud","seed","leaf"],
+      answer:"seed",
+      fun:"🌱 The world's biggest tree is General Sherman, a Giant Sequoia in California. It is 84 metres tall and started from a seed smaller than a grain of oats!",
+    }
+  ]
+};
+ 
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let selectedGame    = null;
+let currentQIndex   = 0;
+let starsEarned     = 0;
+let answeredCorrect = 0;
+let questions       = [];
+ 
+const gameNames = {
+  riddles:   "Riddle Time! 🧩",
+  spotit:    "Spot It! 🔍",
+  truefalse: "True or False? ✅",
+  complete:  "Fill the Gap! 💬"
+};
+const gameEmojis = {
+  riddles:"🧩", spotit:"🔍", truefalse:"✅", complete:"💬"
+};
+const funSymbols = ["🎮","🎯","🎪","🌟","🏆","🎠","🎡","🎢","🎁","🎊","🎈","🃏","🎲","🧩","🔍"];
+const introMessages = [
+  "Get Ready for Some Mega Fun! 🎉",
+  "Time to Play and Win Stars! 🌟",
+  "Brain Games Are the Best Games! 🧠",
+  "Let's Cross the Bridge of Fun! 🌉"
+];
+ 
+const correctMessages = [
+  ["🎉","Woohoo!","Every game makes you smarter!"],
+  ["🌟","Brilliant!","You are on fire! Keep going!"],
+  ["🏆","Champion!","Stars are raining down for you!"],
+  ["🚀","Amazing!","You play like a true champion!"],
+  ["💫","Superstar!","Your brain just levelled up!"]
+];
+const wrongMessages = [
+  ["💪","So Close!","Every wrong answer teaches you something!"],
+  ["🌈","Try Again!","Even champions make mistakes!"],
+  ["🤗","Keep Playing!","Fun never stops – keep going!"]
+];
+ 
+// ═══════════════════════════════════════════════════════
+//  GAME SELECTION
+// ═══════════════════════════════════════════════════════
+function selectGame(card) {
+  document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedGame = card.dataset.game;
+  document.getElementById('selectWarning').style.display = 'none';
+}
+ 
+function startJourney() {
+  if (!selectedGame) { document.getElementById('selectWarning').style.display = 'block'; return; }
+  bridgeTransition(() => { showScreen('screen-intro'); setupIntro(); });
+}
+ 
+// ═══════════════════════════════════════════════════════
+//  INTRO
+// ═══════════════════════════════════════════════════════
+function setupIntro() {
+  document.getElementById('introBadge').textContent = gameEmojis[selectedGame] + ' ' + gameNames[selectedGame].replace(/[🧩🔍✅💬]/g,'').trim();
+  document.getElementById('introMsg').textContent = introMessages[Math.floor(Math.random() * introMessages.length)];
+  const abcSets = { riddles:"🧩 🤔 💡", spotit:"🔍 👀 🎯", truefalse:"✅ ❌ 🤷", complete:"💬 📝 ✏️" };
+  document.getElementById('introAbc').textContent = abcSets[selectedGame];
+  const intro = document.getElementById('screen-intro');
+  intro.querySelectorAll('.alpha-float,.star-intro').forEach(el => el.remove());
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('span'); el.className = 'alpha-float';
+    el.textContent = funSymbols[Math.floor(Math.random() * funSymbols.length)];
+    el.style.cssText = `left:${Math.random()*90}%;bottom:-30px;font-size:${1.2+Math.random()*1.4}rem;animation-delay:${Math.random()*5}s;animation-duration:${3+Math.random()*4}s`;
+    intro.appendChild(el);
+  }
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('span'); s.className = 'star-intro';
+    const sz = (4+Math.random()*8)+'px';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz};height:${sz};animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2}s`;
+    intro.appendChild(s);
+  }
+}
+ 
+// ═══════════════════════════════════════════════════════
+//  QUIZ
+// ═══════════════════════════════════════════════════════
+function showQuiz() {
+  questions = questionBank[selectedGame];
+  currentQIndex = 0; starsEarned = 0; answeredCorrect = 0;
+  bridgeTransition(() => { showScreen('screen-quiz'); renderQuestion(); });
+}
+ 
+function renderQuestion() {
+  if (currentQIndex >= questions.length) { showCompletion(); return; }
+  const q = questions[currentQIndex];
+  document.getElementById('qNumBadge').textContent = `Q ${currentQIndex+1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = (currentQIndex / questions.length * 100) + '%';
+  document.getElementById('starCount').textContent = starsEarned;
+  document.getElementById('qTypeBadge').textContent = q.type;
+  document.getElementById('qEmoji').textContent = q.emoji;
+  document.getElementById('qText').textContent = q.question;
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none'; void card.offsetWidth;
+  card.style.animation = 'cardPop .45s cubic-bezier(.36,.07,.19,.97)';
+  const grid = document.getElementById('optionsGrid'); grid.innerHTML = '';
+  const shuffled = [...q.options].sort(() => Math.random() - .5);
+  shuffled.forEach((opt, idx) => {
+    const btn = document.createElement('button'); btn.className = 'opt-btn';
+    btn.textContent = ['🅰','🅱','🅲','🅳'][idx] + '  ' + opt;
+    btn.dataset.value = opt;
+    btn.onclick = () => checkAnswer(btn, opt, q.answer, q.fun);
+    grid.appendChild(btn);
+  });
+}
+ 
+function checkAnswer(btn, chosen, correct, fun) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+  if (chosen === correct) {
+    btn.classList.add('correct'); starsEarned++; answeredCorrect++;
+    document.getElementById('starCount').textContent = starsEarned;
+    setTimeout(() => showFeedback(true, fun), 400);
+    launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach(b => { if (b.dataset.value === correct) b.classList.add('correct'); });
+    setTimeout(() => showFeedback(false, fun), 400);
+  }
+}
+ 
+function showFeedback(isCorrect, fun) {
+  const data = isCorrect
+    ? correctMessages[Math.floor(Math.random() * correctMessages.length)]
+    : wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
+  document.getElementById('feedbackEmoji').textContent = data[0];
+  document.getElementById('feedbackTitle').textContent = data[1];
+  document.getElementById('feedbackFun').textContent   = fun;
+  document.getElementById('feedbackQuote').textContent = data[2];
+  document.getElementById('feedbackBox').className = 'feedback-box ' + (isCorrect ? 'correct-box' : 'wrong-box');
+  document.getElementById('btnNextQ').textContent = (currentQIndex === questions.length - 1) ? '🏁 See My Stars!' : 'Next Question ➡️';
+  document.getElementById('feedbackOverlay').classList.remove('hidden');
+}
+ 
+function nextQuestion() {
+  document.getElementById('feedbackOverlay').classList.add('hidden');
+  currentQIndex++;
+  if (currentQIndex >= questions.length) bridgeTransition(showCompletion);
+  else renderQuestion();
+}
+ 
+// ═══════════════════════════════════════════════════════
+//  COMPLETION
+// ═══════════════════════════════════════════════════════
+function showCompletion() {
+  showScreen('screen-complete');
+  document.getElementById('completeClass').textContent = 'Fun Zone – ' + gameNames[selectedGame];
+  document.getElementById('scoreBadge').textContent = `Score: ${answeredCorrect} / ${questions.length}`;
+  const starsDiv = document.getElementById('starsDisplay'); starsDiv.innerHTML = '';
+  for (let i = 1; i <= 6; i++) {
+    const s = document.createElement('span');
+    s.className = 'star-slot' + (i <= starsEarned ? ' earned' : '');
+    s.textContent = i <= starsEarned ? '⭐' : '☆';
+    s.style.animationDelay = (i * .12) + 's';
+    starsDiv.appendChild(s);
+  }
+  const msgs = [
+    "Keep playing – every game makes you smarter!",
+    "Good effort – the fun never stops!",
+    "Well played! You're getting better!",
+    "Great game! Keep collecting stars!",
+    "Fantastic! You're almost unbeatable!",
+    "Perfect Score! You are the Fun Zone Champion! 🏆🎉"
+  ];
+  document.getElementById('completeMsg').textContent = msgs[Math.min(starsEarned, msgs.length - 1)];
+  setTimeout(launchConfetti, 300);
+  setTimeout(launchConfetti, 700);
+  setTimeout(launchConfetti, 1100);
+}
+ 
+function replayGame() {
+  bridgeTransition(() => { showScreen('screen-intro'); setupIntro(); });
+}
+function goHome() {
+  selectedGame = null;
+  document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+  bridgeTransition(() => showScreen('screen-select'));
+}
+ 
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function bridgeTransition(callback) {
+  const div = document.createElement('div'); div.className = 'bridge-transition';
+  div.innerHTML = `<span class="bridge-icon-anim">🌉</span><span class="bt-text">Crossing the Bridge...</span>`;
+  document.body.appendChild(div);
+  setTimeout(() => { callback(); div.classList.add('out'); setTimeout(() => div.remove(), 500); }, 600);
+}
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+function launchConfetti() {
+  const colors = ['#FF4757','#FFA502','#2ED573','#00BBF9','#FFD93D','#F15BB5','#9B5DE5'];
+  for (let i = 0; i < 55; i++) {
+    const el = document.createElement('div'); el.className = 'confetti-piece';
+    el.style.cssText = `left:${Math.random()*100}vw;top:-20px;background:${colors[Math.floor(Math.random()*colors.length)]};width:${7+Math.random()*10}px;height:${7+Math.random()*10}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+}
+ 
+showScreen('screen-select');
+</script>
+</body>
+</html>
