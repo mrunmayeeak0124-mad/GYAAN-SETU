@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gyaan Setu – Art Adventure!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Lilita+One&display=swap');
+ 
+/* ── CSS VARIABLES ── */
+:root {
+  --clay:     #E8521A;
+  --saffron:  #FF9B21;
+  --lemon:    #FFE13A;
+  --mint:     #3ECFA8;
+  --ocean:    #2D9CDB;
+  --lavender: #B07FE8;
+  --rose:     #F05C78;
+  --cream:    #FFF9F0;
+  --dark:     #1E1010;
+  --ink:      #2C1654;
+  --correct:  #3ECFA8;
+  --wrong:    #F05C78;
+  --gold:     #FFD700;
+  --shadow:   rgba(0,0,0,0.18);
+  --brush:    #8B4513;
+}
+ 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+ 
+body {
+  font-family: 'Baloo 2', 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(255,155,33,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 10%, rgba(176,127,232,0.20) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(62,207,168,0.20) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 60%, rgba(240,92,120,0.15) 0%, transparent 45%),
+    linear-gradient(160deg, #fff4e0 0%, #fce8ff 40%, #e0fff8 80%, #fff0e8 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M4 24 L10 10 L20 8 L22 18 L10 22 Z' fill='%23E8521A' stroke='%231E1010' stroke-width='1.5'/%3E%3Crect x='20' y='4' width='5' height='7' rx='1' fill='%238B4513' stroke='%231E1010' stroke-width='1'/%3E%3C/svg%3E") 4 24, auto;
+}
+ 
+.hidden { display: none !important; }
+ 
+/* ── PAINT SPLATTER DECORATIONS ── */
+.deco-layer {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+ 
+.splat {
+  position: absolute;
+  border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+  opacity: 0.13;
+  animation: splatPulse ease-in-out infinite alternate;
+}
+@keyframes splatPulse {
+  from { transform: scale(1) rotate(0deg); opacity: 0.10; }
+  to   { transform: scale(1.08) rotate(6deg); opacity: 0.18; }
+}
+ 
+.paintdrop {
+  position: absolute;
+  width: 14px; height: 22px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: drip 4s ease-in-out infinite alternate;
+}
+@keyframes drip {
+  0%   { transform: translateY(0) scaleY(1); }
+  60%  { transform: translateY(8px) scaleY(1.15); }
+  100% { transform: translateY(0) scaleY(0.9); }
+}
+ 
+.paintbrush-deco {
+  position: absolute;
+  font-size: 2.2rem;
+  animation: brushSpin 5s ease-in-out infinite alternate;
+  opacity: 0.22;
+}
+@keyframes brushSpin {
+  0%   { transform: rotate(-15deg) translateY(0); opacity: 0.2; }
+  100% { transform: rotate(15deg) translateY(-14px); opacity: 0.28; }
+}
+ 
+/* ── SCREENS ── */
+.screen {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 16px;
+}
+ 
+/* ══════════════════════════════════════════════
+   SCREEN 1 – LEVEL SELECTION
+══════════════════════════════════════════════ */
+#screen-select { background: transparent; }
+ 
+.brand-header { text-align: center; margin-bottom: 8px; }
+ 
+.brand-title {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  color: var(--clay);
+  text-shadow: 3px 3px 0 var(--saffron), 6px 6px 0 rgba(0,0,0,.08);
+  letter-spacing: 2px;
+  animation: bounceIn .8s cubic-bezier(.36,.07,.19,.97);
+}
+.brand-sub {
+  font-size: clamp(.9rem, 2.5vw, 1.15rem);
+  color: var(--lavender);
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+ 
+.art-banner {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(1.3rem, 3.5vw, 2rem);
+  color: #fff;
+  background: linear-gradient(90deg, var(--clay), var(--rose), var(--lavender), var(--mint));
+  border-radius: 50px;
+  padding: 10px 30px;
+  margin: 14px 0;
+  box-shadow: 0 6px 20px rgba(232,82,26,.35);
+  text-align: center;
+  animation: paintPulse 2.5s ease-in-out infinite;
+}
+@keyframes paintPulse {
+  0%,100% { transform: scale(1); box-shadow: 0 6px 20px rgba(232,82,26,.35); }
+  50%     { transform: scale(1.03); box-shadow: 0 10px 32px rgba(176,127,232,.55); }
+}
+ 
+/* Canvas palette SVG strip */
+.palette-strip {
+  width: 100%; max-width: 600px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  margin: 6px 0 14px;
+}
+.paint-blob {
+  width: 38px; height: 38px;
+  border-radius: 55% 45% 60% 40% / 50% 55% 45% 50%;
+  animation: blobWobble 3s ease-in-out infinite alternate;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+@keyframes blobWobble {
+  0%   { border-radius: 55% 45% 60% 40% / 50% 55% 45% 50%; transform: scale(1); }
+  100% { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; transform: scale(1.1); }
+}
+ 
+/* level cards */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 18px;
+  width: 100%;
+  max-width: 780px;
+  margin: 10px 0;
+}
+ 
+.level-card {
+  background: #fff;
+  border-radius: 26px;
+  padding: 26px 16px 20px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 28px var(--shadow);
+  transition: transform .22s, box-shadow .22s;
+  border: 3.5px solid transparent;
+  position: relative;
+  overflow: hidden;
+  animation: bounceIn .6s both;
+}
+.level-card:nth-child(1) { animation-delay:.05s; border-color: var(--clay); }
+.level-card:nth-child(2) { animation-delay:.15s; border-color: var(--lavender); }
+.level-card:nth-child(3) { animation-delay:.25s; border-color: var(--mint); }
+.level-card:nth-child(4) { animation-delay:.35s; border-color: var(--ocean); }
+ 
+/* paint-stroke top edge */
+.level-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 7px;
+  border-radius: 26px 26px 0 0;
+}
+.level-card:nth-child(1)::before { background: linear-gradient(90deg, var(--clay), var(--saffron)); }
+.level-card:nth-child(2)::before { background: linear-gradient(90deg, var(--lavender), var(--rose)); }
+.level-card:nth-child(3)::before { background: linear-gradient(90deg, var(--mint), var(--ocean)); }
+.level-card:nth-child(4)::before { background: linear-gradient(90deg, var(--ocean), var(--lavender)); }
+ 
+.level-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0) 60%, rgba(255,255,255,.55));
+  border-radius: 26px;
+  opacity: 0;
+  transition: opacity .22s;
+}
+.level-card:hover::after { opacity: 1; }
+.level-card:hover {
+  transform: translateY(-9px) scale(1.05);
+  box-shadow: 0 20px 44px rgba(0,0,0,.18);
+}
+.level-card.selected { transform: translateY(-11px) scale(1.07); }
+.level-card:nth-child(1).selected { background: #fff5f0; }
+.level-card:nth-child(2).selected { background: #f7f0ff; }
+.level-card:nth-child(3).selected { background: #edfff9; }
+.level-card:nth-child(4).selected { background: #edf6ff; }
+ 
+.level-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 10px;
+  animation: brushWobble 3s ease-in-out infinite;
+}
+@keyframes brushWobble {
+  0%,100% { transform: rotate(-5deg); }
+  50%     { transform: rotate(5deg); }
+}
+.level-name {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.2rem;
+  display: block;
+}
+.level-card:nth-child(1) .level-name { color: var(--clay); }
+.level-card:nth-child(2) .level-name { color: var(--lavender); }
+.level-card:nth-child(3) .level-name { color: var(--mint); }
+.level-card:nth-child(4) .level-name { color: var(--ocean); }
+ 
+.level-desc { font-size: .78rem; color: #999; margin-top: 4px; font-weight: 700; }
+ 
+.btn-start {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.35rem;
+  background: linear-gradient(90deg, var(--clay), var(--rose), var(--lavender));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 52px;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(232,82,26,.4);
+  transition: transform .18s, box-shadow .18s;
+  animation: artGlow 2.5s ease-in-out infinite;
+  margin-top: 12px;
+}
+.btn-start:hover { transform: scale(1.08) translateY(-3px); box-shadow: 0 16px 40px rgba(176,127,232,.55); }
+@keyframes artGlow {
+  0%,100% { box-shadow: 0 8px 28px rgba(232,82,26,.4); }
+  50%     { box-shadow: 0 8px 40px rgba(176,127,232,.65); }
+}
+ 
+/* ══════════════════════════════════════════════
+   SCREEN 2 – ANIMATED INTRO
+══════════════════════════════════════════════ */
+#screen-intro {
+  background: linear-gradient(135deg, #1a0a2e 0%, #2c1a0e 40%, #0a2e1a 80%, #1a0a1a 100%);
+  position: relative;
+}
+ 
+.intro-content { text-align: center; z-index: 2; position: relative; }
+ 
+.intro-msg {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  color: #fff;
+  text-shadow: 0 0 22px var(--saffron), 0 0 44px var(--rose);
+  line-height: 1.35;
+  margin-bottom: 8px;
+  animation: fadeSlideDown .8s both;
+}
+ 
+.intro-class-badge {
+  display: inline-block;
+  font-family: 'Lilita One', cursive;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg, var(--saffron), var(--clay));
+  color: var(--dark);
+  border-radius: 50px;
+  padding: 8px 28px;
+  margin: 12px 0;
+  box-shadow: 0 4px 18px rgba(255,155,33,.4);
+  animation: fadeSlideDown .8s .2s both;
+}
+ 
+.intro-art-row {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  letter-spacing: 12px;
+  display: block;
+  margin: 18px 0;
+  animation: rainbowArt 3s linear infinite, fadeSlideDown .8s .4s both;
+  filter: drop-shadow(0 0 10px rgba(255,155,33,.6));
+}
+@keyframes rainbowArt {
+  0%   { filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(255,155,33,.6)); }
+  100% { filter: hue-rotate(360deg) drop-shadow(0 0 10px rgba(255,155,33,.6)); }
+}
+ 
+.floating-art {
+  position: absolute;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  opacity: 0;
+  animation: floatArtEmoji 5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes floatArtEmoji {
+  0%   { opacity: 0; transform: translateY(40px) scale(.4) rotate(-20deg); }
+  20%  { opacity: 1; transform: translateY(-10px) scale(1) rotate(5deg); }
+  80%  { opacity: 1; transform: translateY(-50px) scale(1.05) rotate(-5deg); }
+  100% { opacity: 0; transform: translateY(-90px) scale(.8) rotate(10deg); }
+}
+ 
+.btn-next {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg, var(--mint), var(--ocean));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 48px;
+  cursor: pointer;
+  box-shadow: 0 8px 26px rgba(62,207,168,.45);
+  transition: transform .18s;
+  margin-top: 22px;
+  animation: fadeSlideDown .8s .6s both, mintGlow 2.2s ease-in-out infinite;
+}
+.btn-next:hover { transform: scale(1.08) translateY(-3px); }
+@keyframes mintGlow {
+  0%,100% { box-shadow: 0 8px 26px rgba(62,207,168,.45); }
+  50%     { box-shadow: 0 8px 40px rgba(45,156,219,.7); }
+}
+ 
+/* sparkle dots */
+.spark {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--saffron);
+  animation: sparkTwinkle 2.5s ease-in-out infinite alternate;
+}
+@keyframes sparkTwinkle {
+  from { opacity: .2; transform: scale(.5); }
+  to   { opacity: 1; transform: scale(1.4); }
+}
+ 
+/* ══════════════════════════════════════════════
+   SCREEN 3 – QUIZ / ACTIVITY
+══════════════════════════════════════════════ */
+#screen-quiz {
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(255,155,33,.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(62,207,168,.12) 0%, transparent 50%),
+    linear-gradient(150deg, #fff9f0 0%, #f5eeff 50%, #eafff8 100%);
+}
+ 
+.quiz-header {
+  width: 100%; max-width: 740px;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 16px;
+}
+ 
+.progress-track {
+  flex: 1; height: 18px;
+  background: rgba(0,0,0,.08);
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.1);
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--clay), var(--rose), var(--lavender), var(--mint));
+  border-radius: 50px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 12px rgba(232,82,26,.5);
+}
+ 
+.stars-counter {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.2rem;
+  color: var(--dark);
+  white-space: nowrap;
+}
+.stars-counter span { color: var(--gold); }
+ 
+.q-number-badge {
+  font-family: 'Lilita One', cursive;
+  font-size: 1rem;
+  background: var(--clay);
+  color: #fff;
+  border-radius: 50px;
+  padding: 5px 16px;
+  white-space: nowrap;
+}
+ 
+/* question card */
+.question-card {
+  background: #fff;
+  border-radius: 30px;
+  padding: 32px 28px 24px;
+  max-width: 740px;
+  width: 100%;
+  box-shadow: 0 14px 44px rgba(232,82,26,.13);
+  position: relative;
+  overflow: hidden;
+  animation: cardPop .45s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes cardPop {
+  from { transform: scale(.86) translateY(22px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+ 
+/* paint-stroke gradient header */
+.question-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 7px;
+  background: linear-gradient(90deg, var(--clay), var(--saffron), var(--rose), var(--lavender), var(--mint), var(--ocean));
+  border-radius: 30px 30px 0 0;
+}
+ 
+/* canvas texture pattern overlay */
+.question-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(232,82,26,.025) 25px),
+    repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(232,82,26,.025) 25px);
+  border-radius: 30px;
+  pointer-events: none;
+}
+ 
+.q-type-badge {
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background: linear-gradient(90deg, var(--clay), var(--rose));
+  color: #fff;
+  border-radius: 50px;
+  padding: 4px 14px;
+  margin-bottom: 14px;
+  position: relative; z-index: 1;
+}
+ 
+.q-activity-type {
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  border-radius: 50px;
+  padding: 3px 12px;
+  margin-left: 8px;
+  margin-bottom: 14px;
+  position: relative; z-index: 1;
+}
+.act-draw    { background: #fff3e0; color: #e65100; border: 2px solid #ff9800; }
+.act-color   { background: #f3e5f5; color: #6a1b9a; border: 2px solid #9b5de5; }
+.act-craft   { background: #e8f5e9; color: #1b5e20; border: 2px solid #3ecfa8; }
+.act-identify{ background: #e3f2fd; color: #0d47a1; border: 2px solid #2d9cdb; }
+ 
+.q-emoji { font-size: 2.4rem; display: block; margin-bottom: 10px; position: relative; z-index: 1; }
+ 
+.q-text {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--dark);
+  line-height: 1.45;
+  margin-bottom: 22px;
+  position: relative; z-index: 1;
+}
+ 
+/* activity instruction box */
+.activity-box {
+  background: linear-gradient(135deg, #fff8f0, #f5f0ff);
+  border: 2.5px dashed var(--saffron);
+  border-radius: 18px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  font-weight: 700;
+  font-size: .93rem;
+  color: #5a3a00;
+  position: relative; z-index: 1;
+}
+.activity-box .act-label {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.05rem;
+  color: var(--clay);
+  display: block;
+  margin-bottom: 4px;
+}
+ 
+/* options grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  position: relative; z-index: 1;
+}
+ 
+.opt-btn {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(.9rem, 2.2vw, 1.08rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff5f0, #ffe8f5);
+  color: var(--dark);
+  border: 2.5px solid transparent;
+  border-radius: 18px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s, background .18s;
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.opt-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.45), transparent);
+  border-radius: 18px;
+}
+.opt-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(232,82,26,.28);
+  background: linear-gradient(135deg, #ffe8d6, #ffd6ee);
+  border-color: var(--clay);
+}
+.opt-btn:disabled { cursor: not-allowed; }
+.opt-btn.correct {
+  background: linear-gradient(135deg, #c8f7e0, #a0edd8) !important;
+  border-color: var(--correct) !important;
+  color: #0a4d2e;
+  animation: correctPop .4s ease;
+}
+.opt-btn.wrong {
+  background: linear-gradient(135deg, #ffd6dd, #ffb3bf) !important;
+  border-color: var(--wrong) !important;
+  color: #6b0a1a;
+  animation: wrongShake .4s;
+}
+@keyframes correctPop {
+  0%,100% { transform: scale(1); }
+  40%     { transform: scale(1.08); }
+}
+@keyframes wrongShake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-7px); }
+  40%,80% { transform: translateX(7px); }
+}
+ 
+/* ══════════════════════════════════════════════
+   FEEDBACK OVERLAY
+══════════════════════════════════════════════ */
+.feedback-overlay {
+  position: fixed; inset: 0;
+  background: rgba(30,16,16,.5);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(5px);
+}
+.feedback-box {
+  background: #fff;
+  border-radius: 34px;
+  padding: 38px 40px;
+  text-align: center;
+  max-width: 420px;
+  width: 92%;
+  box-shadow: 0 24px 64px rgba(0,0,0,.28);
+  animation: popIn .4s cubic-bezier(.36,.07,.19,.97);
+  position: relative;
+  overflow: hidden;
+}
+@keyframes popIn {
+  from { transform: scale(.45) rotate(-6deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.feedback-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 7px;
+  border-radius: 34px 34px 0 0;
+}
+.feedback-box.correct-box::before { background: linear-gradient(90deg, var(--correct), var(--ocean)); }
+.feedback-box.wrong-box::before   { background: linear-gradient(90deg, var(--wrong), var(--saffron)); }
+ 
+.feedback-emoji {
+  font-size: 4.5rem; display: block;
+  margin-bottom: 10px;
+  animation: bounceEmoji .55s ease-in-out infinite alternate;
+}
+@keyframes bounceEmoji {
+  from { transform: translateY(0) rotate(-5deg); }
+  to   { transform: translateY(-12px) rotate(5deg); }
+}
+.feedback-title {
+  font-family: 'Lilita One', cursive;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.correct-box .feedback-title { color: #1a6e4a; }
+.wrong-box .feedback-title   { color: #b01a2a; }
+ 
+.feedback-hint {
+  background: linear-gradient(135deg, #fff9e0, #fff0e0);
+  border: 2px dashed var(--saffron);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: .88rem;
+  font-weight: 700;
+  color: #6b3a00;
+  margin-bottom: 14px;
+}
+ 
+.feedback-quote {
+  font-size: .95rem;
+  font-weight: 700;
+  color: #777;
+  margin-bottom: 22px;
+  font-style: italic;
+}
+ 
+.btn-next-q {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.2rem;
+  background: linear-gradient(90deg, var(--clay), var(--rose));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 13px 42px;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(232,82,26,.4);
+  transition: transform .18s;
+}
+.btn-next-q:hover { transform: scale(1.07); }
+ 
+/* confetti */
+.confetti-piece {
+  position: fixed;
+  pointer-events: none;
+  animation: confettiFall linear forwards;
+  z-index: 200;
+  border-radius: 3px;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+ 
+/* ══════════════════════════════════════════════
+   COMPLETION SCREEN
+══════════════════════════════════════════════ */
+#screen-complete {
+  background: linear-gradient(135deg, #1a0a0a 0%, #2c1a0a 35%, #0a1a2c 70%, #1a0a2c 100%);
+}
+.complete-content { text-align: center; z-index: 2; position: relative; }
+ 
+.trophy-wrap {
+  font-size: 7.5rem;
+  display: block;
+  animation: trophyBounce 1s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 22px var(--gold));
+}
+@keyframes trophyBounce {
+  from { transform: scale(1) rotate(-6deg); }
+  to   { transform: scale(1.12) rotate(6deg); }
+}
+ 
+.complete-title {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  color: #fff;
+  text-shadow: 0 0 22px var(--saffron);
+  margin: 14px 0 8px;
+}
+.complete-sub {
+  font-size: clamp(.95rem, 2.5vw, 1.15rem);
+  font-weight: 700;
+  color: var(--saffron);
+  margin-bottom: 18px;
+}
+ 
+.stars-display {
+  display: flex; gap: 10px; justify-content: center;
+  font-size: 2.8rem;
+  margin: 14px 0;
+}
+.star-slot { animation: starPop .5s both; }
+.star-slot.earned { filter: drop-shadow(0 0 8px var(--gold)); }
+@keyframes starPop {
+  from { transform: scale(0) rotate(-30deg); }
+  to   { transform: scale(1) rotate(0deg); }
+}
+ 
+.score-badge {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.5rem;
+  background: linear-gradient(90deg, var(--saffron), var(--clay));
+  color: var(--dark);
+  border-radius: 50px;
+  padding: 10px 36px;
+  margin: 10px auto;
+  display: inline-block;
+  box-shadow: 0 6px 22px rgba(255,155,33,.42);
+}
+ 
+.complete-msg {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.82);
+  margin: 14px 0 28px;
+  font-style: italic;
+}
+ 
+.certificate-frame {
+  border: 4px solid var(--gold);
+  border-radius: 26px;
+  padding: 26px 32px;
+  max-width: 480px;
+  width: 92%;
+  margin: 0 auto 24px;
+  box-shadow: 0 0 32px rgba(255,215,0,.28), inset 0 0 22px rgba(255,215,0,.05);
+  background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,155,33,.04));
+}
+ 
+.btn-replay {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.2rem;
+  background: linear-gradient(90deg, var(--mint), var(--ocean));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 46px;
+  cursor: pointer;
+  box-shadow: 0 8px 26px rgba(62,207,168,.4);
+  transition: transform .18s;
+  margin: 6px;
+}
+.btn-replay:hover { transform: scale(1.07); }
+ 
+.btn-home {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.1rem;
+  background: linear-gradient(90deg, var(--clay), var(--rose));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 40px;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(232,82,26,.4);
+  transition: transform .18s;
+  margin: 6px;
+}
+.btn-home:hover { transform: scale(1.07); }
+ 
+/* ── BRIDGE TRANSITION ── */
+.bridge-transition {
+  position: fixed; inset: 0; z-index: 300;
+  background: linear-gradient(90deg, var(--clay), var(--saffron), var(--rose), var(--lavender));
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  animation: bridgeIn .3s ease-in forwards;
+}
+.bridge-transition.out { animation: bridgeOut .4s ease-out forwards; }
+.bridge-transition .bt-text {
+  font-family: 'Lilita One', cursive;
+  font-size: 1.8rem;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,.3);
+  margin-top: 8px;
+}
+.bridge-icon-anim { font-size: 4.5rem; animation: bounceIn .5s both; }
+@keyframes bridgeIn  { from{clip-path:circle(0% at 50% 50%);} to{clip-path:circle(150% at 50% 50%);} }
+@keyframes bridgeOut { from{clip-path:circle(150% at 50% 50%); opacity:1;} to{clip-path:circle(0% at 50% 50%); opacity:0;} }
+ 
+/* ── SHARED KEYFRAMES ── */
+@keyframes bounceIn {
+  from { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.05); }
+  to   { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeSlideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+ 
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .options-grid { grid-template-columns: 1fr; }
+  .level-grid   { grid-template-columns: 1fr 1fr; }
+  .feedback-box { padding: 26px 18px; }
+  .certificate-frame { padding: 18px 14px; }
+}
+</style>
+</head>
+<body>
+ 
+<!-- ══════════════ FLOATING DECORATIONS ══════════════ -->
+<div class="deco-layer" id="decoLayer">
+  <!-- big paint splatters -->
+  <div class="splat" style="width:200px;height:160px;background:var(--clay);top:5%;left:-4%;animation-duration:7s;animation-delay:0s;"></div>
+  <div class="splat" style="width:160px;height:130px;background:var(--lavender);top:12%;right:-3%;animation-duration:9s;animation-delay:2s;"></div>
+  <div class="splat" style="width:180px;height:140px;background:var(--mint);bottom:10%;left:2%;animation-duration:8s;animation-delay:1s;"></div>
+  <div class="splat" style="width:130px;height:110px;background:var(--saffron);bottom:5%;right:-2%;animation-duration:10s;animation-delay:3s;"></div>
+  <div class="splat" style="width:100px;height:80px;background:var(--rose);top:50%;left:45%;animation-duration:6s;animation-delay:4s;"></div>
+ 
+  <!-- paint drips -->
+  <div class="paintdrop" style="background:var(--clay);top:0;left:15%;animation-delay:0s;"></div>
+  <div class="paintdrop" style="background:var(--lavender);top:0;left:35%;animation-delay:1.2s;"></div>
+  <div class="paintdrop" style="background:var(--mint);top:0;left:58%;animation-delay:.5s;"></div>
+  <div class="paintdrop" style="background:var(--saffron);top:0;right:18%;animation-delay:1.8s;"></div>
+  <div class="paintdrop" style="background:var(--rose);top:0;right:5%;animation-delay:.9s;"></div>
+ 
+  <!-- brushes -->
+  <div class="paintbrush-deco" style="top:20%;left:1%;">🖌️</div>
+  <div class="paintbrush-deco" style="top:60%;right:1%;animation-delay:2s;">✏️</div>
+  <div class="paintbrush-deco" style="bottom:20%;left:3%;animation-delay:1s;">🎨</div>
+  <div class="paintbrush-deco" style="top:35%;right:2%;animation-delay:3s;">✂️</div>
+</div>
+ 
+<!-- ══════════════ SCREEN 1: LEVEL SELECTION ══════════════ -->
+<div class="screen" id="screen-select">
+ 
+  <div class="brand-header">
+    <div class="brand-title">🎨 GYAAN SETU</div>
+    <div class="brand-sub">✨ The Bridge of Knowledge ✨</div>
+  </div>
+ 
+  <div class="art-banner">🖌️ Art Adventure 🖌️</div>
+ 
+  <div class="palette-strip">
+    <div class="paint-blob" style="background:var(--clay);"></div>
+    <div class="paint-blob" style="background:var(--saffron);animation-delay:.4s;"></div>
+    <div class="paint-blob" style="background:var(--lemon);animation-delay:.8s;"></div>
+    <div class="paint-blob" style="background:var(--mint);animation-delay:1.2s;"></div>
+    <div class="paint-blob" style="background:var(--ocean);animation-delay:1.6s;"></div>
+    <div class="paint-blob" style="background:var(--lavender);animation-delay:2s;"></div>
+    <div class="paint-blob" style="background:var(--rose);animation-delay:2.4s;"></div>
+  </div>
+ 
+  <p style="font-weight:800;color:#666;font-size:1.05rem;margin-bottom:8px;">Choose Your Level to Begin!</p>
+ 
+  <div class="level-grid">
+    <div class="level-card" data-level="kg" onclick="selectLevel(this)">
+      <span class="level-icon">🌈</span>
+      <span class="level-name">Kindergarten</span>
+      <span class="level-desc">Colours & Shapes</span>
+    </div>
+    <div class="level-card" data-level="1st" onclick="selectLevel(this)">
+      <span class="level-icon">✏️</span>
+      <span class="level-name">1st Standard</span>
+      <span class="level-desc">Drawing & Patterns</span>
+    </div>
+    <div class="level-card" data-level="2nd" onclick="selectLevel(this)">
+      <span class="level-icon">🖌️</span>
+      <span class="level-name">2nd Standard</span>
+      <span class="level-desc">Painting & Craft</span>
+    </div>
+    <div class="level-card" data-level="3rd" onclick="selectLevel(this)">
+      <span class="level-icon">🏺</span>
+      <span class="level-name">3rd Standard</span>
+      <span class="level-desc">Art Forms & Design</span>
+    </div>
+  </div>
+ 
+  <button class="btn-start" id="btnStart" onclick="startJourney()">🎨 Start Art Adventure!</button>
+ 
+  <p id="selectWarning" style="color:var(--clay);font-weight:800;margin-top:10px;display:none;">
+    👆 Please select a class first!
+  </p>
+</div>
+ 
+<!-- ══════════════ SCREEN 2: ANIMATED INTRO ══════════════ -->
+<div class="screen hidden" id="screen-intro">
+  <div class="intro-content">
+    <div class="intro-class-badge" id="introBadge">🌈 Kindergarten</div>
+    <div class="intro-msg" id="introMsg">Let's Create, Draw & Colour! 🎨</div>
+    <span class="intro-art-row" id="introArt">🎨 🖌️ ✏️</span>
+    <p style="color:rgba(255,255,255,.78);font-size:1.05rem;font-weight:700;margin-bottom:4px;">
+      🌉 Cross the Gyaan Setu Bridge of Art! 🌉
+    </p>
+    <p style="color:rgba(255,255,255,.62);font-size:.92rem;font-weight:600;margin-bottom:6px;">
+      6 creative art activities await you!
+    </p>
+    <button class="btn-next" onclick="showQuiz()">🖌️ Let's Create!</button>
+  </div>
+</div>
+ 
+<!-- ══════════════ SCREEN 3: QUIZ ══════════════ -->
+<div class="screen hidden" id="screen-quiz">
+  <div class="quiz-header">
+    <span class="q-number-badge" id="qNumBadge">Q 1 / 6</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <span class="stars-counter"><span id="starCount">0</span> <span>⭐</span></span>
+  </div>
+ 
+  <div class="question-card" id="questionCard">
+    <div style="position:relative;z-index:1;">
+      <span class="q-type-badge" id="qTypeBadge">Activity Type</span>
+      <span class="q-activity-type" id="qActBadge">Draw</span>
+    </div>
+    <span class="q-emoji" id="qEmoji">🎨</span>
+    <div class="q-text" id="qText">Loading activity...</div>
+    <div class="activity-box" id="activityBox" style="display:none">
+      <span class="act-label" id="actLabel">✏️ Activity:</span>
+      <span id="actDesc"></span>
+    </div>
+    <div class="options-grid" id="optionsGrid"></div>
+  </div>
+</div>
+ 
+<!-- ══════════════ SCREEN 4: COMPLETION ══════════════ -->
+<div class="screen hidden" id="screen-complete">
+  <div class="complete-content">
+    <div class="certificate-frame">
+      <span class="trophy-wrap">🏆</span>
+      <div class="complete-title">Amazing Artist! 🎉</div>
+      <div class="complete-sub" id="completeClass">Art Adventure – Kindergarten</div>
+      <div class="stars-display" id="starsDisplay"></div>
+      <div class="score-badge" id="scoreBadge">Score: 6 / 6</div>
+      <div class="complete-msg" id="completeMsg">Your creativity is your superpower!</div>
+    </div>
+    <button class="btn-replay" onclick="replayLevel()">🔄 Create Again!</button>
+    <button class="btn-home"   onclick="goHome()">🏠 Choose Another Level</button>
+  </div>
+</div>
+ 
+<!-- ══════════════ FEEDBACK OVERLAY ══════════════ -->
+<div class="feedback-overlay hidden" id="feedbackOverlay">
+  <div class="feedback-box" id="feedbackBox">
+    <span class="feedback-emoji" id="feedbackEmoji">🎉</span>
+    <div class="feedback-title" id="feedbackTitle">Brilliant!</div>
+    <div class="feedback-hint hidden" id="feedbackHint"></div>
+    <div class="feedback-quote" id="feedbackQuote">Every artist was first a beginner!</div>
+    <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">Next Activity ➡️</button>
+  </div>
+</div>
+ 
+<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<script>
+// ═══════════════════════════════════════════
+//  QUESTION / ACTIVITY DATA BANK
+// ═══════════════════════════════════════════
+const questionBank = {
+ 
+  kg: [
+    {
+      type: "Colour Identification",
+      actType: "identify",
+      emoji: "🔴",
+      question: "Look at this fruit 🍅. What colour is a tomato?",
+      activity: null,
+      options: ["Blue", "Red", "Green", "Yellow"],
+      answer: "Red",
+      hint: "Ripe tomatoes are bright and warm — like fire! 🔥"
+    },
+    {
+      type: "Shape Recognition",
+      actType: "identify",
+      emoji: "🔵",
+      question: "Which shape has 3 sides and 3 corners? 📐",
+      activity: null,
+      options: ["Circle", "Square", "Triangle", "Rectangle"],
+      answer: "Triangle",
+      hint: "Think of a mountain peak — 3 sides! ⛰️"
+    },
+    {
+      type: "Colour Mixing",
+      actType: "color",
+      emoji: "🎨",
+      question: "If you mix RED and YELLOW paint together, what colour do you get?",
+      activity: "🖌️ Try it! Put a dab of red and yellow on paper and swirl them together.",
+      options: ["Green", "Purple", "Orange", "Brown"],
+      answer: "Orange",
+      hint: "Red + Yellow = a warm sunny colour! 🌅"
+    },
+    {
+      type: "Drawing Activity",
+      actType: "draw",
+      emoji: "✏️",
+      question: "You want to draw the SUN ☀️. Which shape do you start with?",
+      activity: "✏️ Draw a sun on your paper — start with a big shape, then add rays around it!",
+      options: ["Square", "Triangle", "Circle", "Star"],
+      answer: "Circle",
+      hint: "The sun is round and bright — draw a big circle first! ⭕"
+    },
+    {
+      type: "Craft Activity",
+      actType: "craft",
+      emoji: "🌿",
+      question: "For a LEAF PRINTING craft, what natural thing do you press onto paint and stamp?",
+      activity: "🌿 Collect a real leaf, press it into paint, and stamp it on paper to make a print!",
+      options: ["A spoon", "A stone", "A real leaf", "A pencil"],
+      answer: "A real leaf",
+      hint: "Nature makes the best stamps — use a real leaf! 🍃"
+    },
+    {
+      type: "Colour Matching",
+      actType: "color",
+      emoji: "🌈",
+      question: "The sky on a clear sunny day is which colour? 🌤️",
+      activity: "🎨 Colour a picture of the sky — pick the right crayon!",
+      options: ["Pink", "Orange", "Blue", "Purple"],
+      answer: "Blue",
+      hint: "Look up on a sunny day! The sky is…"
+    }
+  ],
+ 
+  "1st": [
+    {
+      type: "Drawing – Basic Shapes",
+      actType: "draw",
+      emoji: "🏠",
+      question: "To draw a simple HOUSE 🏠, which two shapes do you mainly use?",
+      activity: "✏️ Draw a house! Use shapes — the walls are one shape, the roof is another.",
+      options: ["Circle + Oval", "Square + Triangle", "Star + Rectangle", "Hexagon + Circle"],
+      answer: "Square + Triangle",
+      hint: "A box for the walls and a pointed roof — square + triangle!"
+    },
+    {
+      type: "Primary Colours",
+      actType: "identify",
+      emoji: "🎨",
+      question: "Which of these is NOT a PRIMARY colour?",
+      activity: null,
+      options: ["Red", "Blue", "Green", "Yellow"],
+      answer: "Green",
+      hint: "Primary colours are the 3 colours you CANNOT make by mixing: Red, Blue, Yellow!"
+    },
+    {
+      type: "Pattern Completion",
+      actType: "draw",
+      emoji: "🔷",
+      question: "Look at this pattern: 🔴 🔵 🔴 🔵 ___  What comes next?",
+      activity: "✏️ Continue the pattern on paper — draw what shape/colour fits next!",
+      options: ["🔴 Red circle", "🟡 Yellow circle", "🔵 Blue circle", "🟢 Green circle"],
+      answer: "🔴 Red circle",
+      hint: "Red, Blue, Red, Blue… the pattern repeats! What follows Blue?"
+    },
+    {
+      type: "Craft – Paper Folding",
+      actType: "craft",
+      emoji: "📄",
+      question: "When you fold a square piece of paper diagonally (corner to corner), what shape do you get?",
+      activity: "📄 Take a square paper and fold one corner to the opposite corner — see what shape appears!",
+      options: ["Circle", "Rectangle", "Triangle", "Star"],
+      answer: "Triangle",
+      hint: "Fold corner to corner on a square — you get a pointy triangle! 📐"
+    },
+    {
+      type: "Colour Mixing – Secondary",
+      actType: "color",
+      emoji: "🖌️",
+      question: "Mix BLUE + YELLOW paint. What secondary colour do you create? 🌿",
+      activity: "🖌️ Try mixing blue and yellow on your palette — see the new colour appear!",
+      options: ["Purple", "Orange", "Green", "Brown"],
+      answer: "Green",
+      hint: "Blue + Yellow = the colour of grass and leaves! 🌱"
+    },
+    {
+      type: "Drawing – Nature",
+      actType: "draw",
+      emoji: "🌻",
+      question: "A sunflower 🌻 has a dark round centre. What shape is the PETAL of a sunflower?",
+      activity: "✏️ Draw a sunflower — sketch the round centre first, then add petals around it!",
+      options: ["Square", "Star", "Long oval / teardrop", "Triangle"],
+      answer: "Long oval / teardrop",
+      hint: "Sunflower petals are long, narrow, and pointed at one end — like a teardrop! 🌻"
+    }
+  ],
+ 
+  "2nd": [
+    {
+      type: "Warm & Cool Colours",
+      actType: "identify",
+      emoji: "🌡️",
+      question: "Which group contains only WARM colours? 🔥",
+      activity: null,
+      options: [
+        "Blue, Green, Purple",
+        "Red, Orange, Yellow",
+        "White, Grey, Black",
+        "Teal, Violet, Indigo"
+      ],
+      answer: "Red, Orange, Yellow",
+      hint: "Warm colours remind you of fire and sunshine! 🌅"
+    },
+    {
+      type: "Painting Technique",
+      actType: "color",
+      emoji: "🖌️",
+      question: "Which painting technique uses only dots of colour to create a picture? 🔵🟡🔴",
+      activity: "🖌️ Try it! Dip the tip of your pencil eraser in paint and make dots to form a shape on paper.",
+      options: ["Watercolour wash", "Pointillism", "Collage", "Tie-dye"],
+      answer: "Pointillism",
+      hint: "Point → Pointillism! Artists like Seurat made pictures using only tiny dots. 🟠🟡"
+    },
+    {
+      type: "Craft – Collage",
+      actType: "craft",
+      emoji: "✂️",
+      question: "A COLLAGE is made by ____ different materials onto a background.",
+      activity: "✂️ Create a collage! Cut pictures from old magazines, leaves, or fabric and glue them on paper to make a scene.",
+      options: ["Melting", "Gluing / sticking cut pieces of", "Sewing", "Carving"],
+      answer: "Gluing / sticking cut pieces of",
+      hint: "Collage = cut + glue + create! ✂️🖼️"
+    },
+    {
+      type: "Drawing – Perspective",
+      actType: "draw",
+      emoji: "🛤️",
+      question: "In a drawing, objects that are FAR AWAY appear ___.",
+      activity: "✏️ Draw a road going into the distance — notice how the road looks narrower as it goes far away!",
+      options: ["Bigger and darker", "The same size", "Smaller and lighter", "More colourful"],
+      answer: "Smaller and lighter",
+      hint: "Far = small! Think of train tracks that seem to meet at a point far away. 🚂"
+    },
+    {
+      type: "Craft – Paper Mache",
+      actType: "craft",
+      emoji: "🏺",
+      question: "Paper mache is made by dipping torn paper strips into ___ and shaping it.",
+      activity: "🏺 Make a paper mache bowl! Dip newspaper strips in a mix of glue + water, layer over a balloon, let it dry!",
+      options: ["Only water", "Glue mixed with water (paste)", "Sand", "Paint only"],
+      answer: "Glue mixed with water (paste)",
+      hint: "Papier-mâché paste = glue + water — it makes the paper strips stick together! 🧴"
+    },
+    {
+      type: "Colour Theory – Tints",
+      actType: "color",
+      emoji: "🌸",
+      question: "What happens when you add WHITE to any colour? 🌸",
+      activity: "🎨 Mix any dark colour with white paint and watch it become lighter — create a gradient!",
+      options: [
+        "It becomes darker (shade)",
+        "It becomes lighter (tint)",
+        "It turns grey",
+        "Nothing changes"
+      ],
+      answer: "It becomes lighter (tint)",
+      hint: "White = lighter = TINT! Red + White = Pink 🌸"
+    }
+  ],
+ 
+  "3rd": [
+    {
+      type: "Indian Art Forms",
+      actType: "identify",
+      emoji: "🏺",
+      question: "Which famous Indian folk art uses intricate patterns with black outlines on a white background, often showing fish, animals, and gods?",
+      activity: null,
+      options: ["Warli Art", "Madhubani Art", "Tanjore Art", "Pattachitra"],
+      answer: "Madhubani Art",
+      hint: "From the Mithila region of Bihar — it uses bright colours with bold black outlines. 🐟"
+    },
+    {
+      type: "Drawing – Zentangle",
+      actType: "draw",
+      emoji: "🌀",
+      question: "In Zentangle drawing, you fill shapes with ___ patterns to create beautiful art.",
+      activity: "✏️ Draw a big shape (circle or leaf). Fill it entirely with small repeating patterns — lines, dots, waves. No two sections the same!",
+      options: ["Random splashes of colour", "Repetitive structured patterns", "Only photographs", "Only straight lines"],
+      answer: "Repetitive structured patterns",
+      hint: "Zentangle = small, repeating patterns — lines, curves, dots — inside a shape. Relaxing and beautiful! 🌀"
+    },
+    {
+      type: "Craft – Weaving",
+      actType: "craft",
+      emoji: "🧵",
+      question: "In weaving, two sets of threads run at RIGHT ANGLES to each other. The horizontal thread is called ___.",
+      activity: "🧵 Make a simple paper weaving! Cut strips from coloured paper and weave them over-under-over-under to make a mat.",
+      options: ["Warp", "Weft", "Knot", "Bobbin"],
+      answer: "Weft",
+      hint: "WEFT goes left-right (horizontal). WARP goes up-down (vertical). Weft is woven through! 🧵"
+    },
+    {
+      type: "Colour Theory – Complementary Colours",
+      actType: "color",
+      emoji: "🔴🟢",
+      question: "Complementary colours are opposite each other on the colour wheel. What is the complementary colour of RED?",
+      activity: "🎨 Paint two sections with complementary colours side by side — notice how they make each other pop!",
+      options: ["Orange", "Purple", "Blue", "Green"],
+      answer: "Green",
+      hint: "Look at a colour wheel — Red is directly opposite Green. They make each other look more vibrant! 🔴🟢"
+    },
+    {
+      type: "Drawing – Warli Art",
+      actType: "draw",
+      emoji: "🌿",
+      question: "Warli painting from Maharashtra uses only basic shapes. Which basic shapes form a human figure in Warli art?",
+      activity: "✏️ Try Warli drawing! Use white paint on brown paper — draw people using only circles and triangles. Simple and beautiful!",
+      options: [
+        "Rectangle and oval",
+        "Circle (head/stomach) and two triangles (body)",
+        "Star and square",
+        "Only dots and lines"
+      ],
+      answer: "Circle (head/stomach) and two triangles (body)",
+      hint: "Warli humans = two triangles (top-down and bottom-up) meeting at a point, with a circle head! 🔺🔻⚪"
+    },
+    {
+      type: "Craft – Origami",
+      actType: "craft",
+      emoji: "🕊️",
+      question: "Origami is the ancient art of paper folding from which country?",
+      activity: "🕊️ Fold an origami boat or bird! No cutting or gluing — only folding! Search for a simple design and try it with one square sheet.",
+      options: ["China", "India", "Japan", "Korea"],
+      answer: "Japan",
+      hint: "'Ori' means folding and 'kami' means paper in Japanese. Origami = paper folding from Japan! 🇯🇵"
+    }
+  ]
+};
+ 
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let selectedLevel   = null;
+let currentQIndex   = 0;
+let starsEarned     = 0;
+let answeredCorrect = 0;
+let questions       = [];
+ 
+const levelNames = {
+  kg:    "Kindergarten",
+  "1st": "1st Standard",
+  "2nd": "2nd Standard",
+  "3rd": "3rd Standard"
+};
+const levelEmojis = {
+  kg:    "🌈",
+  "1st": "✏️",
+  "2nd": "🖌️",
+  "3rd": "🏺"
+};
+ 
+const introMessages = [
+  "Let's Create, Draw & Colour! 🎨",
+  "Unleash Your Inner Artist! 🌟",
+  "Every Brushstroke Tells a Story! 🖌️",
+  "Art Makes the World More Beautiful! 🌈"
+];
+ 
+const introArtSets = {
+  kg:    "🌈 ⭕ 🔴 🔵 🟡",
+  "1st": "✏️ 🏠 🌻 📐 🖍️",
+  "2nd": "🖌️ ✂️ 🏺 🎨 🌿",
+  "3rd": "🏺 🧵 🌀 🕊️ 🎨"
+};
+ 
+const actTypeLabels = {
+  draw:    "✏️ Drawing Activity",
+  color:   "🎨 Colouring Activity",
+  craft:   "✂️ Craft Activity",
+  identify:"🔍 Identify & Learn"
+};
+const actTypeClasses = { draw:"act-draw", color:"act-color", craft:"act-craft", identify:"act-identify" };
+ 
+// ═══════════════════════════════════════════
+//  LEVEL SELECTION
+// ═══════════════════════════════════════════
+function selectLevel(card) {
+  document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedLevel = card.dataset.level;
+  document.getElementById('selectWarning').style.display = 'none';
+}
+ 
+function startJourney() {
+  if (!selectedLevel) {
+    document.getElementById('selectWarning').style.display = 'block';
+    return;
+  }
+  bridgeTransition(() => {
+    showScreen('screen-intro');
+    setupIntro();
+  });
+}
+ 
+// ═══════════════════════════════════════════
+//  INTRO SETUP
+// ═══════════════════════════════════════════
+function setupIntro() {
+  const msg = introMessages[Math.floor(Math.random() * introMessages.length)];
+  document.getElementById('introBadge').textContent = levelEmojis[selectedLevel] + ' ' + levelNames[selectedLevel];
+  document.getElementById('introMsg').textContent = msg;
+  document.getElementById('introArt').textContent = introArtSets[selectedLevel];
+ 
+  const intro = document.getElementById('screen-intro');
+ 
+  // Remove old floating art emojis
+  intro.querySelectorAll('.floating-art').forEach(el => el.remove());
+  const artEmojis = ['🎨','✏️','🖌️','✂️','🌈','⭐','🏺','🌻','📐','🎭','🖍️','🌿'];
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('span');
+    el.className = 'floating-art';
+    el.textContent = artEmojis[Math.floor(Math.random() * artEmojis.length)];
+    el.style.left   = Math.random() * 90 + '%';
+    el.style.bottom = '-40px';
+    el.style.animationDelay    = (Math.random() * 6) + 's';
+    el.style.animationDuration = (4 + Math.random() * 5) + 's';
+    el.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+    intro.appendChild(el);
+  }
+ 
+  // Sparkle dots
+  intro.querySelectorAll('.spark').forEach(el => el.remove());
+  const colors = ['#FFE13A','#FF9B21','#F05C78','#3ECFA8','#B07FE8','#2D9CDB'];
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement('span');
+    s.className = 'spark';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top  = Math.random() * 100 + '%';
+    s.style.width = s.style.height = (3 + Math.random() * 9) + 'px';
+    s.style.background = colors[Math.floor(Math.random() * colors.length)];
+    s.style.animationDelay    = (Math.random() * 3) + 's';
+    s.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+    intro.appendChild(s);
+  }
+}
+ 
+// ═══════════════════════════════════════════
+//  SHOW QUIZ
+// ═══════════════════════════════════════════
+function showQuiz() {
+  questions = questionBank[selectedLevel];
+  currentQIndex = 0;
+  starsEarned = 0;
+  answeredCorrect = 0;
+  bridgeTransition(() => {
+    showScreen('screen-quiz');
+    renderQuestion();
+  });
+}
+ 
+// ═══════════════════════════════════════════
+//  RENDER QUESTION
+// ═══════════════════════════════════════════
+function renderQuestion() {
+  if (currentQIndex >= questions.length) { showCompletion(); return; }
+ 
+  const q = questions[currentQIndex];
+ 
+  document.getElementById('qNumBadge').textContent = `Q ${currentQIndex + 1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = (currentQIndex / questions.length * 100) + '%';
+  document.getElementById('starCount').textContent = starsEarned;
+ 
+  document.getElementById('qTypeBadge').textContent = q.type;
+ 
+  // Activity type badge
+  const actBadge = document.getElementById('qActBadge');
+  actBadge.textContent = q.actType.charAt(0).toUpperCase() + q.actType.slice(1);
+  actBadge.className = 'q-activity-type ' + actTypeClasses[q.actType];
+ 
+  document.getElementById('qEmoji').textContent = q.emoji;
+  document.getElementById('qText').textContent  = q.question;
+ 
+  // Activity instruction box
+  const actBox  = document.getElementById('activityBox');
+  const actLabel = document.getElementById('actLabel');
+  const actDesc  = document.getElementById('actDesc');
+  if (q.activity) {
+    actBox.style.display = '';
+    actLabel.textContent = actTypeLabels[q.actType] + ':';
+    actDesc.textContent  = q.activity;
+  } else {
+    actBox.style.display = 'none';
+  }
+ 
+  // Animate card
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'cardPop .45s cubic-bezier(.36,.07,.19,.97)';
+ 
+  // Render options (shuffled)
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const labels = ['🅰','🅱','🅲','🅳'];
+  const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+ 
+  shuffled.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = labels[idx] + '  ' + opt;
+    btn.dataset.value = opt;
+    btn.onclick = () => checkAnswer(btn, opt, q.answer, q.hint);
+    grid.appendChild(btn);
+  });
+}
+ 
+// ═══════════════════════════════════════════
+//  CHECK ANSWER
+// ═══════════════════════════════════════════
+function checkAnswer(btn, chosen, correct, hint) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+ 
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    starsEarned++;
+    answeredCorrect++;
+    document.getElementById('starCount').textContent = starsEarned;
+    setTimeout(() => showFeedback(true, hint), 400);
+    launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.dataset.value === correct) b.classList.add('correct');
+    });
+    setTimeout(() => showFeedback(false, hint), 400);
+  }
+}
+ 
+// ═══════════════════════════════════════════
+//  FEEDBACK POPUP
+// ═══════════════════════════════════════════
+const correctMessages = [
+  ["🎨", "Brilliant Artist!", "Your creativity knows no bounds!"],
+  ["🌟", "Superstar!", "Every stroke of genius starts here!"],
+  ["🏆", "Masterpiece!", "You're painting your way to success!"],
+  ["🚀", "Creative Genius!", "Art is your superpower!"],
+  ["✨", "Wonderful!", "Your imagination is extraordinary!"]
+];
+const wrongMessages = [
+  ["💪", "Keep Creating!", "Every great artist makes mistakes — that's how they learn!"],
+  ["🌈", "Try Again!", "Art has no wrong answers — keep exploring!"],
+  ["🤗", "Don't Stop!", "Mistakes make the best lessons in art!"]
+];
+ 
+function showFeedback(isCorrect, hint) {
+  const overlay = document.getElementById('feedbackOverlay');
+  const box     = document.getElementById('feedbackBox');
+  const isLast  = (currentQIndex === questions.length - 1);
+ 
+  const data = isCorrect
+    ? correctMessages[Math.floor(Math.random() * correctMessages.length)]
+    : wrongMessages  [Math.floor(Math.random() * wrongMessages.length)];
+ 
+  document.getElementById('feedbackEmoji').textContent = data[0];
+  document.getElementById('feedbackTitle').textContent = data[1];
+  document.getElementById('feedbackQuote').textContent = data[2];
+ 
+  // Show hint always
+  const hintEl = document.getElementById('feedbackHint');
+  if (hint) {
+    hintEl.textContent = '💡 ' + hint;
+    hintEl.classList.remove('hidden');
+  } else {
+    hintEl.classList.add('hidden');
+  }
+ 
+  box.className = 'feedback-box ' + (isCorrect ? 'correct-box' : 'wrong-box');
+ 
+  const btnNext = document.getElementById('btnNextQ');
+  btnNext.textContent = isLast ? '🏁 See Results!' : 'Next Activity ➡️';
+ 
+  overlay.classList.remove('hidden');
+}
+ 
+function nextQuestion() {
+  document.getElementById('feedbackOverlay').classList.add('hidden');
+  currentQIndex++;
+  if (currentQIndex >= questions.length) {
+    bridgeTransition(showCompletion);
+  } else {
+    renderQuestion();
+  }
+}
+ 
+// ═══════════════════════════════════════════
+//  COMPLETION SCREEN
+// ═══════════════════════════════════════════
+function showCompletion() {
+  showScreen('screen-complete');
+  document.getElementById('completeClass').textContent = 'Art Adventure – ' + levelNames[selectedLevel];
+ 
+  const total = questions.length;
+  document.getElementById('scoreBadge').textContent = `Score: ${answeredCorrect} / ${total}`;
+ 
+  const starsDiv = document.getElementById('starsDisplay');
+  starsDiv.innerHTML = '';
+  for (let i = 1; i <= 6; i++) {
+    const s = document.createElement('span');
+    s.className = 'star-slot' + (i <= starsEarned ? ' earned' : '');
+    s.textContent = i <= starsEarned ? '⭐' : '☆';
+    s.style.animationDelay = (i * .14) + 's';
+    starsDiv.appendChild(s);
+  }
+ 
+  const msgs = [
+    "Keep exploring colours and shapes — you're learning!",
+    "Good effort! Your creativity is growing!",
+    "Well done! Your inner artist is shining!",
+    "Great work! Art runs in your blood!",
+    "Amazing! You are nearly an art master!",
+    "Perfect! You are a true Creative Champion! 🎨🏆"
+  ];
+  document.getElementById('completeMsg').textContent = msgs[Math.min(starsEarned, msgs.length - 1)];
+ 
+  setTimeout(launchConfetti, 300);
+  setTimeout(launchConfetti, 750);
+  setTimeout(launchConfetti, 1200);
+}
+ 
+function replayLevel() {
+  bridgeTransition(() => { showScreen('screen-intro'); setupIntro(); });
+}
+function goHome() {
+  selectedLevel = null;
+  document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+  bridgeTransition(() => showScreen('screen-select'));
+}
+ 
+// ═══════════════════════════════════════════
+//  BRIDGE TRANSITION
+// ═══════════════════════════════════════════
+function bridgeTransition(callback) {
+  const div = document.createElement('div');
+  div.className = 'bridge-transition';
+  div.innerHTML = `<span class="bridge-icon-anim">🎨</span><span class="bt-text">Creating Magic…</span>`;
+  document.body.appendChild(div);
+  setTimeout(() => {
+    callback();
+    div.classList.add('out');
+    setTimeout(() => div.remove(), 500);
+  }, 620);
+}
+ 
+// ═══════════════════════════════════════════
+//  SCREEN HELPER
+// ═══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+ 
+// ═══════════════════════════════════════════
+//  CONFETTI
+// ═══════════════════════════════════════════
+function launchConfetti() {
+  const colors = ['#E8521A','#B07FE8','#F05C78','#3ECFA8','#FFE13A','#FF9B21','#2D9CDB'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left       = (Math.random() * 100) + 'vw';
+    el.style.top        = '-20px';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.width      = (6 + Math.random() * 11) + 'px';
+    el.style.height     = (6 + Math.random() * 11) + 'px';
+    el.style.borderRadius     = Math.random() > .4 ? '50%' : '2px';
+    el.style.animationDuration = (1.6 + Math.random() * 2.2) + 's';
+    el.style.animationDelay   = (Math.random() * .9) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3800);
+  }
+}
+ 
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+(function init() { showScreen('screen-select'); })();
+</script>
+</body>
+</html>
