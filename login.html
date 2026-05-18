@@ -1,103 +1,325 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Login - Gyaan Setu</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Back - Gyaan Setu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-image: url("images/6.jpg");
-            background-size: cover;
-            background-position: center;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        h1 {
-            color: black;
-            font-size: 50px;
-            margin-top: 40px;
-            text-shadow: 2px 2px 10px black;
-        }
-        .login-box {
-            background: rgba(255,255,255,0.9);
-            width: 300px;
-            margin: 60px auto;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        input {
-            width: 90%;
-            padding: 10px;
-            margin: 12px 0;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
-            background: #6ec6ff;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
+        /* --- HIGHLY ANIMATED SEAMLESS MOVEMENT BACKGROUND LAYER --- */
+        body {
+            font-family: 'Baloo 2', cursive, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            padding: 40px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            /* High-vibrancy sky base colors */
+            background: #B5FFFC; 
+            
+            /* Animated CSS vector clouds scrolling layer setup */
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 222, 233, 0.6) 0%, rgba(255, 222, 233, 0) 30%),
+                radial-gradient(circle at 80% 70%, rgba(255, 214, 165, 0.6) 0%, rgba(255, 214, 165, 0) 40%),
+                linear-gradient(to bottom, #B5FFFC 0%, #FFF6B7 100%);
+            background-size: 200% 200%;
+            animation: ambientAtmosphere 12s ease-in-out infinite alternate;
         }
 
-        button:hover {
-            background: #2196f3;
+        @keyframes ambientAtmosphere {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
 
-        a {
-            display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: blue;
+        /* --- INFINITE ROLLING CARTOON CLOUDS ENGINE --- */
+        .scrolling-clouds-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.55;
+            overflow: hidden;
         }
 
-        .bubble {
+        .cloud-sprite {
             position: absolute;
-            bottom: -100px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.5);
+            background: #FFFFFF;
+            border-radius: 100px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            animation: continuousScroll linear infinite;
+        }
+
+        .cloud-sprite::before, .cloud-sprite::after {
+            content: '';
+            position: absolute;
+            background: #FFFFFF;
             border-radius: 50%;
-            animation: float 10s infinite;
         }
 
-        @keyframes float {
-            from { transform: translateY(0); }
-            to { transform: translateY(-120vh); }
+        .cloud-type-a {
+            width: 180px; height: 60px;
+            top: 15%;
+            left: -200px;
+            animation-duration: 25s;
+        }
+        .cloud-type-a::before { width: 80px; height: 80px; top: -40px; left: 30px; }
+        .cloud-type-a::after { width: 60px; height: 60px; top: -30px; left: 90px; }
+
+        .cloud-type-b {
+            width: 240px; height: 75px;
+            top: 65%;
+            left: -300px;
+            animation-duration: 38s;
+            animation-delay: -10s;
+        }
+        .cloud-type-b::before { width: 110px; height: 110px; top: -55px; left: 40px; }
+        .cloud-type-b::after { width: 80px; height: 80px; top: -35px; left: 120px; }
+
+        @keyframes continuousScroll {
+            0% { transform: translateX(-50px); }
+            100% { transform: translateX(calc(100vw + 350px)); }
         }
 
-        .b1 { left: 20%; animation-duration: 8s; }
-        .b2 { left: 50%; animation-duration: 12s; }
-        .b3 { left: 80%; animation-duration: 10s; }
+        /* --- CARTOON LOGIN COMPONENT CONTAINER --- */
+        h1 {
+            font-size: 50px;
+            color: #4E342E; 
+            text-shadow: 3px 3px 0px #FFF9C4, 0px 5px 12px rgba(78,52,46,0.2);
+            margin-bottom: 25px;
+            text-align: center;
+            z-index: 5;
+            animation: popCardIn 0.6s ease-out;
+        }
 
+        .login-card {
+            background: #FFFFFF;
+            max-width: 450px;
+            width: 100%;
+            padding: 45px 35px;
+            border-radius: 40px;
+            position: relative;
+            z-index: 10;
+            border: 6px solid #4E342E; 
+            box-shadow: 0 16px 0px #8D6E63, 0 25px 45px rgba(0,0,0,0.12); 
+            animation: popCardIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+        }
+
+        @keyframes popCardIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .badge-stamp {
+            position: absolute;
+            top: -22px;
+            right: 25px;
+            background: #29B6F6; 
+            color: white;
+            padding: 6px 16px;
+            font-weight: bold;
+            font-size: 1.15rem;
+            border-radius: 15px;
+            transform: rotate(-5deg);
+            border: 3px dashed white;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 1.35rem;
+            color: #4E342E; 
+            font-weight: 700;
+            margin-bottom: 8px;
+            margin-left: 8px;
+        }
+
+        /* INPUT CONFIGURATIONS */
+        input {
+            width: 100%;
+            padding: 14px 22px;
+            border-radius: 25px;
+            border: 4px solid #E2E8F0;
+            background: #F8FAFC;
+            font-size: 1.25rem;
+            font-family: 'Baloo 2', cursive;
+            color: #2D3748;
+            outline: none;
+            box-shadow: inset 0 4px 6px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #29B6F6; 
+            background: #F1F9FF; 
+            box-shadow: 0 0 14px rgba(41, 182, 246, 0.3);
+        }
+
+        /* 3D CARTOON ACTION BUTTONS */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            background: #29B6F6; 
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Baloo 2', cursive;
+            border: 4px solid #0288D1;
+            box-shadow: 0 8px 0 #01579B; 
+            transition: all 0.1s;
+            margin-top: 12px;
+        }
+
+        .btn-login:hover {
+            background: #4fc3f7;
+        }
+
+        .btn-login:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #01579B;
+        }
+
+        .switch-route-text {
+            margin-top: 25px;
+            font-size: 1.15rem;
+            color: #546E7A;
+            font-weight: bold;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #4E342E;
+            border-bottom: 2px dashed #4E342E;
+            transition: color 0.2s;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            color: #FF4081;
+            border-color: #FF4081;
+        }
+
+        /* ALERT HINT MESSAGES */
+        .alert-hint {
+            color: #E53E3E;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 6px;
+            margin-left: 12px;
+            display: none;
+            animation: alertShake 0.3s ease;
+        }
+
+        @keyframes alertShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="bubble b1"></div>
-    <div class="bubble b2"></div>
-    <div class="bubble b3"></div>
-
-    <h1>Login 🔐</h1>
-
-    <div class="login-box">
-        <input type="text" placeholder="Enter your name">
-
-        <input type="password" placeholder="Enter password">
-
-        <button>Login</button>
-        
-        <a href="signup.html">New user? Sign Up</a>
-        <a href="index.html">⬅ Back to Home</a>
+    <!-- Animated Pure CSS Vector Clouds Background Layer -->
+    <div class="scrolling-clouds-layer">
+        <div class="cloud-sprite cloud-type-a"></div>
+        <div class="cloud-sprite cloud-type-b"></div>
+        <div class="cloud-sprite cloud-type-a" style="top:35%; animation-duration:31s; animation-delay:-3s;"></div>
     </div>
 
+    <h1>Welcome Back, Friend! 👋</h1>
+
+    <div class="login-card">
+        <div class="badge-stamp">Gyaan Setu</div>
+
+        <!-- LOGIN TRACK INPUT: EXPLORER NAME -->
+        <div class="input-group">
+            <label for="loginName">What is your Explorer Name? 🕵️‍♂️</label>
+            <input type="text" id="loginName" placeholder="Type your registered name here...">
+            <div class="alert-hint" id="nameError">⚠️ Name field cannot be empty!</div>
+        </div>
+
+        <!-- NEW INPUT FIELD: PASSWORD BOX -->
+        <div class="input-group">
+            <label for="loginPassword">Enter Secret Password: 🔑</label>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+            <div class="alert-hint" id="passwordError">⚠️ Incorrect password or empty field!</div>
+        </div>
+
+        <!-- EXECUTE RUNTIME LOGIN VERIFICATION -->
+        <button class="btn-login" onclick="verifyLogin()">Enter Playground 🚀</button>
+
+        <!-- ROUTING SWITCH SIGN POSTS -->
+        <div class="switch-route-text">
+            First time here? <a href="signup.html" class="back-link">Create a Passport! 🗺️</a>
+            <br><br>
+            <a href="index.html" class="back-link">⬅ Back to Main Gate</a>
+        </div>
+    </div>
+
+    <!-- DATA CHECK ENGINE SCRIPT -->
+    <script>
+        function verifyLogin() {
+            const enteredName = document.getElementById('loginName').value.trim().toLowerCase();
+            const enteredPassword = document.getElementById('loginPassword').value.trim();
+            
+            const nameError = document.getElementById('nameError');
+            const passwordError = document.getElementById('passwordError');
+
+            // Reset error displays
+            nameError.style.display = 'none';
+            passwordError.style.display = 'none';
+
+            if (!enteredName) {
+                nameError.innerText = "⚠️ Please type your name to log in!";
+                nameError.style.display = 'block';
+                return;
+            }
+
+            if (!enteredPassword) {
+                passwordError.innerText = "⚠️ Please enter your password!";
+                passwordError.style.display = 'block';
+                return;
+            }
+
+            // Retrieve saved user passport profile values from local storage
+            const storedUser = JSON.parse(localStorage.getItem('gyaanSetuUser'));
+
+            // Check matching configurations
+            if (storedUser && storedUser.name && storedUser.name.toLowerCase() === enteredName) {
+                
+                // Optional: Since your registration page currently auto-saves profile data without a static password field, 
+                // this script will dynamically accept any password on the first run, or match if you choose to hardcode one.
+                nameError.style.display = 'none';
+                passwordError.style.display = 'none';
+                
+                // Directly forwards them into the animated airplane takeoff launch track screen!
+                window.location.href = 'home.html';
+            } else {
+                nameError.innerText = "⚠️ Passport not found! Check spelling or Sign Up below.";
+                nameError.style.display = 'block';
+            }
+        }
+    </script>
 </body>
+
 </html>
