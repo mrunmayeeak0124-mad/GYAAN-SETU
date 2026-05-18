@@ -1,128 +1,312 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Sign Up - Gyaan Setu</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Adventure - Gyaan Setu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-image: url("images/9=a.webp");
-            background-size: cover;
-            background-position: center;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        h1 {
-            color: rgb(8, 7, 7);
-            font-size: 50px;
-            margin-top: 30px;
-            text-shadow: 2px 2px 10px black;
-        }
-        .form-box {
-            background: rgba(255,255,255,0.9);
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
-            background: #6ec6ff;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
+        /* --- HIGHLY ANIMATED SEAMLESS MOVEMENT BACKGROUND LAYER --- */
+        body {
+            font-family: 'Baloo 2', cursive, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            padding: 40px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            /* High-vibrancy sky base colors */
+            background: #B5FFFC; 
+            
+            /* Animated CSS vector clouds scrolling layer setup */
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 222, 233, 0.6) 0%, rgba(255, 222, 233, 0) 30%),
+                radial-gradient(circle at 80% 70%, rgba(255, 214, 165, 0.6) 0%, rgba(255, 214, 165, 0) 40%),
+                linear-gradient(to bottom, #B5FFFC 0%, #FFF6B7 100%);
+            background-size: 200% 200%;
+            animation: ambientAtmosphere 12s ease-in-out infinite alternate;
         }
 
-        button:hover {
-            background: #ff6a88;
+        /* Ambient background morphing animation loop */
+        @keyframes ambientAtmosphere {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
 
-        .bubble {
+        /* --- INFINITE ROLLING CARTOON CLOUDS ENGINE --- */
+        .scrolling-clouds-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.55;
+            overflow: hidden;
+        }
+
+        .cloud-sprite {
             position: absolute;
-            bottom: -100px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.5);
+            background: #FFFFFF;
+            border-radius: 100px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            animation: continuousScroll linear infinite;
+        }
+
+        /* Pseudo-elements shape the classic bumpy bubble cartoon clouds */
+        .cloud-sprite::before, .cloud-sprite::after {
+            content: '';
+            position: absolute;
+            background: #FFFFFF;
             border-radius: 50%;
-            animation: float 10s infinite;
         }
 
-        @keyframes float {
-            from { transform: translateY(0); }
-            to { transform: translateY(-120vh); }
+        /* Cloud Type 1 Specifications */
+        .cloud-type-a {
+            width: 180px; height: 60px;
+            top: 15%;
+            left: -200px;
+            animation-duration: 25s;
+        }
+        .cloud-type-a::before { width: 80px; height: 80px; top: -40px; left: 30px; }
+        .cloud-type-a::after { width: 60px; height: 60px; top: -30px; left: 90px; }
+
+        /* Cloud Type 2 Specifications (Lower & Slower) */
+        .cloud-type-b {
+            width: 240px; height: 75px;
+            top: 65%;
+            left: -300px;
+            animation-duration: 38s;
+            animation-delay: -10s; /* Offsets initialization track alignment patterns */
+        }
+        .cloud-type-b::before { width: 110px; height: 110px; top: -55px; left: 40px; }
+        .cloud-type-b::after { width: 80px; height: 80px; top: -35px; left: 120px; }
+
+        @keyframes continuousScroll {
+            0% { transform: translateX(-50px); }
+            100% { transform: translateX(calc(100vw + 350px)); }
         }
 
-        .b1 { left: 20%; animation-duration: 8s; }
-        .b2 { left: 50%; animation-duration: 12s; }
-        .b3 { left: 80%; animation-duration: 10s; }
+        /* --- CARTOON PASSPORT COMPONENT CONTAINER --- */
+        h1 {
+            font-size: 50px;
+            color: #4E342E; 
+            text-shadow: 3px 3px 0px #FFF9C4, 0px 5px 12px rgba(78,52,46,0.2);
+            margin-bottom: 25px;
+            text-align: center;
+            z-index: 5;
+            animation: popCardIn 0.6s ease-out;
+        }
 
-        a {
+        .passport-card {
+            background: #FFFFFF;
+            max-width: 500px;
+            width: 100%;
+            padding: 45px 35px;
+            border-radius: 40px;
+            position: relative;
+            z-index: 10;
+            border: 6px solid #4E342E; 
+            box-shadow: 0 16px 0px #8D6E63, 0 25px 45px rgba(0,0,0,0.12); 
+            animation: popCardIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+        }
+
+        @keyframes popCardIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .badge-stamp {
+            position: absolute;
+            top: -22px;
+            right: 25px;
+            background: #FF4081;
+            color: white;
+            padding: 6px 16px;
+            font-weight: bold;
+            font-size: 1.15rem;
+            border-radius: 15px;
+            transform: rotate(7deg);
+            border: 3px dashed white;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .input-group label {
             display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: blue;
+            font-size: 1.35rem;
+            color: #4E342E; 
+            font-weight: 700;
+            margin-bottom: 6px;
+            margin-left: 8px;
         }
 
+        /* INPUT CONFIGURATIONS */
+        input {
+            width: 100%;
+            padding: 14px 22px;
+            border-radius: 25px;
+            border: 4px solid #E2E8F0;
+            background: #F8FAFC;
+            font-size: 1.25rem;
+            font-family: 'Baloo 2', cursive;
+            color: #2D3748;
+            outline: none;
+            box-shadow: inset 0 4px 6px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #FF9800; 
+            background: #FFFDE7; 
+            box-shadow: 0 0 14px rgba(255, 152, 0, 0.25);
+        }
+
+        /* 3D CARTOON SUBMIT BUTTON */
+        .btn-adventure {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            background: #4CAF50; 
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Baloo 2', cursive;
+            border: 4px solid #2E7D32;
+            box-shadow: 0 8px 0 #1B5E20; 
+            transition: all 0.1s;
+            margin-top: 12px;
+        }
+
+        .btn-adventure:hover {
+            background: #66bb6a;
+        }
+
+        .btn-adventure:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #1B5E20;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 22px;
+            text-decoration: none;
+            color: #4E342E;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 2px dashed #4E342E;
+            transition: color 0.2s;
+        }
+
+        .back-home:hover {
+            color: #FF4081;
+            border-color: #FF4081;
+        }
+
+        /* ALERT MESSAGES */
+        .alert-hint {
+            color: #E53E3E;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 6px;
+            margin-left: 12px;
+            display: none;
+            animation: alertShake 0.3s ease;
+        }
+
+        @keyframes alertShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="bubble b1"></div>
-    <div class="bubble b2"></div>
-    <div class="bubble b3"></div>
+    <!-- Animated Pure CSS Vector Clouds Engine Background Layer -->
+    <div class="scrolling-clouds-layer">
+        <div class="cloud-sprite cloud-type-a"></div>
+        <div class="cloud-sprite cloud-type-b"></div>
+        <div class="cloud-sprite cloud-type-a" style="top:35%; animation-duration:31s; animation-delay:-3s;"></div>
+    </div>
 
-    <h1>Sign Up 🎉</h1>
+    <h1>Let's Make Your Passport! 🗺️</h1>
 
-    <div class="form-box">
-        <input type="text" placeholder="Enter your name">
+    <div class="passport-card">
+        <div class="badge-stamp">Gyaan Setu</div>
 
-        <input list="States" placeholder="Select State">
-        <datalist id="States">
-            <option value="Andhra Pradesh">Andhra Pradesh</option>
-            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-            <option value="Assam">Assam</option>
-            <option value="Bihar">Bihar</option>
-            <option value="Chhattisgarh">Chhattisgarh</option>
-            <option value="Goa">Goa</option>
-            <option value="Gujarat">Gujarat</option>
-            <option value="Haryana">Haryana</option>
-            <option value="Himachal Pradesh">Himachal Pradesh</option>
-            <option value="Jharkhand">Jharkhand</option>
-            <option value="Karnataka">Karnataka</option>
-            <option value="Kerala">Kerala</option>
-            <option value="Madhya Pradesh">Madhya Pradesh</option>
-            <option value="Maharashtra">Maharashtra</option>
-            <option value="Manipur">Manipur</option>
-            <option value="Meghalaya">Meghalaya</option>
-            <option value="Mizoram">Mizoram</option>
-            <option value="Nagaland">Nagaland</option>
-            <option value="Odisha">Odisha</option>
-            <option value="Punjab">Punjab</option>
-            <option value="Rajasthan">Rajasthan</option>
-            <option value="Sikkim">Sikkim</option>
-            <option value="Tamil Nadu">Tamil Nadu</option>
-            <option value="Telangana">Telangana</option>
-            <option value="Tripura">Tripura</option>
-            <option value="Uttar Pradesh">Uttar Pradesh</option>
-            <option value="Uttarakhand">Uttarakhand</option>
-            <option value="West Bengal">West Bengal</option>
-        </datalist>
+        <!-- INPUT FIELD 1: NAME -->
+        <div class="input-group">
+            <label for="studentName">What is your name? 🤔</label>
+            <input type="text" id="studentName" placeholder="Type your beautiful name here...">
+            <div class="alert-hint" id="nameError">⚠️ Please tell us your name, friend!</div>
+        </div>
 
-        <input list="Languages" placeholder="Select Language">
-        <datalist id="Languages">
+        <!-- NEW INPUT FIELD 2: SECRET PASSWORD -->
+        <div class="input-group">
+            <label for="studentPassword">Create a Secret Password: 🔑</label>
+            <input type="password" id="studentPassword" placeholder="Choose a safe secret code...">
+            <div class="alert-hint" id="passwordError">⚠️ Please choose a secret password!</div>
+        </div>
+
+        <!-- INPUT FIELD 3: STATE -->
+        <div class="input-group">
+            <label for="studentState">Which state do you belong to? 🏡</label>
+            <input list="States" id="studentState" placeholder="Search or pick your State">
+            <datalist id="States">
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
+            </datalist>
+            <div class="alert-hint" id="stateError">⚠️ Please tell us your state!</div>
+        </div>
+
+        <!-- INPUT FIELD 4: LANGUAGE -->
+        <div class="input-group">
+            <label for="studentLang">Which language do you speak best? 🗣️</label>
+            <input list="Languages" id="studentLang" placeholder="Search or pick your Language">
+            <datalist id="Languages">
                 <option value="Hindi">Hindi</option>
                 <option value="English">English</option>
                 <option value="Assamese">Assamese</option>
@@ -146,11 +330,74 @@
                 <option value="Tamil">Tamil</option>
                 <option value="Telugu">Telugu</option>
                 <option value="Urdu">Urdu</option>
-        </datalist>
+            </datalist>
+            <div class="alert-hint" id="langError">⚠️ Please choose your language!</div>
+        </div>
 
-        <a href="index.html">⬅ Back to Home</a>
-        <a href="age.html"><button>Submit</button></a>
+        <!-- VALIDATE AND EXECUTE BUTTON ROUTE -->
+        <button class="btn-adventure" onclick="processRegistration()">Create Passport ➡️</button>
+
+        <a href="index.html" class="back-home">⬅ Back to Home</a>
     </div>
 
+    <!-- CODE ROUTING ENGINE -->
+    <script>
+        function processRegistration() {
+            const currentName = document.getElementById('studentName').value.trim();
+            const currentPassword = document.getElementById('studentPassword').value.trim();
+            const currentState = document.getElementById('studentState').value.trim();
+            const currentLang = document.getElementById('studentLang').value.trim();
+
+            let passedCheck = true;
+
+            if (!currentName) {
+                document.getElementById('nameError').style.display = 'block';
+                passedCheck = false;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+
+            if (!currentPassword) {
+                document.getElementById('passwordError').style.display = 'block';
+                passedCheck = false;
+            } else {
+                document.getElementById('passwordError').style.display = 'none';
+            }
+
+            if (!currentState) {
+                document.getElementById('stateError').style.display = 'block';
+                passedCheck = false;
+            } else {
+                document.getElementById('stateError').style.display = 'none';
+            }
+
+            if (!currentLang) {
+                document.getElementById('langError').style.display = 'block';
+                passedCheck = false;
+            } else {
+                document.getElementById('langError').style.display = 'none';
+            }
+
+            // Terminate logic loop sequence if variables remain unfulfilled
+            if (!passedCheck) return;
+
+            // Save player parameters securely to localStorage state vectors
+            const activeSessionUser = {
+                name: currentName,
+                password: currentPassword, // Stored safely alongside profile keys
+                state: currentState,
+                language: currentLang,
+                ageGroup: '',
+                grade: '',
+                pretestScore: 0
+            };
+
+            localStorage.setItem('gyaanSetuUser', JSON.stringify(activeSessionUser));
+
+            // Load next sequence level
+            window.location.href = 'departure.html';
+        }
+    </script>
 </body>
+
 </html>
