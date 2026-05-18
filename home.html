@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Gyaan Setu</title>
+    <style>
+        body { margin: 0; display: flex; font-family: 'Comic Sans MS', sans-serif; background: #f0faff; }
+        
+        .sidebar { width: 80px; background: #6ec6ff; height: 100vh; display: flex; flex-direction: column; align-items: center; padding-top: 20px; transition: 0.3s; overflow: hidden; }
+        .sidebar:hover { width: 200px; }
+        .profile-icon { width: 50px; cursor: pointer; background: white; border-radius: 50%; padding: 5px; }
+        .menu-item { color: white; text-decoration: none; margin: 20px 0; font-size: 18px; display: none; }
+        .sidebar:hover .menu-item { display: block; }
+
+        .main { flex: 1; padding: 40px; position: relative; }
+        .welcome-msg {
+            font-size: 60px; color: #ff4081; animation: popOut 1s ease-in-out;
+            text-align: left; margin-bottom: 40px;
+        }
+        @keyframes popOut { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        .topic-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3, 1fr);
+
+    gap:25px;
+
+    margin-top:20px;
+}
+        .topic-card { background: white; 
+            padding: 20px; border-radius: 20px; border: 4px solid #81D4FA; 
+            text-align: center;
+            text-decoration:none;
+
+    color:inherit 
+        }
+        .topic-card img { width: 80px; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="profile-icon">
+        <a href="#" class="menu-item">Dashboard</a>
+        <a href="#" class="menu-item">Progress</a>
+        <a href="#" class="menu-item">About Us</a>
+        <a href="#" class="menu-item">Help</a>
+    </div>
+
+    <div class="main">
+        <div class="welcome-msg">Hello friend,<br>Welcome to Gyaan Setu! 👋</div>
+        
+        <h2 style="color: #555; font-size: 35px;">Your Fun Learning Topics 🎨</h2>
+
+<div class="topic-grid">
+
+    <!-- MATH -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3504/3504066.png">
+        <h3>Math Magic ➕</h3>
+        <p>Learn counting, addition & subtraction with fun games!</p>
+    </div>
+
+    <!-- ENGLISH -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2436/2436874.png">
+        <h3>English Fun 🅰️</h3>
+        <p>Practice spelling, reading and fun word games!</p>
+    </div>
+
+    <!-- STORY -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3815/3815454.png">
+        <h3>Story Time 📖</h3>
+        <p>Listen and read magical stories with cartoons!</p>
+    </div>
+
+    <!-- GK -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+        <h3>General Knowledge 🌍</h3>
+        <p>Explore countries, festivals, planets and more!</p>
+    </div>
+
+    <!-- ART -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2970/2970785.png">
+        <h3>Art & Crafts 🎨</h3>
+        <p>Draw, color and create amazing craft activities!</p>
+    </div>
+
+    <!-- ANIMAL -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
+        <h3>Animal World 🐯</h3>
+        <p>Meet jungle animals and learn fun facts!</p>
+    </div>
+
+    <!-- FUN -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
+        <h3>Fun Time 🎮</h3>
+        <p>Play educational games and win stars!</p>
+    </div>
+
+    <!-- COLORING -->
+
+    <div class="topic-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2867/2867367.png">
+        <h3>Coloring Zone 🌈</h3>
+        <p>Fill beautiful pictures with lovely colors!</p>
+    </div>
+
+</div>
+        </div>
+    </div>
+</body>
+</html>
