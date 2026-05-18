@@ -6,7 +6,6 @@
 <title>Math Adventure</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
-/* ─── CSS Variables ─────────────────────────────────── */
 :root {
   --sky: #4fc3f7;
   --sun: #ffd54f;
@@ -23,10 +22,9 @@
   --font-h: 'Fredoka One', cursive;
   --font-b: 'Nunito', sans-serif;
 }
- 
-/* ─── Reset & Base ──────────────────────────────────── */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
 body {
   font-family: var(--font-b);
   min-height: 100vh;
@@ -34,8 +32,7 @@ body {
   overflow-x: hidden;
   position: relative;
 }
- 
-/* ─── Animated clouds bg ─────────────────────────────── */
+
 .clouds-bg {
   position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
 }
@@ -65,8 +62,7 @@ body {
   from { transform: translateX(-250px); }
   to   { transform: translateX(110vw); }
 }
- 
-/* ─── Pages ──────────────────────────────────────────── */
+
 .page {
   display: none;
   min-height: 100vh;
@@ -76,8 +72,7 @@ body {
 }
 .page.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
- 
-/* ─── Top header bar ─────────────────────────────────── */
+
 .topbar {
   position: fixed; top: 0; left: 0; right: 0;
   background: linear-gradient(90deg,#7e57c2,#ab47bc,#ec407a);
@@ -101,8 +96,7 @@ body {
   font-weight: 700;
   opacity: .9;
 }
- 
-/* ─── Common card ────────────────────────────────────── */
+
 .card {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -113,13 +107,11 @@ body {
   text-align: center;
   position: relative;
 }
- 
-/* ─── Headings ───────────────────────────────────────── */
+
 h1,h2,h3 { font-family: var(--font-h); }
 h1 { font-size: clamp(2rem,6vw,3.2rem); }
 h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
- 
-/* ─── Floating math symbols ──────────────────────────── */
+
 .float-symbols { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: var(--radius); }
 .sym {
   position: absolute;
@@ -135,8 +127,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   0%,100%{transform:translateY(0) rotate(0deg);}
   50%{transform:translateY(-14px) rotate(12deg);}
 }
- 
-/* ─── Buttons ────────────────────────────────────────── */
+
 .btn {
   display: inline-block;
   font-family: var(--font-h);
@@ -168,44 +159,8 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
 .btn-pink  {background:linear-gradient(135deg,#ec407a,#f48fb1);color:#fff;}
 .btn-blue  {background:linear-gradient(135deg,#1e88e5,#4fc3f7);color:#fff;}
 .btn-gray  {background:linear-gradient(135deg,#90a4ae,#b0bec5);color:#fff;}
- 
-/* ─── PAGE 1 – Class Selection ───────────────────────── */
-#page-class .card { padding-bottom: 44px; }
-#page-class h1 { 
-  background: linear-gradient(135deg,#7e57c2,#ec407a);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  margin-bottom: 6px;
-}
-#page-class .subtitle {
-  font-size: 1.05rem; color:#666; margin-bottom: 30px; font-weight: 600;
-}
-.class-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  margin-top: 8px;
-}
-.class-btn {
-  padding: 22px 14px;
-  border-radius: 22px;
-  font-family: var(--font-h);
-  font-size: 1.25rem;
-  border: none;
-  cursor: pointer;
-  transition: transform .2s, box-shadow .2s;
-  box-shadow: 0 6px 20px rgba(0,0,0,.12);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  color: #fff;
-}
-.class-btn:hover { transform:translateY(-5px) scale(1.04); box-shadow:0 14px 30px rgba(0,0,0,.2); }
-.class-btn:active { transform: scale(.97); }
-.class-btn .emoji { font-size: 2.4rem; }
-.class-btn.kg   { background: linear-gradient(135deg,#ff7043,#ffa726); }
-.class-btn.std1 { background: linear-gradient(135deg,#ec407a,#f06292); }
-.class-btn.std2 { background: linear-gradient(135deg,#7e57c2,#ab47bc); }
-.class-btn.std3 { background: linear-gradient(135deg,#1e88e5,#4fc3f7); }
- 
-/* ─── PAGE 2 – Intro Animation ───────────────────────── */
+
+/* ─── PAGE 1 – Intro Animation ─────────────────────── */
 #page-intro {
   background: linear-gradient(160deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
 }
@@ -217,7 +172,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   animation: twinkle 2s ease-in-out infinite;
 }
 @keyframes twinkle { 0%,100%{opacity:.2;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
- 
+
 .intro-card {
   background: rgba(255,255,255,.07);
   backdrop-filter: blur(12px);
@@ -239,7 +194,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   margin-bottom: 12px;
 }
 @keyframes titlePulse { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.25)} }
- 
+
 .intro-msgs {
   min-height: 60px;
   display:flex; align-items:center; justify-content:center;
@@ -262,8 +217,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   8%,18%{opacity:1;transform:none;}
   23%,100%{opacity:0;transform:translateY(-14px);}
 }
- 
-/* ─── Floating maths symbols for intro ──────────────── */
+
 .float-row {
   display:flex; justify-content:center; gap:18px; margin:22px 0;
   flex-wrap:wrap;
@@ -280,8 +234,70 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   0%,100%{transform:translateY(0);}
   50%{transform:translateY(-14px);}
 }
- 
-/* ─── Bridge progress bar ────────────────────────────── */
+
+/* ─── PAGE 2 – Level Selection ───────────────────────── */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  margin-top: 14px;
+}
+.level-btn {
+  padding: 26px 12px;
+  border-radius: 20px;
+  font-family: var(--font-h);
+  font-size: 1.15rem;
+  border: none; cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  display: flex; flex-direction:column; align-items:center; gap:8px;
+  color:#fff;
+}
+.level-btn:hover{transform:translateY(-6px) scale(1.05);box-shadow:0 14px 30px rgba(0,0,0,.22);}
+.level-btn:active{transform:scale(.97);}
+.level-btn .big-emoji{font-size:2.5rem;}
+.level-easy  {background:linear-gradient(135deg,#43a047,#a5d6a7);}
+.level-medium{background:linear-gradient(135deg,#f57c00,#ffd54f);}
+.level-hard  {background:linear-gradient(135deg,#c62828,#ef9a9a);}
+.level-desc  {font-size:.8rem;font-family:var(--font-b);font-weight:700;opacity:.9;}
+
+/* ─── PAGE 3 – Questions ─────────────────────────────── */
+#page-question .card { padding: 30px 32px 36px; }
+
+.q-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:16px;
+}
+.q-badge {
+  background:linear-gradient(135deg,#7e57c2,#ab47bc);
+  color:#fff; border-radius:50px;
+  padding:6px 18px;
+  font-family:var(--font-h);
+  font-size:.95rem;
+}
+.score-badge {
+  background:linear-gradient(135deg,#ff7043,#ffd54f);
+  color:#fff; border-radius:50px;
+  padding:6px 18px;
+  font-family:var(--font-h);
+  font-size:.95rem;
+}
+
+.progress-wrap { margin-bottom: 20px; }
+.progress-label {
+  display:flex; justify-content:space-between;
+  font-size:.82rem; color:#888; font-weight:700; margin-bottom:5px;
+}
+.progress-bar-bg {
+  height:14px; background:#e0e0e0; border-radius:10px; overflow:hidden;
+}
+.progress-bar-fg {
+  height:100%;
+  background:linear-gradient(90deg,#ffd54f,#ff7043,#ec407a);
+  border-radius:10px;
+  transition:width .5s ease;
+}
+
 .bridge-wrap {
   width: 100%; margin: 18px 0 8px;
   position: relative;
@@ -310,7 +326,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   filter: drop-shadow(0 4px 6px rgba(0,0,0,.18));
 }
 @keyframes charBounce { from{transform:translateY(0);} to{transform:translateY(-5px);} }
- 
+
 .bridge-pillars {
   display:flex; justify-content:space-between;
   padding: 0 2px; margin-top:3px;
@@ -318,70 +334,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
 .pillar {
   font-size:.7rem; color:#8d6e63; font-weight:800;
 }
- 
-/* ─── PAGE 3 – Level Selection ───────────────────────── */
-.level-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 16px;
-  margin-top: 14px;
-}
-.level-btn {
-  padding: 26px 12px;
-  border-radius: 20px;
-  font-family: var(--font-h);
-  font-size: 1.15rem;
-  border: none; cursor: pointer;
-  transition: transform .2s, box-shadow .2s;
-  box-shadow: 0 6px 20px rgba(0,0,0,.12);
-  display: flex; flex-direction:column; align-items:center; gap:8px;
-  color:#fff;
-}
-.level-btn:hover{transform:translateY(-6px) scale(1.05);box-shadow:0 14px 30px rgba(0,0,0,.22);}
-.level-btn:active{transform:scale(.97);}
-.level-btn .big-emoji{font-size:2.5rem;}
-.level-easy  {background:linear-gradient(135deg,#43a047,#a5d6a7);}
-.level-medium{background:linear-gradient(135deg,#f57c00,#ffd54f);}
-.level-hard  {background:linear-gradient(135deg,#c62828,#ef9a9a);}
-.level-desc  {font-size:.8rem;font-family:var(--font-b);font-weight:700;opacity:.9;}
- 
-/* ─── PAGE 4 – Questions ─────────────────────────────── */
-#page-question .card { padding: 30px 32px 36px; }
- 
-.q-header {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:16px;
-}
-.q-badge {
-  background:linear-gradient(135deg,#7e57c2,#ab47bc);
-  color:#fff; border-radius:50px;
-  padding:6px 18px;
-  font-family:var(--font-h);
-  font-size:.95rem;
-}
-.score-badge {
-  background:linear-gradient(135deg,#ff7043,#ffd54f);
-  color:#fff; border-radius:50px;
-  padding:6px 18px;
-  font-family:var(--font-h);
-  font-size:.95rem;
-}
- 
-.progress-wrap { margin-bottom: 20px; }
-.progress-label {
-  display:flex; justify-content:space-between;
-  font-size:.82rem; color:#888; font-weight:700; margin-bottom:5px;
-}
-.progress-bar-bg {
-  height:14px; background:#e0e0e0; border-radius:10px; overflow:hidden;
-}
-.progress-bar-fg {
-  height:100%;
-  background:linear-gradient(90deg,#ffd54f,#ff7043,#ec407a);
-  border-radius:10px;
-  transition:width .5s ease;
-}
- 
+
 .q-question {
   background: linear-gradient(135deg,#ede7f6,#e3f2fd);
   border-radius:20px;
@@ -394,7 +347,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   position:relative;
 }
 .q-emoji { font-size:2.8rem; display:block; margin-bottom:6px; }
- 
+
 .options-grid {
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -417,7 +370,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
 .opt-btn.correct {background:linear-gradient(135deg,#43a047,#a5d6a7);color:#fff;border-color:#2e7d32;}
 .opt-btn.wrong   {background:linear-gradient(135deg,#c62828,#ef9a9a);color:#fff;border-color:#b71c1c;}
 .opt-btn:disabled{cursor:not-allowed; opacity:.85;}
- 
+
 /* ─── Popup overlays ─────────────────────────────────── */
 .popup-overlay {
   position:fixed; inset:0;
@@ -457,7 +410,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   font-weight:700; margin-bottom:22px;
   font-style:italic;
 }
- 
+
 /* ─── Confetti ───────────────────────────────────────── */
 .confetti-container {
   position:fixed; inset:0; pointer-events:none; z-index:600; overflow:hidden;
@@ -472,8 +425,8 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   0%  { transform:translateY(-20px) rotate(0deg); opacity:1; }
   100%{ transform:translateY(110vh) rotate(720deg); opacity:0; }
 }
- 
-/* ─── PAGE 5 – Completion ─────────────────────────────── */
+
+/* ─── PAGE 4 – Completion ─────────────────────────────── */
 #page-complete {
   background: linear-gradient(160deg,#1a1a2e,#0f3460);
 }
@@ -484,7 +437,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   border-radius:var(--radius);
   padding:52px 40px;
   max-width:640px; width:92%;
-  text-align:center; position:relative;z:1;
+  text-align:center; position:relative;
 }
 .complete-title {
   font-family:var(--font-h);
@@ -520,13 +473,12 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   margin:6px 0;
 }
 .score-label { font-size:.95rem; color:#b3e5fc; font-weight:700; margin-bottom:18px; }
- 
+
 .complete-btns {
   display:flex; flex-wrap:wrap; gap:12px; justify-content:center;
   margin-top:24px;
 }
- 
-/* ─── Bridge visual banner ───────────────────────────── */
+
 .bridge-banner {
   width:100%; max-width:480px;
   margin:0 auto 16px;
@@ -557,10 +509,8 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
   font-size:1.8rem;
   animation:charBounce .7s ease-in-out infinite alternate;
 }
- 
-/* ─── Responsiveness ─────────────────────────────────── */
+
 @media(max-width:520px){
-  .class-grid{grid-template-columns:1fr 1fr;}
   .level-grid{grid-template-columns:1fr;}
   .options-grid{grid-template-columns:1fr;}
   .card{padding:24px 16px;}
@@ -569,77 +519,28 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
 </style>
 </head>
 <body>
- 
-<!-- Clouds background -->
+
 <div class="clouds-bg">
   <div class="cloud"></div>
   <div class="cloud"></div>
   <div class="cloud"></div>
   <div class="cloud"></div>
 </div>
- 
-<!-- Top bar -->
+
 <div class="topbar" id="topbar">
-  <div class="topbar-logo">🌉 Math <span>Adventure</span></div>
+  <div class="topbar-logo">🎯 <span>Math Adventure</span></div>
   <div class="topbar-info" id="topbar-info"></div>
 </div>
- 
-<!-- Confetti container -->
+
 <div class="confetti-container" id="confetti-container"></div>
- 
-<!-- ══════════════ PAGE 1: Class Selection ══════════════ -->
-<div id="page-class" class="page active" style="padding-top:70px;">
-  <div class="card">
-    <div class="float-symbols">
-      <span class="sym" style="top:12%;left:5%;">➕</span>
-      <span class="sym" style="top:30%;right:6%;">✖️</span>
-      <span class="sym" style="top:65%;left:8%;">🔢</span>
-      <span class="sym" style="top:78%;right:9%;">🔷</span>
-      <span class="sym" style="top:50%;left:50%;">➗</span>
-    </div>
- 
-    <div style="font-size:3rem;margin-bottom:8px;">🌉</div>
-    <h1>Math Adventure</h1>
-    <p class="subtitle">Bridge of Knowledge — Math Adventure!</p>
- 
-    <div class="bridge-banner">
-      <div class="bridge-arch"></div>
-      <div class="bridge-path"></div>
-      <div class="bridge-char2">🧒</div>
-      <div class="bridge-flag">🚩</div>
-    </div>
- 
-    <h2 style="color:#7e57c2;margin-bottom:6px;">Pick Your Class!</h2>
-    <p style="color:#888;font-size:.9rem;font-weight:600;margin-bottom:18px;">Choose your standard to begin the journey</p>
- 
-    <div class="class-grid">
-      <button class="class-btn kg"   onclick="selectClass('Kindergarten','KG')">
-        <span class="emoji">🌱</span>
-        Kindergarten
-      </button>
-      <button class="class-btn std1" onclick="selectClass('1st Standard','1')">
-        <span class="emoji">⭐</span>
-        1st Standard
-      </button>
-      <button class="class-btn std2" onclick="selectClass('2nd Standard','2')">
-        <span class="emoji">🚀</span>
-        2nd Standard
-      </button>
-      <button class="class-btn std3" onclick="selectClass('3rd Standard','3')">
-        <span class="emoji">🏆</span>
-        3rd Standard
-      </button>
-    </div>
-  </div>
-</div>
- 
-<!-- ══════════════ PAGE 2: Intro Animation ══════════════ -->
+
+<!-- ══════════════ PAGE 1: Intro Animation ══════════════ -->
 <div id="page-intro" class="page" style="padding-top:70px;">
   <div class="star-field" id="star-field"></div>
- 
+
   <div class="intro-card">
-    <div class="intro-title">🎮 Math Adventure</div>
- 
+    <div class="intro-title">🎯 Math Adventure!</div>
+
     <div class="float-row">
       <span class="float-icon">🔢</span>
       <span class="float-icon">➕</span>
@@ -647,7 +548,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
       <span class="float-icon">🔷</span>
       <span class="float-icon">🎯</span>
     </div>
- 
+
     <div class="intro-msgs" style="position:relative;height:70px;">
       <div class="intro-msg">🎉 Hey! Let's Have Fun With Maths!</div>
       <div class="intro-msg">🚀 Ready for a Math Adventure?</div>
@@ -655,18 +556,18 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
       <div class="intro-msg">⭐ Let's Learn While Having Fun!</div>
       <div class="intro-msg">🧠 You Are a Math Champion!</div>
     </div>
- 
+
     <p style="color:#b3e5fc;font-family:var(--font-b);font-weight:700;font-size:.95rem;margin:14px 0 24px;">
       Class: <span id="intro-class-label" style="color:#ffd54f;"></span>
     </p>
- 
+
     <button class="btn btn-orange" style="font-size:1.3rem;padding:18px 48px;" onclick="showLevelPage()">
       🎮 Start Learning!
     </button>
   </div>
 </div>
- 
-<!-- ══════════════ PAGE 3: Level Selection ══════════════ -->
+
+<!-- ══════════════ PAGE 2: Level Selection ══════════════ -->
 <div id="page-level" class="page" style="padding-top:70px;">
   <div class="card">
     <div class="float-symbols">
@@ -678,7 +579,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
     <p style="color:#888;font-size:.9rem;font-weight:600;margin-bottom:22px;">
       Class: <strong id="level-class-label" style="color:#ec407a;"></strong>
     </p>
- 
+
     <div class="level-grid">
       <button class="level-btn level-easy"   onclick="selectLevel('Easy')">
         <span class="big-emoji">🟢</span>
@@ -696,23 +597,17 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
         <span class="level-desc">Challenge me!</span>
       </button>
     </div>
- 
-    <div style="margin-top:20px;">
-      <button class="btn btn-gray" onclick="showPage('page-class')" style="font-size:.95rem;padding:10px 26px;">
-        ← Back
-      </button>
-    </div>
   </div>
 </div>
- 
-<!-- ══════════════ PAGE 4: Question ══════════════════════ -->
+
+<!-- ══════════════ PAGE 3: Question ══════════════════════ -->
 <div id="page-question" class="page" style="padding-top:80px;">
   <div class="card">
     <div class="q-header">
       <div class="q-badge" id="q-badge">Q 1 / 6</div>
       <div class="score-badge" id="score-badge">⭐ Score: 0</div>
     </div>
- 
+
     <div class="progress-wrap">
       <div class="progress-label">
         <span id="prog-label">Progress</span>
@@ -722,8 +617,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
         <div class="progress-bar-fg" id="progress-bar" style="width:0%"></div>
       </div>
     </div>
- 
-    <!-- Bridge progress -->
+
     <div class="bridge-wrap">
       <div class="bridge-road">
         <div class="bridge-fill" id="bridge-fill" style="width:0%">
@@ -739,18 +633,16 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
         <span class="pillar">FINISH 🚩</span>
       </div>
     </div>
- 
+
     <div class="q-question" id="q-question">
       <span class="q-emoji" id="q-emoji">🔢</span>
       <span id="q-text">Loading question…</span>
     </div>
- 
-    <div class="options-grid" id="options-grid">
-      <!-- filled by JS -->
-    </div>
+
+    <div class="options-grid" id="options-grid"></div>
   </div>
 </div>
- 
+
 <!-- ══════════════ POPUP: Correct ═══════════════════════ -->
 <div class="popup-overlay hidden" id="popup-correct">
   <div class="popup-box">
@@ -762,7 +654,7 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
     </button>
   </div>
 </div>
- 
+
 <!-- ══════════════ POPUP: Wrong ══════════════════════════ -->
 <div class="popup-overlay hidden" id="popup-wrong">
   <div class="popup-box">
@@ -774,22 +666,22 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
     </button>
   </div>
 </div>
- 
-<!-- ══════════════ PAGE 5: Completion ════════════════════ -->
+
+<!-- ══════════════ PAGE 4: Completion ════════════════════ -->
 <div id="page-complete" class="page" style="padding-top:70px;">
   <div class="star-field" id="star-field-2"></div>
   <div class="complete-card">
     <div style="font-size:3rem;margin-bottom:4px;">🏆</div>
     <div class="complete-title">You Did It!</div>
-    <div class="complete-sub">You Crossed the Bridge! 🌉</div>
- 
+    <div class="complete-sub">You Crossed the Bridge of Knowledge! 🌉</div>
+
     <div class="bridge-banner" style="margin-bottom:22px;">
       <div class="bridge-arch" style="border-color:#ffd54f88;"></div>
       <div class="bridge-path"></div>
       <div class="bridge-char2" style="font-size:2rem;">🧒</div>
       <div class="bridge-flag">🏆</div>
     </div>
- 
+
     <div class="stars-row" id="stars-row">
       <span class="star-icon">⭐</span>
       <span class="star-icon">⭐</span>
@@ -797,16 +689,15 @@ h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
     </div>
     <div class="score-display" id="final-score">6/6</div>
     <div class="score-label" id="final-label">Perfect Score! You are a Math Star! 🌟</div>
- 
+
     <div class="complete-btns">
       <button class="btn btn-orange" onclick="replayLevel()">🔄 Play Again</button>
-      <button class="btn btn-purple" onclick="showPage('page-class')">🏠 Choose Class</button>
+      <button class="btn btn-purple" onclick="goHome()">🏠 Choose Class</button>
       <button class="btn btn-blue"   onclick="showLevelPage()">⚡ Change Level</button>
     </div>
   </div>
 </div>
- 
- 
+
 <script>
 /* ═══════════════════ STATE ═══════════════════ */
 let selectedClass = '';
@@ -816,10 +707,10 @@ let currentQ = 0;
 let score = 0;
 let questions = [];
 const TOTAL_Q = 6;
- 
+
 /* ═══════════════════ QUESTION BANK ══════════════════ */
 const QB = {
- 
+
   KG: {
     Easy: [
       { emoji:'🍎', text:'How many apples are here? 🍎🍎🍎', opts:['1','3','5','2'], ans:'3' },
@@ -846,7 +737,7 @@ const QB = {
       { emoji:'🐠', text:'I have 4 fish. 1 swims away. How many left?', opts:['2','5','4','3'], ans:'3' },
     ],
   },
- 
+
   '1': {
     Easy: [
       { emoji:'🍎', text:'3 + 2 = ?', opts:['4','6','5','7'], ans:'5' },
@@ -873,7 +764,7 @@ const QB = {
       { emoji:'🎉', text:'9 + 9 + 2 = ?', opts:['19','21','20','22'], ans:'20' },
     ],
   },
- 
+
   '2': {
     Easy: [
       { emoji:'✖️', text:'2 × 3 = ?', opts:['5','7','6','8'], ans:'6' },
@@ -900,7 +791,7 @@ const QB = {
       { emoji:'🌟', text:'9 × 9 = ?', opts:['72','82','81','80'], ans:'81' },
     ],
   },
- 
+
   '3': {
     Easy: [
       { emoji:'✖️', text:'6 × 7 = ?', opts:['40','43','42','44'], ans:'42' },
@@ -927,17 +818,17 @@ const QB = {
       { emoji:'🧩', text:'A book has 240 pages. Sam reads 8 pages a day. In how many days?', opts:['25','35','30','40'], ans:'30' },
     ],
   },
- 
+
 };
- 
+
 /* ═══════════════════ MESSAGES ═════════════════════ */
 const correctMsgs = [
-  { title:'Awesome! 🎉',       emoji:'🎉' },
-  { title:'Excellent! 🌟',     emoji:'🌟' },
-  { title:'Great Job! 🏆',     emoji:'🏆' },
-  { title:'Math Star! ⭐',     emoji:'⭐' },
-  { title:'Brilliant! 🚀',     emoji:'🚀' },
-  { title:'Superb! 🥳',        emoji:'🥳' },
+  { title:'Awesome! 🎉',   emoji:'🎉' },
+  { title:'Excellent! 🌟', emoji:'🌟' },
+  { title:'Great Job! 🏆', emoji:'🏆' },
+  { title:'Math Star! ⭐', emoji:'⭐' },
+  { title:'Brilliant! 🚀', emoji:'🚀' },
+  { title:'Superb! 🥳',    emoji:'🥳' },
 ];
 const wrongMsgs = [
   'Oops! Try Again! 😅',
@@ -955,15 +846,31 @@ const quotes = [
   '"You are braver than you believe!"',
 ];
 const confettiColors = ['#ffd54f','#ff7043','#ec407a','#ab47bc','#7e57c2','#1e88e5','#43a047','#4fc3f7'];
- 
+
+const CLASS_NAMES = { KG:'Kindergarten', '1':'1st Standard', '2':'2nd Standard', '3':'3rd Standard' };
+
 /* ═══════════════════ HELPERS ══════════════════════ */
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
- 
+
 function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
- 
+
+/* ═══════════════════ READ FROM URL ══════════════════
+   Usage:
+     math-adventure.html?class=KG
+     math-adventure.html?class=1
+     math-adventure.html?class=2
+     math-adventure.html?class=3
+   ═════════════════════════════════════════════════ */
+function getClassFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const cls = params.get('class');
+  if (cls && QB[cls]) return cls;
+  return 'KG'; // fallback default
+}
+
 /* ═══════════════════ STARS BACKGROUND ═══════════════ */
 function makeStars(containerId) {
   const c = document.getElementById(containerId);
@@ -977,7 +884,7 @@ function makeStars(containerId) {
     c.appendChild(s);
   }
 }
- 
+
 /* ═══════════════════ CONFETTI ═════════════════════ */
 function launchConfetti() {
   const c = document.getElementById('confetti-container');
@@ -998,33 +905,21 @@ function launchConfetti() {
   }
   setTimeout(() => c.innerHTML = '', 3500);
 }
- 
-/* ═══════════════════ CLASS SELECT ════════════════════ */
-function selectClass(name, code) {
-  selectedClass = name;
-  selectedClassCode = code;
-  document.getElementById('intro-class-label').textContent = name;
-  document.getElementById('level-class-label').textContent = name;
-  document.getElementById('topbar-info').textContent = name;
-  makeStars('star-field');
-  showPage('page-intro');
-}
- 
+
 /* ═══════════════════ SHOW LEVEL PAGE ════════════════ */
 function showLevelPage() {
   showPage('page-level');
 }
- 
+
 /* ═══════════════════ LEVEL SELECT ════════════════════ */
 function selectLevel(level) {
   selectedLevel = level;
   startQuiz();
 }
- 
+
 /* ═══════════════════ START QUIZ ══════════════════════ */
 function startQuiz() {
   const pool = QB[selectedClassCode][selectedLevel];
-  // Shuffle & pick 6
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
   questions = shuffled.slice(0, TOTAL_Q);
   currentQ = 0;
@@ -1033,26 +928,22 @@ function startQuiz() {
   showPage('page-question');
   loadQuestion();
 }
- 
+
 /* ═══════════════════ LOAD QUESTION ═══════════════════ */
 function loadQuestion() {
   const q = questions[currentQ];
- 
-  // Badge & progress
+
   document.getElementById('q-badge').textContent = `Q ${currentQ+1} / ${TOTAL_Q}`;
   const pct = Math.round((currentQ / TOTAL_Q) * 100);
   document.getElementById('progress-bar').style.width = pct + '%';
   document.getElementById('prog-pct').textContent = pct + '%';
- 
-  // Bridge fill (based on correct answers so far)
+
   const bridgePct = Math.round((score / TOTAL_Q) * 100);
   document.getElementById('bridge-fill').style.width = bridgePct + '%';
- 
-  // Question
+
   document.getElementById('q-emoji').textContent = q.emoji;
   document.getElementById('q-text').textContent = q.text;
- 
-  // Options – shuffle order
+
   const shuffledOpts = [...q.opts].sort(() => Math.random() - 0.5);
   const grid = document.getElementById('options-grid');
   grid.innerHTML = '';
@@ -1064,29 +955,25 @@ function loadQuestion() {
     grid.appendChild(btn);
   });
 }
- 
+
 /* ═══════════════════ CHECK ANSWER ════════════════════ */
 function checkAnswer(btn, chosen, correct) {
-  // Disable all
   document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
- 
+
   if (chosen === correct) {
     btn.classList.add('correct');
     score++;
     updateScoreBadge();
     launchConfetti();
- 
-    // Update bridge
+
     const bridgePct = Math.round((score / TOTAL_Q) * 100);
     document.getElementById('bridge-fill').style.width = bridgePct + '%';
- 
-    // Show correct popup
+
     const msg = rand(correctMsgs);
     document.getElementById('correct-emoji').textContent = msg.emoji;
     document.getElementById('correct-title').textContent = msg.title;
     document.getElementById('correct-quote').textContent = rand(quotes);
- 
-    // Last question?
+
     if (currentQ === TOTAL_Q - 1) {
       document.getElementById('next-btn').textContent = '🎊 See Results!';
       document.getElementById('next-btn').onclick = showComplete;
@@ -1095,21 +982,19 @@ function checkAnswer(btn, chosen, correct) {
       document.getElementById('next-btn').onclick = nextQuestion;
     }
     document.getElementById('popup-correct').classList.remove('hidden');
- 
+
   } else {
     btn.classList.add('wrong');
-    // Highlight correct
     document.querySelectorAll('.opt-btn').forEach(b => {
       if (b.textContent === correct) b.classList.add('correct');
     });
- 
-    // Show wrong popup
+
     document.getElementById('wrong-title').textContent = rand(wrongMsgs);
     document.getElementById('wrong-hint').textContent = `Correct answer: ${correct}`;
     document.getElementById('popup-wrong').classList.remove('hidden');
   }
 }
- 
+
 /* ═══════════════════ NEXT QUESTION ═══════════════════ */
 function nextQuestion() {
   document.getElementById('popup-correct').classList.add('hidden');
@@ -1120,29 +1005,27 @@ function nextQuestion() {
     showComplete();
   }
 }
- 
+
 function dismissWrong() {
   document.getElementById('popup-wrong').classList.add('hidden');
-  // Re-enable buttons to retry
   document.querySelectorAll('.opt-btn').forEach(b => {
     b.disabled = false;
     b.classList.remove('correct','wrong');
   });
 }
- 
+
 function updateScoreBadge() {
   document.getElementById('score-badge').textContent = `⭐ Score: ${score}`;
 }
- 
+
 /* ═══════════════════ COMPLETION ══════════════════════ */
 function showComplete() {
   document.getElementById('popup-correct').classList.add('hidden');
- 
-  // Stars earned
+
   let stars = 1;
   if (score >= 4) stars = 2;
   if (score >= 5) stars = 3;
- 
+
   const starsRow = document.getElementById('stars-row');
   starsRow.innerHTML = '';
   for (let i = 0; i < 3; i++) {
@@ -1151,30 +1034,46 @@ function showComplete() {
     s.textContent = i < stars ? '⭐' : '☆';
     starsRow.appendChild(s);
   }
- 
+
   document.getElementById('final-score').textContent = `${score} / ${TOTAL_Q}`;
- 
+
   let label = '';
   if (score === TOTAL_Q) label = '🌟 Perfect Score! You are a Math Star!';
   else if (score >= 4) label = '🎉 Great Job! Keep it up!';
   else if (score >= 2) label = '👍 Good Effort! Practice more!';
   else label = '💪 Keep trying! You Can Do It!';
   document.getElementById('final-label').textContent = label;
- 
+
   document.getElementById('topbar-info').textContent = `${selectedClass} • ${selectedLevel}`;
   makeStars('star-field-2');
   launchConfetti();
   showPage('page-complete');
 }
- 
+
 /* ═══════════════════ REPLAY ══════════════════════════ */
 function replayLevel() {
   startQuiz();
 }
- 
-/* ═══════════════════ INIT ════════════════════════════ */
+
+// "Choose Class" goes back to your existing selection page
+function goHome() {
+  window.history.back();
+}
+
+/* ═══════════════════ INIT ════════════════════════════
+   Reads ?class=KG / 1 / 2 / 3 from URL,
+   skips class selection screen, goes straight to intro.
+   ════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
-  showPage('page-class');
+  selectedClassCode = getClassFromURL();
+  selectedClass = CLASS_NAMES[selectedClassCode] || 'Kindergarten';
+
+  document.getElementById('intro-class-label').textContent = selectedClass;
+  document.getElementById('level-class-label').textContent = selectedClass;
+  document.getElementById('topbar-info').textContent = selectedClass;
+
+  makeStars('star-field');
+  showPage('page-intro');
 });
 </script>
 </body>
