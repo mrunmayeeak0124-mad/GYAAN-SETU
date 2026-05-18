@@ -41,14 +41,17 @@
 <body>
     <div class="sidebar">
         <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="profile-icon">
-        <a href="#" class="menu-item">Dashboard</a>
-        <a href="#" class="menu-item">Progress</a>
-        <a href="#" class="menu-item">About Us</a>
-        <a href="#" class="menu-item">Help</a>
+        <a href="dashboard.html" class="menu-item">Dashboard</a>
+
+        <a href="progress.html" class="menu-item">Progress</a>
+
+        <a href="about.html" class="menu-item">About Us</a>
+        <a href="help.html" class="menu-item">Help</a>
     </div>
 
     <div class="main">
-        <div class="welcome-msg">Hello friend,<br>Welcome to Gyaan Setu! 👋</div>
+        <!-- Add the id="dynamicGreeting" to your existing welcome message box -->
+        <div class="welcome-msg" id="dynamicGreeting">Hello friend,<br>Welcome to Gyaan Setu! 👋</div>
         
         <h2 style="color: #555; font-size: 35px;">Your Fun Learning Topics 🎨</h2>
 
@@ -121,5 +124,20 @@
 </div>
         </div>
     </div>
+
+    <!-- Add this right before the </body> tag -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Read registration keys safely from the browser storage memory
+            const userPassport = JSON.parse(localStorage.getItem('gyaanSetuUser'));
+            
+            // Check if a signed-up name exists
+            if (userPassport && userPassport.name) {
+                // Dynamically swap "friend" with the explorer's real passport name!
+                document.getElementById('dynamicGreeting').innerHTML = `Hello, ${userPassport.name}!<br>Welcome to Gyaan Setu! 👋`;
+            }
+        });
+    </script>
+</body>
 </body>
 </html>
