@@ -3,143 +3,560 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Magic Vector Coloring Zone!</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Lilita+One&display=swap" rel="stylesheet">
+<title>English Adventure!</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  body {
-    font-family: 'Baloo 2', sans-serif;
-    background: linear-gradient(160deg, #ffe0f0, #fff4d6 50%, #d6f5ff);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 15px;
-    overflow-x: hidden;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
 
-  .color-banner {
-    font-family: 'Lilita One', cursive;
-    font-size: clamp(2rem, 5vw, 2.8rem);
-    color: #fff;
-    background: linear-gradient(90deg, #FF4081, #FF9800, #4CAF50, #00BBF9);
-    border-radius: 50px;
-    padding: 10px 45px;
-    margin-bottom: 10px;
-    box-shadow: 0 8px 22px rgba(255, 64, 129, 0.3);
-    text-align: center;
-  }
+:root {
+  --sky:      #6BD4F8;
+  --sun:      #FFD93D;
+  --grass:    #6BCB77;
+  --bridge:   #FF6B35;
+  --purple:   #9B5DE5;
+  --pink:     #F15BB5;
+  --teal:     #00BBF9;
+  --white:    #FFFFFF;
+  --cream:    #FFFBE6;
+  --dark:     #1A1A2E;
+  --correct:  #6BCB77;
+  --wrong:    #FF6B6B;
+  --gold:     #FFD700;
+  --shadow:   rgba(0,0,0,0.18);
+}
 
-  .level-status-tag {
-    font-family: 'Lilita One', cursive;
-    background: #4E342E;
-    color: #FFF9C4;
-    padding: 6px 20px;
-    font-size: 1.25rem;
-    border-radius: 50px;
-    margin-bottom: 20px;
-    border: 3px dashed #FFF9C4;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  background: linear-gradient(160deg, #a8edea, #fed6e3 60%, #d4fc79);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* --- PLAYGROUND ARENA DECK --- */
-  .playground-deck {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    flex-wrap: wrap;
-    background: white;
-    padding: 25px;
-    border-radius: 35px;
-    border: 5px solid #4E342E;
-    box-shadow: 0 12px 0px #8D6E63;
-    max-width: 850px;
-    width: 100%;
-  }
+.hidden { display: none !important; }
 
-  .color-palette {
-    display: grid;
-    grid-template-columns: repeat(2, 55px);
-    gap: 12px;
-    background: #F8FAFC;
-    padding: 15px;
-    border-radius: 22px;
-    border: 3px solid #E2E8F0;
-  }
+/* ============================================================
+   FLOATING DECORATIONS
+   ============================================================ */
+.deco-layer {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.cloud {
+  position: absolute;
+  background: #fff;
+  border-radius: 50px;
+  opacity: 0.82;
+  animation: driftCloud linear infinite;
+}
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+}
+.cloud::before { width: 60%; height: 120%; top: -50%; left: 15%; }
+.cloud::after  { width: 40%; height: 90%;  top: -40%; right: 10%; }
 
-  .color-blob {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 4px solid white;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.15s;
-  }
+.cloud-1 { width:120px; height:40px; top:8%;  left:-140px; animation-duration:28s; animation-delay:0s; }
+.cloud-2 { width:90px;  height:30px; top:20%; left:-110px; animation-duration:22s; animation-delay:6s; }
+.cloud-3 { width:150px; height:50px; top:5%;  left:-170px; animation-duration:35s; animation-delay:12s; }
+.cloud-4 { width:80px;  height:28px; top:35%; left:-100px; animation-duration:25s; animation-delay:4s; }
 
-  .color-blob:hover, .color-blob.active-color {
-    transform: scale(1.18);
-    border-color: #4E342E;
-  }
+@keyframes driftCloud { from { transform: translateX(0); } to { transform: translateX(110vw); } }
 
-  /* VECTOR SVG WORKSPACE DOCK */
-  .book-canvas-dock {
-    width: 100%;
-    max-width: 400px;
-    height: 400px;
-    background: #FFFFFF;
-    border: 4px dashed #FF9800;
-    border-radius: 25px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.star-deco {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: var(--sun);
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  animation: twinkle 2s ease-in-out infinite alternate;
+}
+@keyframes twinkle { from { opacity:.3; transform: scale(.8) rotate(0deg); } to { opacity:1; transform: scale(1.2) rotate(20deg); } }
 
-  /* Pure SVG vector path properties rendering styles map tracks */
-  svg.coloring-object-image {
-    width: 100%;
-    height: 100%;
-  }
+.balloon {
+  position: absolute;
+  width: 34px; height: 44px;
+  border-radius: 50% 50% 45% 45%;
+  animation: floatBalloon 6s ease-in-out infinite alternate;
+}
+.balloon::after {
+  content: '';
+  position: absolute;
+  bottom: -18px; left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px; height: 18px;
+  background: rgba(0,0,0,.3);
+}
+@keyframes floatBalloon { 0%{transform:translateY(0) rotate(-4deg);} 100%{transform:translateY(-22px) rotate(4deg);} }
 
-  /* Target lines interactive paths configurations */
-  svg.coloring-object-image path, svg.coloring-object-image circle, svg.coloring-object-image rect {
-    fill: #FFFFFF; /* Initial fill blank state */
-    stroke: #1A1A2E;
-    stroke-width: 4px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    cursor: pointer;
-    transition: fill 0.2s ease;
-  }
+/* ============================================================
+   SCREEN WRAPPERS
+   ============================================================ */
+.screen {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 16px;
+}
 
-  svg.coloring-object-image path:hover, svg.coloring-object-image circle:hover {
-    opacity: 0.8;
-  }
+/* ============================================================
+   SCREEN 1 – ANIMATED INTRO
+   ============================================================ */
+#screen-intro {
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+  position: relative;
+}
+.intro-content { text-align: center; z-index: 2; position: relative; }
 
-  .appreciation-msg {
-    margin-top: 20px;
-    font-size: 1.4rem;
-    color: #2E7D32;
-    font-weight: 800;
-    text-align: center;
-    min-height: 40px;
-  }
+.intro-msg {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 5vw, 3.5rem);
+  color: var(--white);
+  text-shadow: 0 0 20px var(--teal), 0 0 40px var(--purple);
+  line-height: 1.3;
+  margin-bottom: 8px;
+  animation: fadeSlideDown .8s both;
+}
+.intro-class-badge {
+  display: inline-block;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg, var(--sun), var(--bridge));
+  color: var(--dark);
+  border-radius: 50px;
+  padding: 8px 28px;
+  margin: 12px 0;
+  box-shadow: 0 4px 16px rgba(255,217,61,.4);
+  animation: fadeSlideDown .8s .2s both;
+}
 
-  .action-bar-dock { display: flex; gap: 15px; margin-top: 15px; }
+.alpha-float {
+  position: absolute;
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  opacity: 0;
+  animation: floatAlpha 4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes floatAlpha {
+  0%   { opacity: 0; transform: translateY(40px) scale(.5); }
+  20%  { opacity: 1; transform: translateY(-10px) scale(1); }
+  80%  { opacity: 1; transform: translateY(-40px) scale(1.05); }
+  100% { opacity: 0; transform: translateY(-80px) scale(.8); }
+}
 
-  .btn-panel {
-    font-family: 'Lilita One', cursive; font-size: 1.2rem; padding: 12px 35px; border: none; border-radius: 50px; color: white; cursor: pointer; text-decoration: none; box-shadow: 0 6px 0px rgba(0,0,0,0.15);
-  }
-  .btn-panel:active { transform: translateY(3px); }
-  .btn-home { background: #2D9CDB; border-bottom: 4px solid #1A6E9B; }
-  .btn-next-level { background: #4CAF50; border-bottom: 4px solid #2E7D32; opacity: 0.5; pointer-events: none; }
-  .btn-next-level.unlocked { opacity: 1; pointer-events: auto; animation: pulse 1.5s infinite alternate; }
+.intro-abc {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  background: linear-gradient(90deg, var(--sun), var(--pink), var(--teal), var(--grass));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 10px;
+  display: block;
+  margin: 20px 0;
+  animation: rainbowShift 3s linear infinite, fadeSlideDown .8s .4s both;
+}
+@keyframes rainbowShift { 0%{filter:hue-rotate(0deg);} 100%{filter:hue-rotate(360deg);} }
 
-  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+.btn-next {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg, var(--grass), var(--teal));
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  padding: 15px 48px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(107,203,119,.45);
+  transition: transform .18s, box-shadow .18s;
+  margin-top: 24px;
+  animation: fadeSlideDown .8s .6s both, glowGreen 2s ease-in-out infinite;
+}
+.btn-next:hover { transform: scale(1.08) translateY(-3px); }
+@keyframes glowGreen {
+  0%,100%{box-shadow:0 8px 25px rgba(107,203,119,.45);}
+  50%{box-shadow:0 8px 40px rgba(0,187,249,.65);}
+}
 
-  .back-btn{
+.star-intro {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: var(--sun);
+  border-radius: 50%;
+  animation: starBlink 2s ease-in-out infinite alternate;
+}
+@keyframes starBlink { from{opacity:.2; transform:scale(.6);} to{opacity:1; transform:scale(1.3);} }
+
+/* ============================================================
+   SCREEN 2 – QUIZ
+   ============================================================ */
+#screen-quiz {
+  background: linear-gradient(150deg, #f8f9ff 0%, #eef2ff 50%, #fff0f9 100%);
+}
+
+.quiz-header {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.progress-track {
+  flex: 1;
+  height: 18px;
+  background: rgba(0,0,0,.08);
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.1);
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--pink), var(--teal));
+  border-radius: 50px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 10px rgba(155,93,229,.5);
+}
+.stars-counter {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: var(--dark);
+  white-space: nowrap;
+}
+.stars-counter span { color: var(--gold); }
+
+.q-number-badge {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  background: var(--purple);
+  color: var(--white);
+  border-radius: 50px;
+  padding: 5px 16px;
+  white-space: nowrap;
+}
+
+.question-card {
+  background: var(--white);
+  border-radius: 28px;
+  padding: 32px 28px 24px;
+  max-width: 720px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(155,93,229,.15);
+  position: relative;
+  overflow: hidden;
+  animation: cardPop .45s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes cardPop { from{transform:scale(.88) translateY(20px); opacity:0;} to{transform:scale(1) translateY(0); opacity:1;} }
+.question-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--purple), var(--pink), var(--teal), var(--grass));
+  border-radius: 28px 28px 0 0;
+}
+
+.q-type-badge {
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  color: var(--white);
+  border-radius: 50px;
+  padding: 4px 14px;
+  margin-bottom: 14px;
+}
+.q-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.15rem, 3vw, 1.65rem);
+  color: var(--dark);
+  line-height: 1.4;
+  margin-bottom: 22px;
+}
+.q-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.opt-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(.92rem, 2.2vw, 1.1rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #f8f0ff, #ffe8f5);
+  color: var(--dark);
+  border: 2.5px solid transparent;
+  border-radius: 18px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s, background .18s;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.opt-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.4), transparent);
+  border-radius: 18px;
+}
+.opt-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 22px rgba(155,93,229,.3);
+  background: linear-gradient(135deg, #ede0ff, #ffd6ee);
+  border-color: var(--purple);
+}
+.opt-btn:disabled { cursor: not-allowed; }
+.opt-btn.correct {
+  background: linear-gradient(135deg, #c8f7c5, #a8e6cf) !important;
+  border-color: var(--correct) !important;
+  color: #1b6b3a;
+  animation: correctShake .4s;
+}
+.opt-btn.wrong {
+  background: linear-gradient(135deg, #ffd6d6, #ffb3b3) !important;
+  border-color: var(--wrong) !important;
+  color: #8b1a1a;
+  animation: wrongShake .4s;
+}
+@keyframes correctShake {
+  0%,100%{transform:scale(1);}
+  25%{transform:scale(1.07);}
+  75%{transform:scale(.97);}
+}
+@keyframes wrongShake {
+  0%,100%{transform:translateX(0);}
+  20%,60%{transform:translateX(-6px);}
+  40%,80%{transform:translateX(6px);}
+}
+
+/* ============================================================
+   FEEDBACK POPUP
+   ============================================================ */
+.feedback-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.feedback-box {
+  background: var(--white);
+  border-radius: 32px;
+  padding: 36px 40px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  animation: popIn .4s cubic-bezier(.36,.07,.19,.97);
+  position: relative;
+  overflow: hidden;
+}
+@keyframes popIn { from{transform:scale(.5); opacity:0;} to{transform:scale(1); opacity:1;} }
+
+.feedback-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  border-radius: 32px 32px 0 0;
+}
+.feedback-box.correct-box::before { background: linear-gradient(90deg, var(--correct), var(--teal)); }
+.feedback-box.wrong-box::before   { background: linear-gradient(90deg, var(--wrong), var(--sun)); }
+
+.feedback-emoji { font-size: 4rem; display: block; margin-bottom: 10px; animation: bounceEmoji .5s ease-in-out infinite alternate; }
+@keyframes bounceEmoji { from{transform:translateY(0);} to{transform:translateY(-10px);} }
+
+.feedback-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.correct-box .feedback-title { color: #2d8a4e; }
+.wrong-box .feedback-title   { color: #c0392b; }
+
+.feedback-quote {
+  font-size: .95rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 22px;
+  font-style: italic;
+}
+
+.btn-next-q {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  padding: 13px 40px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(155,93,229,.4);
+  transition: transform .18s, box-shadow .18s;
+}
+.btn-next-q:hover { transform: scale(1.06); }
+
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  pointer-events: none;
+  animation: confettiFall linear forwards;
+  z-index: 200;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ============================================================
+   COMPLETION SCREEN
+   ============================================================ */
+#screen-complete {
+  background: linear-gradient(135deg, #1A1A2E, #0F3460);
+}
+.complete-content { text-align: center; z-index: 2; position: relative; }
+
+.trophy-wrap {
+  font-size: 7rem;
+  display: block;
+  animation: trophyBounce 1s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 20px var(--gold));
+}
+@keyframes trophyBounce { from{transform:scale(1) rotate(-5deg);} to{transform:scale(1.1) rotate(5deg);} }
+
+.complete-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  color: var(--white);
+  text-shadow: 0 0 20px var(--sun);
+  margin: 14px 0 8px;
+}
+.complete-sub {
+  font-size: clamp(.95rem, 2.5vw, 1.2rem);
+  font-weight: 700;
+  color: var(--sun);
+  margin-bottom: 20px;
+}
+
+.stars-display {
+  display: flex; gap: 10px; justify-content: center;
+  font-size: 2.8rem;
+  margin: 14px 0;
+}
+.star-slot { transition: transform .3s; animation: starPop .5s both; }
+.star-slot.earned { filter: drop-shadow(0 0 8px var(--gold)); animation: starPop .5s both; }
+@keyframes starPop { from{transform:scale(0) rotate(-30deg);} to{transform:scale(1) rotate(0deg);} }
+
+.score-badge {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  background: linear-gradient(90deg, var(--sun), var(--bridge));
+  color: var(--dark);
+  border-radius: 50px;
+  padding: 10px 34px;
+  margin: 10px auto;
+  display: inline-block;
+  box-shadow: 0 6px 20px rgba(255,217,61,.4);
+}
+
+.complete-msg {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+  margin: 14px 0 28px;
+  font-style: italic;
+}
+
+.btn-replay {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  background: linear-gradient(90deg, var(--grass), var(--teal));
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  padding: 14px 44px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(107,203,119,.4);
+  transition: transform .18s;
+  margin: 6px;
+}
+.btn-replay:hover { transform: scale(1.07); }
+.btn-home {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  padding: 12px 38px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(155,93,229,.4);
+  transition: transform .18s;
+  margin: 6px;
+}
+.btn-home:hover { transform: scale(1.07); }
+
+.certificate-frame {
+  border: 4px solid var(--gold);
+  border-radius: 24px;
+  padding: 24px 30px;
+  max-width: 460px;
+  width: 90%;
+  margin: 0 auto 24px;
+  box-shadow: 0 0 30px rgba(255,217,61,.3), inset 0 0 20px rgba(255,217,61,.05);
+}
+
+/* ============================================================
+   SHARED KEYFRAMES
+   ============================================================ */
+@keyframes bounceIn {
+  from { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.05); }
+  to   { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeSlideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================================
+   BRIDGE TRANSITION
+   ============================================================ */
+.bridge-transition {
+  position: fixed; inset: 0; z-index: 300;
+  background: linear-gradient(90deg, var(--purple) 0%, var(--pink) 50%, var(--teal) 100%);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  animation: bridgeIn .3s ease-in forwards;
+}
+.bridge-transition.out { animation: bridgeOut .4s ease-out forwards; }
+.bridge-transition .bt-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: var(--white);
+  text-shadow: 0 2px 10px rgba(0,0,0,.3);
+}
+.bridge-icon-anim { font-size: 4rem; animation: bounceIn .5s both; }
+@keyframes bridgeIn { from{clip-path:circle(0% at 50% 50%);} to{clip-path:circle(150% at 50% 50%);} }
+@keyframes bridgeOut { from{clip-path:circle(150% at 50% 50%); opacity:1;} to{clip-path:circle(0% at 50% 50%); opacity:0;} }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  .options-grid { grid-template-columns: 1fr; }
+  .feedback-box { padding: 28px 20px; }
+}
+
+.back-btn{
     position:absolute;
     top:20px;
     left:20px;
@@ -161,176 +578,644 @@
 </style>
 </head>
 <body>
+<a href="home.html" class="back-btn">⬅ Back</a>
+<!-- FLOATING DECORATIONS -->
+<div class="deco-layer" id="decoLayer">
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <div class="cloud cloud-4"></div>
+  <div class="star-deco" style="top:10%; left:5%; animation-delay:.3s;"></div>
+  <div class="star-deco" style="top:18%; right:8%; animation-delay:.9s;"></div>
+  <div class="star-deco" style="top:45%; left:3%; animation-delay:1.5s;"></div>
+  <div class="star-deco" style="top:70%; right:5%; animation-delay:.6s;"></div>
+  <div class="star-deco" style="bottom:15%; left:12%; animation-delay:1.2s;"></div>
+  <div class="star-deco" style="bottom:25%; right:15%; animation-delay:.4s;"></div>
+  <div class="balloon" style="background:#FF6B35; bottom:5%; left:4%; animation-delay:0s;"></div>
+  <div class="balloon" style="background:#9B5DE5; bottom:8%; left:10%; animation-delay:1.5s;"></div>
+  <div class="balloon" style="background:#F15BB5; bottom:6%; right:6%; animation-delay:.8s;"></div>
+  <div class="balloon" style="background:#6BCB77; bottom:10%; right:13%; animation-delay:2.2s;"></div>
+</div>
 
-    <a href="home.html" class="back-btn">⬅ Back</a>
-  <div class="color-banner">🎨 Real Picture Coloring Zone ✨</div>
-  <div class="level-status-tag" id="levelTrackBadge">Picture Canvas: Level 1 (Magic Water Bottle 🧴)</div>
+<!-- SCREEN 1: ANIMATED INTRO -->
+<div class="screen" id="screen-intro">
+  <div class="intro-content">
+    <div class="intro-class-badge hidden" id="introBadge"></div>
+    <div class="intro-msg" id="introMsg">Hey! Let's Have Fun With English!</div>
+    <span class="intro-abc" id="introAbc">A B C</span>
+    <p style="color:rgba(255,255,255,.75); font-size:1.05rem; font-weight:700; margin-bottom:4px;">
+      🌉 Cross the Bridge of Knowledge! 🌉
+    </p>
+    <p style="color:rgba(255,255,255,.6); font-size:.92rem; font-weight:600; margin-bottom:6px;">
+      6 amazing questions await you!
+    </p>
+    <button class="btn-next" onclick="showQuiz()">➡️ Let's Go!</button>
+  </div>
+</div>
 
-  <div class="playground-deck">
-    
-    <!-- Palette Swatches Controls -->
-    <div class="color-palette">
-      <div class="color-blob active-color" style="background: #FF4757" onclick="selectColor('#FF4757', this)"></div>
-      <div class="color-blob" style="background: #2ED573" onclick="selectColor('#2ED573', this)"></div>
-      <div class="color-blob" style="background: #1E90FF" onclick="selectColor('#1E90FF', this)"></div>
-      <div class="color-blob" style="background: #FFA502" onclick="selectColor('#FFA502', this)"></div>
-      <div class="color-blob" style="background: #E8521A" onclick="selectColor('#E8521A', this)"></div>
-      <div class="color-blob" style="background: #9B5DE5" onclick="selectColor('#9B5DE5', this)"></div>
-      <div class="color-blob" style="background: #FF6B81" onclick="selectColor('#FF6B81', this)"></div>
-      <div class="color-blob" style="background: #57606F" onclick="selectColor('#57606F', this)"></div>
+<!-- SCREEN 2: QUIZ -->
+<div class="screen hidden" id="screen-quiz">
+  <div class="quiz-header">
+    <span class="q-number-badge" id="qNumBadge">Q 1 / 6</span>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
-
-    <!-- PURE VECTOR IMAGE CONTENT FIELD (NO MORE PIXEL BOXES) -->
-    <div class="book-canvas-dock" id="vectorBookContainer">
-       <!-- Loaded via dynamic script engine -->
-    </div>
-
+    <span class="stars-counter"><span id="starCount">0</span> <span>⭐</span></span>
   </div>
 
-  <div class="appreciation-msg" id="feedbackPrompt">Tap different parts of the drawing picture to color them completely! 🌟</div>
-
-  <div class="action-bar-dock">
-    <a href="home.html" class="btn-panel btn-home">🏡 Back Home</a>
-    <button class="btn-panel btn-next-level" id="nextLevelBtn" onclick="advanceLevel()">Unlock Next Level ➡️</button>
+  <div class="question-card" id="questionCard">
+    <div class="q-type-badge" id="qTypeBadge">Question Type</div>
+    <span class="q-emoji" id="qEmoji">📝</span>
+    <div class="q-text" id="qText">Loading question...</div>
+    <div class="options-grid" id="optionsGrid"></div>
   </div>
+</div>
 
-  <script>
-    let activeColor = '#FF4757';
-    let currentLevel = 1;
+<!-- SCREEN 3: COMPLETION -->
+<div class="screen hidden" id="screen-complete">
+  <div class="complete-content">
+    <div class="certificate-frame">
+      <span class="trophy-wrap">🏆</span>
+      <div class="complete-title">You Did It! 🎉</div>
+      <div class="complete-sub" id="completeClass">English Adventure</div>
+      <div class="stars-display" id="starsDisplay"></div>
+      <div class="score-badge" id="scoreBadge">Score: 6 / 6</div>
+      <div class="complete-msg" id="completeMsg">You are becoming an English champion!</div>
+    </div>
+    <button class="btn-replay" onclick="replayLevel()">🔄 Play Again!</button>
+    <button class="btn-home" onclick="goHome()">🏠 Choose Another Level</button>
+  </div>
+</div>
 
-    // --- MANUALLY CUSTOM INJECTED 6 SCENIC VECTOR SVG GRAPHICS PATHS DATA ---
-    const imageVectorBanks = {
-      1: {
-        name: "Magic Water Bottle 🧴",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <rect class="color-part" x="42" y="10" width="16" height="12" rx="2" /> <!-- Cap -->
-                <path class="color-part" d="M35 30 C35 25, 65 25, 65 30 L65 35 C65 35, 65 35, 65 35 L35 35 Z" /> <!-- Neck -->
-                <path class="color-part" d="M30 40 C30 35, 70 35, 70 40 L70 85 C70 90, 30 90, 30 85 Z" /> <!-- Main Body Body -->
-                <rect class="color-part" x="35" y="52" width="30" height="15" rx="3" /> <!-- Center Decorative Stripe Tag Label -->
-              </svg>`
-      },
-      2: {
-        name: "Garden Flower 🌸",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M50 22 C42 10, 58 10, 50 22 Z" /> <!-- Petal Top -->
-                <path class="color-part" d="M50 78 C42 90, 58 90, 50 78 Z" /> <!-- Petal Bottom -->
-                <path class="color-part" d="M22 50 C10 42, 10 58, 22 50 Z" /> <!-- Petal Left -->
-                <path class="color-part" d="M78 50 C90 42, 90 58, 78 50 Z" /> <!-- Petal Right -->
-                <circle class="color-part" cx="50" cy="50" r="16" /> <!-- Yellow Center Core Bud Bud -->
-                <path class="color-part" d="M48 78 L48 95 L52 95 L52 78 Z" /> <!-- Flower Stem Line -->
-              </svg>`
-      },
-      3: {
-        name: "Yummy Sweet Apple 🍎",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M50 35 C40 20, 15 25, 20 55 C25 80, 48 85, 50 85 C52 85, 75 80, 80 55 C85 25, 60 20, 50 35 Z" /> <!-- Main Fruit Shell -->
-                <path class="color-part" d="M50 35 Q55 20 62 18" /> <!-- Branch Stick -->
-                <path class="color-part" d="M52 28 C55 20, 70 24, 65 32 C58 35, 54 32, 52 28 Z" /> <!-- Safe Green Leaf Leaf -->
-              </svg>`
-      },
-      4: {
-        name: "Little Toy Car 🚗",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M25 50 L35 32 L65 32 L75 50 Z" /> <!-- Car Top Window Cabin Area -->
-                <path class="color-part" d="M15 50 L85 50 C90 50, 90 68, 85 68 L15 68 C10 68, 10 50, 15 50 Z" /> <!-- Lower Car Body Deck Base -->
-                <circle class="color-part" cx="30" cy="68" r="10" /> <!-- Wheel Front -->
-                <circle class="color-part" cx="70" cy="68" r="10" /> <!-- Wheel Back -->
-              </svg>`
-      },
-      5: {
-        name: "Cute Pond Duck 🦆",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M30 45 C20 40, 20 20, 32 22 C42 24, 45 40, 45 45 Z" /> <!-- Neck & Small Head Face -->
-                <path class="color-part" d="M16 26 L22 30 L16 34 Z" /> <!-- Duck Beak Lip Mouth -->
-                <path class="color-part" d="M35 45 C35 45, 75 40, 80 60 C85 75, 45 80, 35 75 C25 70, 25 50, 35 45 Z" /> <!-- Main Duck Feather Body Hull -->
-                <circle class="color-part" cx="30" cy="28" r="2.5" /> <!-- Eye Spot -->
-              </svg>`
-      },
-      6: {
-        name: "Magic Flying Butterfly 🦋",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <rect class="color-part" x="46" y="20" width="8" height="55" rx="4" /> <!-- Center Body Backbone -->
-                <path class="color-part" d="M46 30 C30 10, 10 20, 15 45 C20 60, 40 55, 46 50 Z" /> <!-- Top Left Wing Petal -->
-                <path class="color-part" d="M54 30 C70 10, 90 20, 85 45 C80 60, 60 55, 54 50 Z" /> <!-- Top Right Wing Petal -->
-                <path class="color-part" d="M46 52 C35 55, 20 65, 25 75 C30 82, 42 75, 46 68 Z" /> <!-- Lower Left Tail Wing -->
-                <path class="color-part" d="M54 52 C65 55, 80 65, 75 75 C70 82, 58 75, 54 68 Z" /> <!-- Lower Right Tail Wing -->
-              </svg>`
+<!-- FEEDBACK OVERLAY -->
+<div class="feedback-overlay hidden" id="feedbackOverlay">
+  <div class="feedback-box" id="feedbackBox">
+    <span class="feedback-emoji" id="feedbackEmoji">🎉</span>
+    <div class="feedback-title" id="feedbackTitle">Awesome!</div>
+    <div class="feedback-quote" id="feedbackQuote">Learning makes you shine brighter!</div>
+    <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">Next Question ➡️</button>
+  </div>
+</div>
+
+<script>
+// =============================================================
+//  QUESTION DATA BANK
+// =============================================================
+const questionBank = {
+
+  kg: [
+    {
+      type: "Identify the Letter",
+      emoji: "🔤",
+      question: "Which letter comes after  'C'  in the alphabet?",
+      options: ["B", "D", "E", "A"],
+      answer: "D",
+      hint: "A B C _?"
+    },
+    {
+      type: "Capital & Small Letter",
+      emoji: "🅰️",
+      question: "Which is the SMALL letter of  'G'?",
+      options: ["G", "g", "J", "q"],
+      answer: "g",
+      hint: "Big 'G' – small is…"
+    },
+    {
+      type: "Find Missing Letter",
+      emoji: "❓",
+      question: "Fill in the blank:  A _ C  (A, ?, C)",
+      options: ["B", "D", "E", "F"],
+      answer: "B",
+      hint: "Sing A-B-C!"
+    },
+    {
+      type: "Phonics Fun",
+      emoji: "🔊",
+      question: "Which letter makes the sound  'buh'  at the start of 'Ball'?",
+      options: ["P", "D", "B", "Q"],
+      answer: "B",
+      hint: "B is for Ball! 🏀"
+    },
+    {
+      type: "Image Alphabet",
+      emoji: "🍎",
+      question: "🍎  Apple starts with which letter?",
+      options: ["A", "E", "I", "O"],
+      answer: "A",
+      hint: "A is for Apple!"
+    },
+    {
+      type: "Match the Letter",
+      emoji: "🌟",
+      question: "Which letter is the CAPITAL of  'h'?",
+      options: ["h", "H", "K", "N"],
+      answer: "H",
+      hint: "Small 'h' – big is…"
     }
+  ],
+
+  "1st": [
+    {
+      type: "Simple Spelling",
+      emoji: "✏️",
+      question: "Choose the correct spelling for the animal that says 'Moo' 🐄",
+      options: ["Kow", "Couw", "Cow", "Caw"],
+      answer: "Cow",
+      hint: "C-O-W 🐄"
+    },
+    {
+      type: "Opposites",
+      emoji: "⚡",
+      question: "What is the OPPOSITE of  'Big'?",
+      options: ["Tall", "Small", "Heavy", "Long"],
+      answer: "Small",
+      hint: "Big ↔ ?"
+    },
+    {
+      type: "Rhyming Words",
+      emoji: "🎵",
+      question: "Which word RHYMES with  'Cat'?",
+      options: ["Dog", "Hat", "Pen", "Cup"],
+      answer: "Hat",
+      hint: "Cat – H_t… sounds the same!"
+    },
+    {
+      type: "Fill in the Blank",
+      emoji: "📝",
+      question: "The sun shines in the ___.",
+      options: ["night", "sky", "water", "box"],
+      answer: "sky",
+      hint: "Look up on a sunny day!"
+    },
+    {
+      type: "Word Identification",
+      emoji: "🔍",
+      question: "Which word is a FRUIT? 🍊",
+      options: ["Chair", "Mango", "Book", "Table"],
+      answer: "Mango",
+      hint: "It's sweet and yellow! 🥭"
+    },
+    {
+      type: "Animal Names",
+      emoji: "🐾",
+      question: "Which animal lives in water and has fins? 🌊",
+      options: ["Dog", "Cat", "Fish", "Bird"],
+      answer: "Fish",
+      hint: "It swims and says nothing! 🐟"
+    }
+  ],
+
+  "2nd": [
+    {
+      type: "Sentence Completion",
+      emoji: "📖",
+      question: "She ___ a book every day.",
+      options: ["read", "reads", "reading", "readed"],
+      answer: "reads",
+      hint: "She (singular) + ? Present tense."
+    },
+    {
+      type: "Nouns",
+      emoji: "🏷️",
+      question: "Which word is a NOUN (a person, place, or thing)?",
+      options: ["Run", "Happy", "School", "Quickly"],
+      answer: "School",
+      hint: "It's a PLACE you go every day!"
+    },
+    {
+      type: "Verbs",
+      emoji: "🏃",
+      question: "Which word is a VERB (an action)?",
+      options: ["Beautiful", "Jump", "Flower", "Blue"],
+      answer: "Jump",
+      hint: "An action word – what you DO!"
+    },
+    {
+      type: "Synonyms",
+      emoji: "🔄",
+      question: "Which word means the SAME as  'Happy'?",
+      options: ["Sad", "Angry", "Joyful", "Tired"],
+      answer: "Joyful",
+      hint: "Another word for feeling good 😊"
+    },
+    {
+      type: "Grammar Basics",
+      emoji: "📐",
+      question: "Choose the correct sentence:",
+      options: [
+        "She go to school.",
+        "She goes to school.",
+        "She going to school.",
+        "She goed to school."
+      ],
+      answer: "She goes to school.",
+      hint: "She + goes (present tense, 3rd person)"
+    },
+    {
+      type: "Vocabulary",
+      emoji: "📚",
+      question: "A place where you borrow books is called a ___.",
+      options: ["Hospital", "Library", "Kitchen", "Garage"],
+      answer: "Library",
+      hint: "Shhh! Keep quiet here 📚"
+    }
+  ],
+
+  "3rd": [
+    {
+      type: "Tenses",
+      emoji: "⏰",
+      question: "Change to PAST TENSE: 'She walks to school.'",
+      options: [
+        "She will walk to school.",
+        "She walked to school.",
+        "She walking to school.",
+        "She walks to school."
+      ],
+      answer: "She walked to school.",
+      hint: "Past tense of 'walk' is 'walked'."
+    },
+    {
+      type: "Correct Sentence",
+      emoji: "✅",
+      question: "Choose the CORRECT sentence:",
+      options: [
+        "The childrens are playing.",
+        "The children is playing.",
+        "The children are playing.",
+        "The children was playing."
+      ],
+      answer: "The children are playing.",
+      hint: "'Children' is already plural — use 'are'."
+    },
+    {
+      type: "Vocabulary Challenge",
+      emoji: "🧠",
+      question: "What does the word  'ENORMOUS'  mean?",
+      options: ["Very small", "Very fast", "Very large", "Very dark"],
+      answer: "Very large",
+      hint: "An enormous elephant is HUGE! 🐘"
+    },
+    {
+      type: "Word Meaning",
+      emoji: "📖",
+      question: "What is the meaning of  'BRAVE'?",
+      options: ["Scared", "Fearless", "Lazy", "Hungry"],
+      answer: "Fearless",
+      hint: "A brave lion fears nothing! 🦁"
+    },
+    {
+      type: "Grammar",
+      emoji: "📝",
+      question: "Which sentence uses the FUTURE TENSE?",
+      options: [
+        "She played cricket.",
+        "She plays cricket.",
+        "She will play cricket.",
+        "She was playing cricket."
+      ],
+      answer: "She will play cricket.",
+      hint: "'Will' = future tense!"
+    },
+    {
+      type: "Paragraph Understanding",
+      emoji: "🌿",
+      question: "Riya loves reading books. She visits the library every Saturday. What does Riya love to do?",
+      options: ["Play cricket", "Read books", "Go swimming", "Watch TV"],
+      answer: "Read books",
+      hint: "Read the first sentence again!"
+    }
+  ]
+};
+
+// =============================================================
+//  STATE
+// =============================================================
+let selectedLevel   = null;
+let currentQIndex   = 0;
+let starsEarned     = 0;
+let answeredCorrect = 0;
+let questions       = [];
+
+const levelNames = {
+  kg: "Kindergarten",
+  "1st": "1st Standard",
+  "2nd": "2nd Standard",
+  "3rd": "3rd Standard"
+};
+const levelEmojis = {
+  kg: "🌱",
+  "1st": "⭐",
+  "2nd": "🚀",
+  "3rd": "🏆"
+};
+
+const introMessages = [
+  "Hey! Let's Have Fun With English! 🎉",
+  "Welcome to the English Adventure! 🌈",
+  "Learning English is Super Fun! ✨",
+  "Cross the Bridge of Knowledge! 🌉"
+];
+
+// =============================================================
+//  READ LEVEL FROM URL PARAMETER
+//  Usage: english-adventure.html?level=kg
+//         english-adventure.html?level=1st
+//         english-adventure.html?level=2nd
+//         english-adventure.html?level=3rd
+// =============================================================
+function getLevelFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const level = params.get('level');
+  if (level && questionBank[level]) return level;
+  // fallback: default to kg if not provided or invalid
+  return 'kg';
+}
+
+// =============================================================
+//  INTRO SETUP
+// =============================================================
+function setupIntro() {
+  const msg = introMessages[Math.floor(Math.random() * introMessages.length)];
+  document.getElementById('introBadge').textContent =
+    levelEmojis[selectedLevel] + ' ' + levelNames[selectedLevel];
+  document.getElementById('introMsg').textContent = msg;
+
+  const abcSets = {
+    kg:    "A B C D E F",
+    "1st": "G H I J K L",
+    "2nd": "M N O P Q R",
+    "3rd": "S T U V W X"
   };
+  document.getElementById('introAbc').textContent = abcSets[selectedLevel];
 
-    function selectColor(colorValue, blobElement) {
-        activeColor = colorValue;
-        document.querySelectorAll('.color-blob').forEach(b => b.classList.remove('active-color'));
-        blobElement.classList.add('active-color');
-    }
+  const intro = document.getElementById('screen-intro');
+  intro.querySelectorAll('.alpha-float').forEach(el => el.remove());
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  for (let i = 0; i < 20; i++) {
+    const el = document.createElement('span');
+    el.className = 'alpha-float';
+    el.textContent = letters[Math.floor(Math.random() * letters.length)];
+    el.style.left = Math.random() * 90 + '%';
+    el.style.bottom = '-30px';
+    el.style.color = randomColor();
+    el.style.animationDelay = (Math.random() * 5) + 's';
+    el.style.animationDuration = (3 + Math.random() * 4) + 's';
+    intro.appendChild(el);
+  }
 
-    function loadPictureLevel(lvl) {
-        const levelData = imageVectorBanks[lvl];
-        document.getElementById('levelTrackBadge').innerText = `Picture Canvas: Level ${lvl} (${levelData.name})`;
-        
-        const container = document.getElementById('vectorBookContainer');
-        container.innerHTML = levelData.svg;
+  intro.querySelectorAll('.star-intro').forEach(el => el.remove());
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('span');
+    s.className = 'star-intro';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top  = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 3) + 's';
+    s.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    s.style.width  = (4 + Math.random() * 8) + 'px';
+    s.style.height = s.style.width;
+    intro.appendChild(s);
+  }
+}
 
-        // Bind dynamic tap-fill logic onto the SVG internal parts elements nodes maps directly
-        const colorableParts = container.querySelectorAll('.color-part');
-        colorableParts.forEach(part => {
-            part.addEventListener('click', (e) => {
-                // Instantly rewrites the filled path hex color structural string inside vector engine directly
-                part.style.fill = activeColor;
-                verifyBookCompletion();
-                e.stopPropagation();
-            });
-        });
+// =============================================================
+//  SHOW QUIZ
+// =============================================================
+function showQuiz() {
+  questions = questionBank[selectedLevel];
+  currentQIndex = 0;
+  starsEarned = 0;
+  answeredCorrect = 0;
+  bridgeTransition(() => {
+    showScreen('screen-quiz');
+    renderQuestion();
+  });
+}
 
-        document.getElementById('nextLevelBtn').classList.remove('unlocked');
-    }
+// =============================================================
+//  RENDER QUESTION
+// =============================================================
+function renderQuestion() {
+  if (currentQIndex >= questions.length) {
+    showCompletion();
+    return;
+  }
 
-    function verifyBookCompletion() {
-        const totalParts = document.querySelectorAll('.color-part');
-        let completelyColoredCount = 0;
+  const q = questions[currentQIndex];
 
-        totalParts.forEach(part => {
-            const innerFill = part.style.fill;
-            // Evaluates if default empty blank canvas property string state layer has been active modified
-            if (innerFill !== "" && innerFill !== "none" && innerFill !== "rgb(255, 255, 255)") {
-                completelyColoredCount++;
-            }
-        });
+  document.getElementById('qNumBadge').textContent = `Q ${currentQIndex + 1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = (currentQIndex / questions.length * 100) + '%';
+  document.getElementById('starCount').textContent = starsEarned;
 
-        if (completelyColoredCount === totalParts.length) {
-            const artCheers = [
-                "🌟 You are doing great! That picture looks so beautiful and realistic!",
-                "🌈 Spectacular filling! Your color combination looks stunningly creative!",
-                "🎉 Wow! What a brilliant choice of colors! You are an amazing little artist!"
-            ];
-            document.getElementById('feedbackPrompt').innerText = artCheers[Math.floor(Math.random() * artCheers.length)];
-            document.getElementById('nextLevelBtn').classList.add('unlocked');
-            triggerVictoryBlasts();
-        }
-    }
+  document.getElementById('qTypeBadge').textContent = q.type;
+  document.getElementById('qEmoji').textContent = q.emoji;
+  document.getElementById('qText').textContent = q.question;
 
-    function advanceLevel() {
-        if (currentLevel < 6) {
-            currentLevel++;
-            document.getElementById('feedbackPrompt').innerText = "Fresh real drawing picture object unlocked! Tap to color it completely... 🎨";
-            loadPictureLevel(currentLevel);
-        } else {
-            document.getElementById('feedbackPrompt').innerHTML = "🏆 HURRAY! You colored all 6 vector object pictures cleanly! You are a master coloring champion artist! 🎉🎨";
-            document.getElementById('nextLevelBtn').classList.remove('unlocked');
-        }
-    }
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'cardPop .45s cubic-bezier(.36,.07,.19,.97)';
 
-    function triggerVictoryBlasts() {
-        for (let i = 0; i < 25; i++) {
-            const p = document.createElement("div"); p.innerHTML = "🎉";
-            p.style.cssText = `left:${Math.random()*100}vw; top:-20px; font-size:30px; position:fixed; pointer-events:none; transition:transform 2.2s linear; z-index:999;`;
-            document.body.appendChild(p);
-            setTimeout(() => { p.style.transform = `translateY(105vh) rotate(${Math.random()*360}deg)`; setTimeout(() => p.remove(), 2200); }, 50);
-        }
-    }
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
 
-    // Initialize Level 1 content framework vectors on launch tracking mappings bounds
-    loadPictureLevel(currentLevel);
-  </script>
+  const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+
+  shuffled.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = ['🅰', '🅱', '🅲', '🅳'][idx] + '  ' + opt;
+    btn.dataset.value = opt;
+    btn.onclick = () => checkAnswer(btn, opt, q.answer);
+    grid.appendChild(btn);
+  });
+}
+
+// =============================================================
+//  CHECK ANSWER
+// =============================================================
+function checkAnswer(btn, chosen, correct) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    starsEarned++;
+    answeredCorrect++;
+    document.getElementById('starCount').textContent = starsEarned;
+    setTimeout(() => showFeedback(true), 400);
+    launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.dataset.value === correct) b.classList.add('correct');
+    });
+    setTimeout(() => showFeedback(false), 400);
+  }
+}
+
+// =============================================================
+//  FEEDBACK POPUP
+// =============================================================
+const correctMessages = [
+  ["🎉", "Excellent!", "Learning makes you shine brighter!"],
+  ["🌟", "Awesome!", "Every word makes you smarter!"],
+  ["🏆", "Great Job!", "You crossed another bridge!"],
+  ["🚀", "Fantastic!", "You are becoming an English champion!"],
+  ["💫", "Superstar!", "Your brain is getting stronger!"]
+];
+const wrongMessages = [
+  ["💪", "Try Again!", "Don't give up – you can do it!"],
+  ["🌈", "You Can Do It!", "Mistakes help us learn more!"],
+  ["🤗", "Keep Going!", "Every great learner makes mistakes!"]
+];
+
+function showFeedback(isCorrect) {
+  const overlay = document.getElementById('feedbackOverlay');
+  const box     = document.getElementById('feedbackBox');
+  const isLast  = (currentQIndex === questions.length - 1);
+
+  const data = isCorrect
+    ? correctMessages[Math.floor(Math.random() * correctMessages.length)]
+    : wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
+
+  document.getElementById('feedbackEmoji').textContent = data[0];
+  document.getElementById('feedbackTitle').textContent = data[1];
+  document.getElementById('feedbackQuote').textContent = data[2];
+
+  box.className = 'feedback-box ' + (isCorrect ? 'correct-box' : 'wrong-box');
+
+  const btnNext = document.getElementById('btnNextQ');
+  btnNext.textContent = isLast ? '🏁 See Results!' : 'Next Question ➡️';
+
+  overlay.classList.remove('hidden');
+}
+
+function nextQuestion() {
+  document.getElementById('feedbackOverlay').classList.add('hidden');
+  currentQIndex++;
+  if (currentQIndex >= questions.length) {
+    bridgeTransition(showCompletion);
+  } else {
+    renderQuestion();
+  }
+}
+
+// =============================================================
+//  COMPLETION SCREEN
+// =============================================================
+function showCompletion() {
+  showScreen('screen-complete');
+
+  document.getElementById('completeClass').textContent =
+    'English Adventure – ' + levelNames[selectedLevel];
+
+  const total = questions.length;
+  document.getElementById('scoreBadge').textContent =
+    `Score: ${answeredCorrect} / ${total}`;
+
+  const starsDiv = document.getElementById('starsDisplay');
+  starsDiv.innerHTML = '';
+  for (let i = 1; i <= 6; i++) {
+    const s = document.createElement('span');
+    s.className = 'star-slot' + (i <= starsEarned ? ' earned' : '');
+    s.textContent = i <= starsEarned ? '⭐' : '☆';
+    s.style.animationDelay = (i * .12) + 's';
+    starsDiv.appendChild(s);
+  }
+
+  const msgs = [
+    "Keep practising – you're learning!",
+    "Good effort – keep it up!",
+    "Well done! You're improving!",
+    "Great work! Keep going!",
+    "Amazing! Almost perfect!",
+    "Perfect Score! You are an English Champion! 🏆"
+  ];
+  document.getElementById('completeMsg').textContent =
+    msgs[Math.min(starsEarned, msgs.length - 1)];
+
+  setTimeout(launchConfetti, 300);
+  setTimeout(launchConfetti, 700);
+  setTimeout(launchConfetti, 1100);
+}
+
+function replayLevel() {
+  bridgeTransition(() => {
+    showScreen('screen-intro');
+    setupIntro();
+  });
+}
+
+// "Choose Another Level" goes back to your existing selection page
+function goHome() {
+  window.history.back();
+}
+
+// =============================================================
+//  BRIDGE TRANSITION ANIMATION
+// =============================================================
+function bridgeTransition(callback) {
+  const div = document.createElement('div');
+  div.className = 'bridge-transition';
+  div.innerHTML = `
+    <span class="bridge-icon-anim">🌉</span>
+    <span class="bt-text">Crossing the Bridge...</span>
+  `;
+  document.body.appendChild(div);
+
+  setTimeout(() => {
+    callback();
+    div.classList.add('out');
+    setTimeout(() => div.remove(), 500);
+  }, 600);
+}
+
+// =============================================================
+//  SHOW SCREEN HELPER
+// =============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+// =============================================================
+//  CONFETTI
+// =============================================================
+function launchConfetti() {
+  const colors = ['#FF6B35','#9B5DE5','#F15BB5','#6BD4F8','#FFD93D','#6BCB77','#00BBF9'];
+  for (let i = 0; i < 55; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = (Math.random() * 100) + 'vw';
+    el.style.top  = '-20px';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.width  = (7 + Math.random() * 10) + 'px';
+    el.style.height = (7 + Math.random() * 10) + 'px';
+    el.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+    el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    el.style.animationDelay = (Math.random() * .8) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+}
+
+// =============================================================
+//  UTILS
+// =============================================================
+function randomColor() {
+  const c = ['#FF6B35','#9B5DE5','#F15BB5','#6BD4F8','#FFD93D','#6BCB77','#00BBF9','#FF9F43'];
+  return c[Math.floor(Math.random() * c.length)];
+}
+
+// =============================================================
+//  INIT — read level from URL, then go straight to intro
+// =============================================================
+(function init() {
+  selectedLevel = getLevelFromURL();
+  showScreen('screen-intro');
+  setupIntro();
+})();
+</script>
 </body>
 </html>
