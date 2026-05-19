@@ -3,79 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Us - Gyaan Setu</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+<title>About - Colouring Zone</title>
 
 <style>
-
 body{
-    font-family:'Baloo 2', cursive;
-    background:linear-gradient(135deg,#FFF8E1,#E1F5FE);
-    min-height:100vh;
-    padding:40px;
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#ffe6f0,#e6f7ff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
 }
 
-.about-box{
-    max-width:900px;
-    margin:auto;
-    background:white;
-    padding:50px;
-    border-radius:35px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+/* MAIN CARD */
+.card{
+  background:white;
+  max-width:650px;
+  padding:40px;
+  border-radius:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  text-align:center;
+  animation: fadeIn 1s ease;
 }
 
+/* TITLE */
 h1{
-    text-align:center;
-    color:#FF4081;
-    font-size:50px;
-    margin-bottom:30px;
+  color:#ff1493;
+  font-size:32px;
+  margin-bottom:20px;
 }
 
+/* ICON */
+.icon{
+  font-size:50px;
+  margin-bottom:10px;
+  animation: bounce 2s infinite;
+}
+
+/* TEXT */
 p{
-    font-size:22px;
-    line-height:1.8;
-    color:#444;
+  font-size:18px;
+  line-height:1.6;
+  color:#333;
+  margin-bottom:20px;
 }
 
-.highlight{
-    color:#7E57C2;
-    font-weight:bold;
+/* HIGHLIGHTS BOX */
+.features{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+  gap:15px;
+  margin-top:20px;
 }
 
-.home-btn{
-    display:block;
-    width:max-content;
-    margin:40px auto 0;
-    text-decoration:none;
-    background:#42A5F5;
-    color:white;
-    padding:12px 25px;
-    border-radius:40px;
+.feature{
+  background:#fff0f5;
+  padding:15px;
+  border-radius:15px;
+  font-size:15px;
+  font-weight:bold;
+  color:#444;
+  transition:0.3s;
 }
 
+.feature:hover{
+  transform:scale(1.05);
+  background:#ffe0ec;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:25px;
+  display:inline-block;
+  padding:12px 25px;
+  background:#ff1493;
+  color:white;
+  border:none;
+  border-radius:30px;
+  text-decoration:none;
+  font-size:16px;
+  transition:0.3s;
+}
+
+.btn:hover{
+  background:#e0137f;
+  transform:scale(1.05);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+}
 </style>
 </head>
 
 <body>
 
-<div class="about-box">
+<div class="card">
 
-    <h1>About Gyaan Setu 🌈</h1>
+  <div class="icon">🎨</div>
 
-    <p>
+  <h1>About Colouring Zone</h1>
 
-        <span class="highlight">Gyaan Setu</span> is a fun and interactive learning platform specially designed for rural children in India.
+  <p>
+    Colouring Zone is a fun and interactive learning platform designed for students.
+    It helps improve creativity, imagination, focus, and colour recognition through
+    engaging colouring activities and games.
+  </p>
 
-        Our mission is to make education joyful, colorful, and easy to understand through games, quizzes, stories, activities, and creative learning experiences.
+  <div class="features">
+    <div class="feature">🌈 Creativity Boost</div>
+    <div class="feature">🧠 Focus Improvement</div>
+    <div class="feature">🎯 Learning with Fun</div>
+    <div class="feature">🎨 Colour Practice</div>
+  </div>
 
-        We believe every child deserves quality education with happiness and confidence. ✨
-
-    </p>
-
-    <a href="home.html" class="home-btn">
-        ⬅ Back Home
-    </a>
+  <a href="home.html" class="btn">🏠 Back to Home</a>
 
 </div>
 
