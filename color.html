@@ -3,334 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Magic Vector Coloring Zone!</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Lilita+One&display=swap" rel="stylesheet">
+<title>Colouring Zone</title>
+
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  body {
-    font-family: 'Baloo 2', sans-serif;
-    background: linear-gradient(160deg, #ffe0f0, #fff4d6 50%, #d6f5ff);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 15px;
-    overflow-x: hidden;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Lilita+One&display=swap');
 
-  .color-banner {
-    font-family: 'Lilita One', cursive;
-    font-size: clamp(2rem, 5vw, 2.8rem);
-    color: #fff;
-    background: linear-gradient(90deg, #FF4081, #FF9800, #4CAF50, #00BBF9);
-    border-radius: 50px;
-    padding: 10px 45px;
-    margin-bottom: 10px;
-    box-shadow: 0 8px 22px rgba(255, 64, 129, 0.3);
-    text-align: center;
-  }
-
-  .level-status-tag {
-    font-family: 'Lilita One', cursive;
-    background: #4E342E;
-    color: #FFF9C4;
-    padding: 6px 20px;
-    font-size: 1.25rem;
-    border-radius: 50px;
-    margin-bottom: 20px;
-    border: 3px dashed #FFF9C4;
-  }
-
-  /* --- PLAYGROUND ARENA DECK --- */
-  .playground-deck {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    flex-wrap: wrap;
-    background: white;
-    padding: 25px;
-    border-radius: 35px;
-    border: 5px solid #4E342E;
-    box-shadow: 0 12px 0px #8D6E63;
-    max-width: 850px;
-    width: 100%;
-  }
-
-  .color-palette {
-    display: grid;
-    grid-template-columns: repeat(2, 55px);
-    gap: 12px;
-    background: #F8FAFC;
-    padding: 15px;
-    border-radius: 22px;
-    border: 3px solid #E2E8F0;
-  }
-
-  .color-blob {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 4px solid white;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.15s;
-  }
-
-  .color-blob:hover, .color-blob.active-color {
-    transform: scale(1.18);
-    border-color: #4E342E;
-  }
-
-  /* VECTOR SVG WORKSPACE DOCK */
-  .book-canvas-dock {
-    width: 100%;
-    max-width: 400px;
-    height: 400px;
-    background: #FFFFFF;
-    border: 4px dashed #FF9800;
-    border-radius: 25px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Pure SVG vector path properties rendering styles map tracks */
-  svg.coloring-object-image {
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Target lines interactive paths configurations */
-  svg.coloring-object-image path, svg.coloring-object-image circle, svg.coloring-object-image rect {
-    fill: #FFFFFF; /* Initial fill blank state */
-    stroke: #1A1A2E;
-    stroke-width: 4px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    cursor: pointer;
-    transition: fill 0.2s ease;
-  }
-
-  svg.coloring-object-image path:hover, svg.coloring-object-image circle:hover {
-    opacity: 0.8;
-  }
-
-  .appreciation-msg {
-    margin-top: 20px;
-    font-size: 1.4rem;
-    color: #2E7D32;
-    font-weight: 800;
-    text-align: center;
-    min-height: 40px;
-  }
-
-  .action-bar-dock { display: flex; gap: 15px; margin-top: 15px; }
-
-  .btn-panel {
-    font-family: 'Lilita One', cursive; font-size: 1.2rem; padding: 12px 35px; border: none; border-radius: 50px; color: white; cursor: pointer; text-decoration: none; box-shadow: 0 6px 0px rgba(0,0,0,0.15);
-  }
-  .btn-panel:active { transform: translateY(3px); }
-  .btn-home { background: #2D9CDB; border-bottom: 4px solid #1A6E9B; }
-  .btn-next-level { background: #4CAF50; border-bottom: 4px solid #2E7D32; opacity: 0.5; pointer-events: none; }
-  .btn-next-level.unlocked { opacity: 1; pointer-events: auto; animation: pulse 1.5s infinite alternate; }
-
-  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
-
-  .back-btn{
-    position:absolute;
-    top:20px;
-    left:20px;
-    background:#6ec6ff;
-    color:white;
-    padding:10px 18px;
-    border-radius:12px;
-    text-decoration:none;
-    font-size:18px;
-    font-weight:bold;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-    transition:0.3s;
+body{
+margin:0;
+font-family: 'Baloo 2', 'Segoe UI', sans-serif;
+background:linear-gradient(to right,#ffd6e7,#d6f0ff);
+overflow-x:hidden;
 }
 
-.back-btn:hover{
-    background:#42a5f5;
-    transform:scale(1.05);
+header{
+text-align:center;
+padding:20px;
+background:#ff66a3;
+color:white;
+font-size:38px;
+font-family: 'Lilita One', cursive;
+letter-spacing: 1px;
+animation:bounce 2s infinite;
+box-shadow: 0 4px 15px rgba(255, 102, 163, 0.3);
+}
+
+@keyframes bounce{
+0%{transform:translateY(0);}
+50%{transform:translateY(-5px);}
+100%{transform:translateY(0);}
+}
+
+.welcome{
+text-align:center;
+font-size:28px;
+margin-top:20px;
+color:#ff1493;
+font-weight: 800;
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{opacity:0.6;}
+to{opacity:1;}
+}
+
+.menu{
+display:flex;
+justify-content:center;
+gap:25px;
+flex-wrap:wrap;
+margin:40px auto;
+max-width: 1000px;
+padding: 0 15px;
+}
+
+/* UI Card Clickable Parent Wrappers Framework Settings */
+.menu a {
+text-decoration:none;
+display: block;
+transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card{
+width:220px;
+height:180px; /* Adjusted height bounds cleanly for kid emoji grids */
+background:white;
+border-radius:25px;
+box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+text-align:center;
+padding: 25px 15px;
+font-size:22px;
+font-weight: 800;
+color: #4E342E; /* Professional Brand Brown Text Color Line */
+border: 3px solid transparent;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 8px;
+transition: all 0.3s ease;
+}
+
+/* Smooth Interactive Click Hover State Animations */
+.menu a:hover {
+transform: translateY(-8px) scale(1.05);
+}
+
+.menu a:hover .card {
+background:#fff0f5;
+border-color: #ff66a3;
+box-shadow: 0 12px 24px rgba(255, 102, 163, 0.2);
+}
+
+.card-emoji {
+font-size: 3.2rem;
+display: block;
+animation: bobIcon 3s ease-in-out infinite alternate;
+}
+
+@keyframes bobIcon {
+from { transform: translateY(0); }
+to { transform: translateY(-6px); }
+}
+
+footer{
+margin-top:40px;
+background:#ff66a3;
+color:white;
+text-align:center;
+padding:18px;
+font-size: 1.1rem;
+font-weight: bold;
+}
+
+.stars{
+position:fixed;
+width:100%;
+height:100%;
+pointer-events:none;
+overflow:hidden;
+z-index: 0;
+}
+
+.star{
+position:absolute;
+color:white;
+animation:float 6s linear infinite;
+font-size:20px;
+}
+
+@keyframes float{
+0%{
+transform:translateY(100vh);
+opacity:0;
+}
+100%{
+transform:translateY(-10vh);
+opacity:1;
+}
 }
 </style>
 </head>
+
 <body>
 
-    <a href="home.html" class="back-btn">⬅ Back</a>
-  <div class="color-banner">🎨 Real Picture Coloring Zone ✨</div>
-  <div class="level-status-tag" id="levelTrackBadge">Picture Canvas: Level 1 (Magic Water Bottle 🧴)</div>
+<div class="stars">
+<div class="star" style="left:10%">✨</div>
+<div class="star" style="left:30%">⭐</div>
+<div class="star" style="left:50%">✨</div>
+<div class="star" style="left:70%">⭐</div>
+<div class="star" style="left:90%">✨</div>
+</div>
 
-  <div class="playground-deck">
-    
-    <!-- Palette Swatches Controls -->
-    <div class="color-palette">
-      <div class="color-blob active-color" style="background: #FF4757" onclick="selectColor('#FF4757', this)"></div>
-      <div class="color-blob" style="background: #2ED573" onclick="selectColor('#2ED573', this)"></div>
-      <div class="color-blob" style="background: #1E90FF" onclick="selectColor('#1E90FF', this)"></div>
-      <div class="color-blob" style="background: #FFA502" onclick="selectColor('#FFA502', this)"></div>
-      <div class="color-blob" style="background: #E8521A" onclick="selectColor('#E8521A', this)"></div>
-      <div class="color-blob" style="background: #9B5DE5" onclick="selectColor('#9B5DE5', this)"></div>
-      <div class="color-blob" style="background: #FF6B81" onclick="selectColor('#FF6B81', this)"></div>
-      <div class="color-blob" style="background: #57606F" onclick="selectColor('#57606F', this)"></div>
-    </div>
+<header>
+🎨 COLOURING ZONE 🎨
+</header>
 
-    <!-- PURE VECTOR IMAGE CONTENT FIELD (NO MORE PIXEL BOXES) -->
-    <div class="book-canvas-dock" id="vectorBookContainer">
-       <!-- Loaded via dynamic script engine -->
-    </div>
+<div class="welcome">
+Let's Colour Up Some Fun... 🌈
+</div>
 
-  </div>
+<div class="menu">
 
-  <div class="appreciation-msg" id="feedbackPrompt">Tap different parts of the drawing picture to color them completely! 🌟</div>
+<a href="color1.html">
+<div class="card">
+<span class="card-emoji">🐻</span>
+Easy Fun
+</div>
+</a>
 
-  <div class="action-bar-dock">
-    <a href="home.html" class="btn-panel btn-home">🏡 Back Home</a>
-    <button class="btn-panel btn-next-level" id="nextLevelBtn" onclick="advanceLevel()">Unlock Next Level ➡️</button>
-  </div>
+<a href="color2.html">
+<div class="card">
+<span class="card-emoji">🌈</span>
+Creative Zone
+</div>
+</a>
 
-  <script>
-    let activeColor = '#FF4757';
-    let currentLevel = 1;
+<a href="color3.html">
+<div class="card">
+<span class="card-emoji">🚀</span>
+Challenge Art
+</div>
+</a>
 
-    // --- MANUALLY CUSTOM INJECTED 6 SCENIC VECTOR SVG GRAPHICS PATHS DATA ---
-    const imageVectorBanks = {
-      1: {
-        name: "Magic Water Bottle 🧴",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <rect class="color-part" x="42" y="10" width="16" height="12" rx="2" /> <!-- Cap -->
-                <path class="color-part" d="M35 30 C35 25, 65 25, 65 30 L65 35 C65 35, 65 35, 65 35 L35 35 Z" /> <!-- Neck -->
-                <path class="color-part" d="M30 40 C30 35, 70 35, 70 40 L70 85 C70 90, 30 90, 30 85 Z" /> <!-- Main Body Body -->
-                <rect class="color-part" x="35" y="52" width="30" height="15" rx="3" /> <!-- Center Decorative Stripe Tag Label -->
-              </svg>`
-      },
-      2: {
-        name: "Garden Flower 🌸",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M50 22 C42 10, 58 10, 50 22 Z" /> <!-- Petal Top -->
-                <path class="color-part" d="M50 78 C42 90, 58 90, 50 78 Z" /> <!-- Petal Bottom -->
-                <path class="color-part" d="M22 50 C10 42, 10 58, 22 50 Z" /> <!-- Petal Left -->
-                <path class="color-part" d="M78 50 C90 42, 90 58, 78 50 Z" /> <!-- Petal Right -->
-                <circle class="color-part" cx="50" cy="50" r="16" /> <!-- Yellow Center Core Bud Bud -->
-                <path class="color-part" d="M48 78 L48 95 L52 95 L52 78 Z" /> <!-- Flower Stem Line -->
-              </svg>`
-      },
-      3: {
-        name: "Yummy Sweet Apple 🍎",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M50 35 C40 20, 15 25, 20 55 C25 80, 48 85, 50 85 C52 85, 75 80, 80 55 C85 25, 60 20, 50 35 Z" /> <!-- Main Fruit Shell -->
-                <path class="color-part" d="M50 35 Q55 20 62 18" /> <!-- Branch Stick -->
-                <path class="color-part" d="M52 28 C55 20, 70 24, 65 32 C58 35, 54 32, 52 28 Z" /> <!-- Safe Green Leaf Leaf -->
-              </svg>`
-      },
-      4: {
-        name: "Little Toy Car 🚗",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M25 50 L35 32 L65 32 L75 50 Z" /> <!-- Car Top Window Cabin Area -->
-                <path class="color-part" d="M15 50 L85 50 C90 50, 90 68, 85 68 L15 68 C10 68, 10 50, 15 50 Z" /> <!-- Lower Car Body Deck Base -->
-                <circle class="color-part" cx="30" cy="68" r="10" /> <!-- Wheel Front -->
-                <circle class="color-part" cx="70" cy="68" r="10" /> <!-- Wheel Back -->
-              </svg>`
-      },
-      5: {
-        name: "Cute Pond Duck 🦆",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <path class="color-part" d="M30 45 C20 40, 20 20, 32 22 C42 24, 45 40, 45 45 Z" /> <!-- Neck & Small Head Face -->
-                <path class="color-part" d="M16 26 L22 30 L16 34 Z" /> <!-- Duck Beak Lip Mouth -->
-                <path class="color-part" d="M35 45 C35 45, 75 40, 80 60 C85 75, 45 80, 35 75 C25 70, 25 50, 35 45 Z" /> <!-- Main Duck Feather Body Hull -->
-                <circle class="color-part" cx="30" cy="28" r="2.5" /> <!-- Eye Spot -->
-              </svg>`
-      },
-      6: {
-        name: "Magic Flying Butterfly 🦋",
-        svg: `<svg class="coloring-object-image" viewBox="0 0 100 100">
-                <rect class="color-part" x="46" y="20" width="8" height="55" rx="4" /> <!-- Center Body Backbone -->
-                <path class="color-part" d="M46 30 C30 10, 10 20, 15 45 C20 60, 40 55, 46 50 Z" /> <!-- Top Left Wing Petal -->
-                <path class="color-part" d="M54 30 C70 10, 90 20, 85 45 C80 60, 60 55, 54 50 Z" /> <!-- Top Right Wing Petal -->
-                <path class="color-part" d="M46 52 C35 55, 20 65, 25 75 C30 82, 42 75, 46 68 Z" /> <!-- Lower Left Tail Wing -->
-                <path class="color-part" d="M54 52 C65 55, 80 65, 75 75 C70 82, 58 75, 54 68 Z" /> <!-- Lower Right Tail Wing -->
-              </svg>`
-    }
-  };
+<a href="gallery.html">
+<div class="card">
+<span class="card-emoji">🖼️</span>
+Fun Gallery
+</div>
+</a>
 
-    function selectColor(colorValue, blobElement) {
-        activeColor = colorValue;
-        document.querySelectorAll('.color-blob').forEach(b => b.classList.remove('active-color'));
-        blobElement.classList.add('active-color');
-    }
+<a href="color4.html">
+<div class="card">
+<span class="card-emoji">🏆</span>
+Achievements
+</div>
+</a>
 
-    function loadPictureLevel(lvl) {
-        const levelData = imageVectorBanks[lvl];
-        document.getElementById('levelTrackBadge').innerText = `Picture Canvas: Level ${lvl} (${levelData.name})`;
-        
-        const container = document.getElementById('vectorBookContainer');
-        container.innerHTML = levelData.svg;
+<a href="feedback.html">
+<div class="card">
+<span class="card-emoji">💌</span>
+Feedback
+</div>
+</a>
 
-        // Bind dynamic tap-fill logic onto the SVG internal parts elements nodes maps directly
-        const colorableParts = container.querySelectorAll('.color-part');
-        colorableParts.forEach(part => {
-            part.addEventListener('click', (e) => {
-                // Instantly rewrites the filled path hex color structural string inside vector engine directly
-                part.style.fill = activeColor;
-                verifyBookCompletion();
-                e.stopPropagation();
-            });
-        });
+<a href="about.html">
+<div class="card">
+<span class="card-emoji">📚</span>
+About
+</div>
+</a>
 
-        document.getElementById('nextLevelBtn').classList.remove('unlocked');
-    }
+<a href="contact.html">
+<div class="card">
+<span class="card-emoji">☎️</span>
+Contact
+</div>
+</a>
 
-    function verifyBookCompletion() {
-        const totalParts = document.querySelectorAll('.color-part');
-        let completelyColoredCount = 0;
+</div>
 
-        totalParts.forEach(part => {
-            const innerFill = part.style.fill;
-            // Evaluates if default empty blank canvas property string state layer has been active modified
-            if (innerFill !== "" && innerFill !== "none" && innerFill !== "rgb(255, 255, 255)") {
-                completelyColoredCount++;
-            }
-        });
-
-        if (completelyColoredCount === totalParts.length) {
-            const artCheers = [
-                "🌟 You are doing great! That picture looks so beautiful and realistic!",
-                "🌈 Spectacular filling! Your color combination looks stunningly creative!",
-                "🎉 Wow! What a brilliant choice of colors! You are an amazing little artist!"
-            ];
-            document.getElementById('feedbackPrompt').innerText = artCheers[Math.floor(Math.random() * artCheers.length)];
-            document.getElementById('nextLevelBtn').classList.add('unlocked');
-            triggerVictoryBlasts();
-        }
-    }
-
-    function advanceLevel() {
-        if (currentLevel < 6) {
-            currentLevel++;
-            document.getElementById('feedbackPrompt').innerText = "Fresh real drawing picture object unlocked! Tap to color it completely... 🎨";
-            loadPictureLevel(currentLevel);
-        } else {
-            document.getElementById('feedbackPrompt').innerHTML = "🏆 HURRAY! You colored all 6 vector object pictures cleanly! You are a master coloring champion artist! 🎉🎨";
-            document.getElementById('nextLevelBtn').classList.remove('unlocked');
-        }
-    }
-
-    function triggerVictoryBlasts() {
-        for (let i = 0; i < 25; i++) {
-            const p = document.createElement("div"); p.innerHTML = "🎉";
-            p.style.cssText = `left:${Math.random()*100}vw; top:-20px; font-size:30px; position:fixed; pointer-events:none; transition:transform 2.2s linear; z-index:999;`;
-            document.body.appendChild(p);
-            setTimeout(() => { p.style.transform = `translateY(105vh) rotate(${Math.random()*360}deg)`; setTimeout(() => p.remove(), 2200); }, 50);
-        }
-    }
-
-    // Initialize Level 1 content framework vectors on launch tracking mappings bounds
-    loadPictureLevel(currentLevel);
-  </script>
+<footer>
+Made with ❤️ for Students Fun Learning
+</footer>
+<a href="home.html" class="btn">🏠 Back to Home</a>
 </body>
 </html>
