@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Gallery - Colouring Zone</title>
+<link href="https://fonts.googleapis.com/css2=family=Baloo+2:wght@700;800&family=Lilita+One&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Baloo 2', sans-serif;
+    background: linear-gradient(160deg, #ffe0f0, #fff4d6 50%, #d6f5ff);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px;
+  }
+
+  .gallery-banner {
+    font-family: 'Lilita One', cursive;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: #fff;
+    background: linear-gradient(90deg, #00BBF9, #9B5DE5, #FF1493);
+    border-radius: 50px;
+    padding: 10px 45px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 187, 249, 0.3);
+  }
+
+  .gallery-deck {
+    background: white;
+    padding: 30px;
+    border-radius: 35px;
+    border: 5px solid #4E342E;
+    box-shadow: 0 12px 0px #8D6E63;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .art-item-card {
+    background: #F8FAFC;
+    border: 3px solid #E2E8F0;
+    border-radius: 22px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .art-item-card:hover {
+    transform: scale(1.05) translateY(-5px);
+    border-color: #FF1493;
+    background: #FFF0F5;
+  }
+
+  .art-preview {
+    font-size: 4.5rem;
+    margin-bottom: 10px;
+    display: block;
+    animation: bob 3s infinite alternate ease-in-out;
+  }
+
+  .art-item-card:nth-child(even) .art-preview { animation-delay: 0.5s; }
+
+  @keyframes bob {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+  }
+
+  .art-title {
+    font-family: 'Lilita One', cursive;
+    font-size: 1.3rem;
+    color: #4E342E;
+  }
+
+  .btn-dock { margin-top: 20px; text-align: center; }
+  .btn-panel {
+    font-family: 'Lilita One', cursive; font-size: 1.2rem; padding: 12px 45px; border: none; border-radius: 50px; color: white; cursor: pointer; text-decoration: none; box-shadow: 0 6px 0px #2D1A1A; display: inline-block; background: #4E342E;
+  }
+  .btn-panel:active { transform: translateY(3px); box-shadow: 0 3px 0px #2D1A1A; }
+</style>
+</head>
+<body>
+
+  <div class="gallery-banner">🖼️ Magical Fun Gallery</div>
+
+  <div class="gallery-deck">
+    <div class="grid-layout">
+      <div class="art-item-card">
+        <span class="art-preview">🦜</span>
+        <div class="art-title">Magic Bird</div>
+      </div>
+      <div class="art-item-card">
+        <span class="art-preview">🍎</span>
+        <div class="art-title">Sweet Apple</div>
+      </div>
+      <div class="art-item-card">
+        <span class="art-preview">🐟</span>
+        <div class="art-title">Pond Fish</div>
+      </div>
+      <div class="art-item-card">
+        <span class="art-preview">☂️</span>
+        <div class="art-title">Umbrella</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-dock">
+    <a href="color.html" class="btn-panel">🏡 Back Home</a>
+  </div>
+
+</body>
+</html>
