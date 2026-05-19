@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Math Adventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+/* ─── CSS Variables ─────────────────────────────────── */
+:root {
+  --sky: #4fc3f7;
+  --sun: #ffd54f;
+  --grass: #66bb6a;
+  --water: #29b6f6;
+  --orange: #ff7043;
+  --pink: #ec407a;
+  --purple: #ab47bc;
+  --violet: #7e57c2;
+  --white: #fffde7;
+  --card-bg: #ffffffee;
+  --shadow: 0 8px 32px rgba(0,0,0,0.13);
+  --radius: 28px;
+  --font-h: 'Fredoka One', cursive;
+  --font-b: 'Nunito', sans-serif;
+}
+ 
+/* ─── Reset & Base ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+body {
+  font-family: var(--font-b);
+  min-height: 100vh;
+  background: linear-gradient(160deg, #e0f7fa 0%, #b3e5fc 40%, #e8f5e9 100%);
+  overflow-x: hidden;
+  position: relative;
+}
+ 
+/* ─── Animated clouds bg ─────────────────────────────── */
+.clouds-bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.cloud {
+  position: absolute;
+  background: #fff;
+  border-radius: 50px;
+  opacity: .55;
+  animation: floatCloud linear infinite;
+}
+.cloud::before,.cloud::after {
+  content:''; position:absolute; background:#fff; border-radius:50%;
+}
+.cloud:nth-child(1){width:140px;height:50px;top:8%;animation-duration:28s;animation-delay:-5s;}
+.cloud:nth-child(1)::before{width:80px;height:70px;top:-35px;left:20px;}
+.cloud:nth-child(1)::after{width:55px;height:55px;top:-25px;left:65px;}
+.cloud:nth-child(2){width:100px;height:40px;top:22%;animation-duration:22s;animation-delay:-12s;}
+.cloud:nth-child(2)::before{width:60px;height:60px;top:-30px;left:15px;}
+.cloud:nth-child(2)::after{width:45px;height:45px;top:-20px;left:50px;}
+.cloud:nth-child(3){width:170px;height:55px;top:55%;animation-duration:35s;animation-delay:-20s;}
+.cloud:nth-child(3)::before{width:90px;height:80px;top:-40px;left:25px;}
+.cloud:nth-child(3)::after{width:70px;height:65px;top:-30px;left:80px;}
+.cloud:nth-child(4){width:110px;height:42px;top:72%;animation-duration:25s;animation-delay:-8s;}
+.cloud:nth-child(4)::before{width:65px;height:62px;top:-32px;left:18px;}
+.cloud:nth-child(4)::after{width:50px;height:50px;top:-22px;left:55px;}
+@keyframes floatCloud {
+  from { transform: translateX(-250px); }
+  to   { transform: translateX(110vw); }
+}
+ 
+/* ─── Pages ──────────────────────────────────────────── */
+.page {
+  display: none;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn .5s ease;
+}
+.page.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:none} }
+ 
+/* ─── Top header bar ─────────────────────────────────── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: linear-gradient(90deg,#7e57c2,#ab47bc,#ec407a);
+  padding: 10px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 100;
+  box-shadow: 0 3px 16px rgba(0,0,0,.18);
+}
+.topbar-logo {
+  font-family: var(--font-h);
+  font-size: 1.45rem;
+  color: #fff;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.topbar-logo span { color: var(--sun); }
+.topbar-info {
+  font-family: var(--font-b);
+  font-size: .92rem;
+  color: #fff;
+  font-weight: 700;
+  opacity: .9;
+}
+ 
+/* ─── Common card ────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 36px 40px;
+  max-width: 700px;
+  width: 92%;
+  text-align: center;
+  position: relative;
+}
+ 
+/* ─── Headings ───────────────────────────────────────── */
+h1,h2,h3 { font-family: var(--font-h); }
+h1 { font-size: clamp(2rem,6vw,3.2rem); }
+h2 { font-size: clamp(1.5rem,4vw,2.2rem); }
+ 
+/* ─── Floating math symbols ──────────────────────────── */
+.float-symbols { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: var(--radius); }
+.sym {
+  position: absolute;
+  font-size: 1.6rem;
+  opacity: .18;
+  animation: floatSym 4s ease-in-out infinite;
+}
+.sym:nth-child(2){animation-delay:.6s;font-size:1.2rem;}
+.sym:nth-child(3){animation-delay:1.2s;font-size:2rem;}
+.sym:nth-child(4){animation-delay:1.8s;font-size:1.4rem;}
+.sym:nth-child(5){animation-delay:2.4s;font-size:1.8rem;}
+@keyframes floatSym {
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-14px) rotate(12deg);}
+}
+ 
+/* ─── Buttons ────────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  font-family: var(--font-h);
+  font-size: 1.15rem;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s;
+  box-shadow: 0 5px 18px rgba(0,0,0,.15);
+  letter-spacing: .5px;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content:'';
+  position:absolute;inset:0;
+  background:rgba(255,255,255,.2);
+  border-radius:inherit;
+  opacity:0;
+  transition:opacity .18s;
+}
+.btn:hover::after{opacity:1;}
+.btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 10px 28px rgba(0,0,0,.2);}
+.btn:active{transform:scale(.97);}
+.btn-purple{background:linear-gradient(135deg,#7e57c2,#ab47bc);color:#fff;}
+.btn-orange{background:linear-gradient(135deg,#ff7043,#ffd54f);color:#fff;}
+.btn-green {background:linear-gradient(135deg,#43a047,#a5d6a7);color:#fff;}
+.btn-pink  {background:linear-gradient(135deg,#ec407a,#f48fb1);color:#fff;}
+.btn-blue  {background:linear-gradient(135deg,#1e88e5,#4fc3f7);color:#fff;}
+.btn-gray  {background:linear-gradient(135deg,#90a4ae,#b0bec5);color:#fff;}
+ 
+/* ─── PAGE 1 – Class Selection ───────────────────────── */
+#page-class .card { padding-bottom: 44px; }
+#page-class h1 { 
+  background: linear-gradient(135deg,#7e57c2,#ec407a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom: 6px;
+}
+#page-class .subtitle {
+  font-size: 1.05rem; color:#666; margin-bottom: 30px; font-weight: 600;
+}
+.class-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 8px;
+}
+.class-btn {
+  padding: 22px 14px;
+  border-radius: 22px;
+  font-family: var(--font-h);
+  font-size: 1.25rem;
+  border: none;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: #fff;
+}
+.class-btn:hover { transform:translateY(-5px) scale(1.04); box-shadow:0 14px 30px rgba(0,0,0,.2); }
+.class-btn:active { transform: scale(.97); }
+.class-btn .emoji { font-size: 2.4rem; }
+.class-btn.kg   { background: linear-gradient(135deg,#ff7043,#ffa726); }
+.class-btn.std1 { background: linear-gradient(135deg,#ec407a,#f06292); }
+.class-btn.std2 { background: linear-gradient(135deg,#7e57c2,#ab47bc); }
+.class-btn.std3 { background: linear-gradient(135deg,#1e88e5,#4fc3f7); }
+ 
+/* ─── PAGE 2 – Intro Animation ───────────────────────── */
+#page-intro {
+  background: linear-gradient(160deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+}
+.star-field {
+  position: absolute; inset:0; pointer-events:none; overflow:hidden;
+}
+.star {
+  position:absolute; background:#fff; border-radius:50%;
+  animation: twinkle 2s ease-in-out infinite;
+}
+@keyframes twinkle { 0%,100%{opacity:.2;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+ 
+.intro-card {
+  background: rgba(255,255,255,.07);
+  backdrop-filter: blur(12px);
+  border: 2px solid rgba(255,255,255,.15);
+  border-radius: var(--radius);
+  padding: 50px 40px;
+  max-width: 640px;
+  width: 92%;
+  text-align:center;
+  position:relative;
+  z-index:1;
+}
+.intro-title {
+  font-family: var(--font-h);
+  font-size: clamp(2rem,7vw,3.4rem);
+  background: linear-gradient(135deg,#ffd54f,#ff7043,#ec407a,#ab47bc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  animation: titlePulse 2.5s ease-in-out infinite;
+  margin-bottom: 12px;
+}
+@keyframes titlePulse { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.25)} }
+ 
+.intro-msgs {
+  min-height: 60px;
+  display:flex; align-items:center; justify-content:center;
+}
+.intro-msg {
+  font-family: var(--font-h);
+  font-size: clamp(1.1rem,3.5vw,1.55rem);
+  color: #fff;
+  opacity: 0;
+  position:absolute;
+  animation: msgCycle 16s infinite;
+}
+.intro-msg:nth-child(1){ animation-delay:0s; }
+.intro-msg:nth-child(2){ animation-delay:3.2s; }
+.intro-msg:nth-child(3){ animation-delay:6.4s; }
+.intro-msg:nth-child(4){ animation-delay:9.6s; }
+.intro-msg:nth-child(5){ animation-delay:12.8s; }
+@keyframes msgCycle {
+  0%,3%{opacity:0;transform:translateY(14px);}
+  8%,18%{opacity:1;transform:none;}
+  23%,100%{opacity:0;transform:translateY(-14px);}
+}
+ 
+/* ─── Floating maths symbols for intro ──────────────── */
+.float-row {
+  display:flex; justify-content:center; gap:18px; margin:22px 0;
+  flex-wrap:wrap;
+}
+.float-icon {
+  font-size:2.4rem;
+  animation: floatBounce 2s ease-in-out infinite;
+}
+.float-icon:nth-child(2){animation-delay:.3s;}
+.float-icon:nth-child(3){animation-delay:.6s;}
+.float-icon:nth-child(4){animation-delay:.9s;}
+.float-icon:nth-child(5){animation-delay:1.2s;}
+@keyframes floatBounce {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-14px);}
+}
+ 
+/* ─── Bridge progress bar ────────────────────────────── */
+.bridge-wrap {
+  width: 100%; margin: 18px 0 8px;
+  position: relative;
+}
+.bridge-road {
+  height: 18px;
+  background: linear-gradient(90deg,#8d6e63,#bcaaa4);
+  border-radius: 12px;
+  position:relative;
+  overflow:visible;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,.15), 0 2px 0 #6d4c41;
+}
+.bridge-fill {
+  height:100%;
+  background: linear-gradient(90deg,#ffd54f,#ff7043,#ec407a);
+  border-radius:12px;
+  transition: width .5s cubic-bezier(.4,2,.6,1);
+  position:relative;
+}
+.bridge-char {
+  position:absolute;
+  right:-18px; top:-20px;
+  font-size:2.2rem;
+  transition: right .5s cubic-bezier(.4,2,.6,1);
+  animation: charBounce .7s ease-in-out infinite alternate;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.18));
+}
+@keyframes charBounce { from{transform:translateY(0);} to{transform:translateY(-5px);} }
+ 
+.bridge-pillars {
+  display:flex; justify-content:space-between;
+  padding: 0 2px; margin-top:3px;
+}
+.pillar {
+  font-size:.7rem; color:#8d6e63; font-weight:800;
+}
+ 
+/* ─── PAGE 3 – Level Selection ───────────────────────── */
+.level-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  margin-top: 14px;
+}
+.level-btn {
+  padding: 26px 12px;
+  border-radius: 20px;
+  font-family: var(--font-h);
+  font-size: 1.15rem;
+  border: none; cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  display: flex; flex-direction:column; align-items:center; gap:8px;
+  color:#fff;
+}
+.level-btn:hover{transform:translateY(-6px) scale(1.05);box-shadow:0 14px 30px rgba(0,0,0,.22);}
+.level-btn:active{transform:scale(.97);}
+.level-btn .big-emoji{font-size:2.5rem;}
+.level-easy  {background:linear-gradient(135deg,#43a047,#a5d6a7);}
+.level-medium{background:linear-gradient(135deg,#f57c00,#ffd54f);}
+.level-hard  {background:linear-gradient(135deg,#c62828,#ef9a9a);}
+.level-desc  {font-size:.8rem;font-family:var(--font-b);font-weight:700;opacity:.9;}
+ 
+/* ─── PAGE 4 – Questions ─────────────────────────────── */
+#page-question .card { padding: 30px 32px 36px; }
+ 
+.q-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:16px;
+}
+.q-badge {
+  background:linear-gradient(135deg,#7e57c2,#ab47bc);
+  color:#fff; border-radius:50px;
+  padding:6px 18px;
+  font-family:var(--font-h);
+  font-size:.95rem;
+}
+.score-badge {
+  background:linear-gradient(135deg,#ff7043,#ffd54f);
+  color:#fff; border-radius:50px;
+  padding:6px 18px;
+  font-family:var(--font-h);
+  font-size:.95rem;
+}
+ 
+.progress-wrap { margin-bottom: 20px; }
+.progress-label {
+  display:flex; justify-content:space-between;
+  font-size:.82rem; color:#888; font-weight:700; margin-bottom:5px;
+}
+.progress-bar-bg {
+  height:14px; background:#e0e0e0; border-radius:10px; overflow:hidden;
+}
+.progress-bar-fg {
+  height:100%;
+  background:linear-gradient(90deg,#ffd54f,#ff7043,#ec407a);
+  border-radius:10px;
+  transition:width .5s ease;
+}
+ 
+.q-question {
+  background: linear-gradient(135deg,#ede7f6,#e3f2fd);
+  border-radius:20px;
+  padding:24px 20px;
+  font-family:var(--font-h);
+  font-size:clamp(1.2rem,4vw,1.8rem);
+  color:#4a148c;
+  margin-bottom:22px;
+  line-height:1.4;
+  position:relative;
+}
+.q-emoji { font-size:2.8rem; display:block; margin-bottom:6px; }
+ 
+.options-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.opt-btn {
+  padding: 18px 12px;
+  border-radius:16px;
+  font-family:var(--font-h);
+  font-size:1.2rem;
+  border:3px solid transparent;
+  cursor:pointer;
+  transition:transform .18s, box-shadow .18s, background .18s;
+  background:#fff;
+  color:#333;
+  box-shadow:0 4px 14px rgba(0,0,0,.1);
+}
+.opt-btn:hover{transform:translateY(-3px) scale(1.04); box-shadow:0 8px 22px rgba(0,0,0,.16); border-color:#ab47bc;}
+.opt-btn:active{transform:scale(.97);}
+.opt-btn.correct {background:linear-gradient(135deg,#43a047,#a5d6a7);color:#fff;border-color:#2e7d32;}
+.opt-btn.wrong   {background:linear-gradient(135deg,#c62828,#ef9a9a);color:#fff;border-color:#b71c1c;}
+.opt-btn:disabled{cursor:not-allowed; opacity:.85;}
+ 
+/* ─── Popup overlays ─────────────────────────────────── */
+.popup-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(4px);
+  z-index:500;
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn .25s ease;
+}
+.popup-overlay.hidden { display:none; }
+.popup-box {
+  background:#fff;
+  border-radius:28px;
+  padding:44px 38px;
+  max-width:440px;
+  width:90%;
+  text-align:center;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  animation:popIn .35s cubic-bezier(.4,2,.6,1);
+}
+@keyframes popIn {
+  from{transform:scale(.6);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+.popup-emoji { font-size:4rem; margin-bottom:10px; display:block; animation:spin .6s ease; }
+@keyframes spin { from{transform:rotate(-30deg) scale(.5);} to{transform:rotate(0) scale(1);} }
+.popup-title {
+  font-family:var(--font-h);
+  font-size:clamp(1.5rem,5vw,2.2rem);
+  margin-bottom:8px;
+}
+.popup-title.correct-title { color:#2e7d32; }
+.popup-title.wrong-title   { color:#c62828; }
+.popup-quote {
+  font-size:.97rem; color:#777;
+  font-weight:700; margin-bottom:22px;
+  font-style:italic;
+}
+ 
+/* ─── Confetti ───────────────────────────────────────── */
+.confetti-container {
+  position:fixed; inset:0; pointer-events:none; z-index:600; overflow:hidden;
+}
+.confetti-piece {
+  position:absolute;
+  width:12px; height:14px;
+  border-radius:3px;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0%  { transform:translateY(-20px) rotate(0deg); opacity:1; }
+  100%{ transform:translateY(110vh) rotate(720deg); opacity:0; }
+}
+ 
+/* ─── PAGE 5 – Completion ─────────────────────────────── */
+#page-complete {
+  background: linear-gradient(160deg,#1a1a2e,#0f3460);
+}
+.complete-card {
+  background: rgba(255,255,255,.08);
+  backdrop-filter:blur(14px);
+  border:2px solid rgba(255,255,255,.18);
+  border-radius:var(--radius);
+  padding:52px 40px;
+  max-width:640px; width:92%;
+  text-align:center; position:relative;z:1;
+}
+.complete-title {
+  font-family:var(--font-h);
+  font-size:clamp(1.8rem,6vw,3rem);
+  background:linear-gradient(135deg,#ffd54f,#ff7043,#ec407a);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  margin-bottom:6px;
+}
+.complete-sub {
+  font-family:var(--font-h);
+  font-size:clamp(1rem,3vw,1.4rem);
+  color:#b3e5fc; margin-bottom:24px;
+}
+.stars-row {
+  display:flex; justify-content:center; gap:10px; margin:10px 0 18px;
+}
+.star-icon {
+  font-size:3rem;
+  animation:starPop .4s cubic-bezier(.4,2,.6,1) forwards;
+  opacity:0;
+}
+.star-icon:nth-child(1){animation-delay:.1s;}
+.star-icon:nth-child(2){animation-delay:.3s;}
+.star-icon:nth-child(3){animation-delay:.5s;}
+@keyframes starPop {
+  to{opacity:1;transform:scale(1.15);}
+}
+.score-display {
+  font-family:var(--font-h);
+  font-size:clamp(2.5rem,8vw,4.5rem);
+  background:linear-gradient(135deg,#ffd54f,#ff7043);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  margin:6px 0;
+}
+.score-label { font-size:.95rem; color:#b3e5fc; font-weight:700; margin-bottom:18px; }
+ 
+.complete-btns {
+  display:flex; flex-wrap:wrap; gap:12px; justify-content:center;
+  margin-top:24px;
+}
+ 
+/* ─── Bridge visual banner ───────────────────────────── */
+.bridge-banner {
+  width:100%; max-width:480px;
+  margin:0 auto 16px;
+  position:relative; height:60px;
+}
+.bridge-path {
+  position:absolute; bottom:0; left:0; right:0;
+  height:14px;
+  background:linear-gradient(90deg,#8d6e63,#bcaaa4,#8d6e63);
+  border-radius:8px;
+  box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+.bridge-arch {
+  position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  width:70%; height:44px;
+  border:6px solid #90a4ae;
+  border-bottom:none;
+  border-radius:50% 50% 0 0 / 100% 100% 0 0;
+}
+.bridge-flag {
+  position:absolute; right:8px; bottom:12px;
+  font-size:1.6rem;
+  animation:waveflag .8s ease-in-out infinite alternate;
+}
+@keyframes waveflag{from{transform:rotate(-8deg);}to{transform:rotate(8deg);}}
+.bridge-char2 {
+  position:absolute; left:8px; bottom:12px;
+  font-size:1.8rem;
+  animation:charBounce .7s ease-in-out infinite alternate;
+}
+ 
+/* ─── Responsiveness ─────────────────────────────────── */
+@media(max-width:520px){
+  .class-grid{grid-template-columns:1fr 1fr;}
+  .level-grid{grid-template-columns:1fr;}
+  .options-grid{grid-template-columns:1fr;}
+  .card{padding:24px 16px;}
+  .complete-btns .btn{width:100%;}
+}
+.back-btn{
+    position:absolute;
+    top:20px;
+    left:20px;
+    background:#6ec6ff;
+    color:white;
+    padding:10px 18px;
+    border-radius:12px;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:bold;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    transition:0.3s;
+}
+
+.back-btn:hover{
+    background:#42a5f5;
+    transform:scale(1.05);
+}
+</style>
+</head>
+<body>
+ <a href="home.html" class="back-btn">⬅ Back</a>
+<!-- Clouds background -->
+<div class="clouds-bg">
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+</div>
+ 
+<!-- Top bar -->
+<div class="topbar" id="topbar">
+  <div class="topbar-logo">🌉 Math <span>Adventure</span></div>
+  <div class="topbar-info" id="topbar-info"></div>
+</div>
+ 
+<!-- Confetti container -->
+<div class="confetti-container" id="confetti-container"></div>
+ 
+<!-- ══════════════ PAGE 1: Class Selection ══════════════ -->
+<div id="page-class" class="page active" style="padding-top:70px;">
+  <div class="card">
+    <div class="float-symbols">
+      <span class="sym" style="top:12%;left:5%;">➕</span>
+      <span class="sym" style="top:30%;right:6%;">✖️</span>
+      <span class="sym" style="top:65%;left:8%;">🔢</span>
+      <span class="sym" style="top:78%;right:9%;">🔷</span>
+      <span class="sym" style="top:50%;left:50%;">➗</span>
+    </div>
+ 
+    <div style="font-size:3rem;margin-bottom:8px;">🌉</div>
+    <h1>Math Adventure</h1>
+    <p class="subtitle">Bridge of Knowledge — Math Adventure!</p>
+ 
+    <div class="bridge-banner">
+      <div class="bridge-arch"></div>
+      <div class="bridge-path"></div>
+      <div class="bridge-char2">🧒</div>
+      <div class="bridge-flag">🚩</div>
+    </div>
+ 
+    <h2 style="color:#7e57c2;margin-bottom:6px;">Pick Your Challenge!</h2>
+    <p style="color:#888;font-size:.9rem;font-weight:600;margin-bottom:18px;">Choose your standard to begin the journey</p>
+ 
+    <div class="class-grid">
+      <button class="class-btn kg"   onclick="selectClass('Kindergarten','KG')">
+        <span class="emoji">🌱</span>
+        Count Explorer 🔢
+      </button>
+      <button class="class-btn std1" onclick="selectClass('1st Standard','1')">
+        <span class="emoji">⭐</span>
+        Sum Buddy ➕
+      </button>
+      <button class="class-btn std2" onclick="selectClass('2nd Standard','2')">
+        <span class="emoji">🚀</span>
+        Number Rocket 🚀
+      </button>
+      <button class="class-btn std3" onclick="selectClass('3rd Standard','3')">
+        <span class="emoji">🏆</span>
+        Logic Champion 🏆
+      </button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════════ PAGE 2: Intro Animation ══════════════ -->
+<div id="page-intro" class="page" style="padding-top:70px;">
+  <div class="star-field" id="star-field"></div>
+ 
+  <div class="intro-card">
+    <div class="intro-title">🎮 Math Adventure</div>
+ 
+    <div class="float-row">
+      <span class="float-icon">🔢</span>
+      <span class="float-icon">➕</span>
+      <span class="float-icon">✖️</span>
+      <span class="float-icon">🔷</span>
+      <span class="float-icon">🎯</span>
+    </div>
+ 
+    <div class="intro-msgs" style="position:relative;height:70px;">
+      <div class="intro-msg">🎉 Hey! Let's Have Fun With Maths!</div>
+      <div class="intro-msg">🚀 Ready for a Math Adventure?</div>
+      <div class="intro-msg">🌉 Cross the Bridge of Knowledge!</div>
+      <div class="intro-msg">⭐ Let's Learn While Having Fun!</div>
+      <div class="intro-msg">🧠 You Are a Math Champion!</div>
+    </div>
+ 
+    <p style="color:#b3e5fc;font-family:var(--font-b);font-weight:700;font-size:.95rem;margin:14px 0 24px;">
+      Class: <span id="intro-class-label" style="color:#ffd54f;"></span>
+    </p>
+ 
+    <button class="btn btn-orange" style="font-size:1.3rem;padding:18px 48px;" onclick="showLevelPage()">
+      🎮 Start Learning!
+    </button>
+  </div>
+</div>
+ 
+<!-- ══════════════ PAGE 3: Level Selection ══════════════ -->
+<div id="page-level" class="page" style="padding-top:70px;">
+  <div class="card">
+    <div class="float-symbols">
+      <span class="sym" style="top:10%;left:4%;">🌟</span>
+      <span class="sym" style="top:80%;right:5%;">💡</span>
+    </div>
+    <div style="font-size:2.8rem;margin-bottom:8px;">⚡</div>
+    <h2 style="color:#7e57c2;margin-bottom:4px;">Choose Your Level!</h2>
+    <p style="color:#888;font-size:.9rem;font-weight:600;margin-bottom:22px;">
+      Class: <strong id="level-class-label" style="color:#ec407a;"></strong>
+    </p>
+ 
+    <div class="level-grid">
+      <button class="level-btn level-easy"   onclick="selectLevel('Easy')">
+        <span class="big-emoji">🟢</span>
+        Easy
+        <span class="level-desc">Simple & Fun!</span>
+      </button>
+      <button class="level-btn level-medium" onclick="selectLevel('Medium')">
+        <span class="big-emoji">🟡</span>
+        Medium
+        <span class="level-desc">A bit tricky!</span>
+      </button>
+      <button class="level-btn level-hard"   onclick="selectLevel('Hard')">
+        <span class="big-emoji">🔴</span>
+        Hard
+        <span class="level-desc">Challenge me!</span>
+      </button>
+    </div>
+ 
+    <div style="margin-top:20px;">
+      <button class="btn btn-gray" onclick="showPage('page-class')" style="font-size:.95rem;padding:10px 26px;">
+        ← Back
+      </button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════════ PAGE 4: Question ══════════════════════ -->
+<div id="page-question" class="page" style="padding-top:80px;">
+  <div class="card">
+    <div class="q-header">
+      <div class="q-badge" id="q-badge">Q 1 / 6</div>
+      <div class="score-badge" id="score-badge">⭐ Score: 0</div>
+    </div>
+ 
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="prog-label">Progress</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fg" id="progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+ 
+    <!-- Bridge progress -->
+    <div class="bridge-wrap">
+      <div class="bridge-road">
+        <div class="bridge-fill" id="bridge-fill" style="width:0%">
+          <div class="bridge-char" id="bridge-char">🧒</div>
+        </div>
+      </div>
+      <div class="bridge-pillars">
+        <span class="pillar">START 🏁</span>
+        <span class="pillar">Q2</span>
+        <span class="pillar">Q3</span>
+        <span class="pillar">Q4</span>
+        <span class="pillar">Q5</span>
+        <span class="pillar">FINISH 🚩</span>
+      </div>
+    </div>
+ 
+    <div class="q-question" id="q-question">
+      <span class="q-emoji" id="q-emoji">🔢</span>
+      <span id="q-text">Loading question…</span>
+    </div>
+ 
+    <div class="options-grid" id="options-grid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════════ POPUP: Correct ═══════════════════════ -->
+<div class="popup-overlay hidden" id="popup-correct">
+  <div class="popup-box">
+    <span class="popup-emoji" id="correct-emoji">🎉</span>
+    <div class="popup-title correct-title" id="correct-title">Awesome!</div>
+    <div class="popup-quote" id="correct-quote">"Learning is fun!"</div>
+    <button class="btn btn-green" id="next-btn" onclick="nextQuestion()" style="font-size:1.1rem;">
+      Next Question ➡️
+    </button>
+  </div>
+</div>
+ 
+<!-- ══════════════ POPUP: Wrong ══════════════════════════ -->
+<div class="popup-overlay hidden" id="popup-wrong">
+  <div class="popup-box">
+    <span class="popup-emoji">😅</span>
+    <div class="popup-title wrong-title" id="wrong-title">Oops! Try Again!</div>
+    <div class="popup-quote" id="wrong-hint" style="color:#555;margin-bottom:20px;"></div>
+    <button class="btn btn-orange" onclick="dismissWrong()" style="font-size:1.1rem;">
+      🔄 Try Again!
+    </button>
+  </div>
+</div>
+ 
+<!-- ══════════════ PAGE 5: Completion ════════════════════ -->
+<div id="page-complete" class="page" style="padding-top:70px;">
+  <div class="star-field" id="star-field-2"></div>
+  <div class="complete-card">
+    <div style="font-size:3rem;margin-bottom:4px;">🏆</div>
+    <div class="complete-title">You Did It!</div>
+    <div class="complete-sub">You Crossed the Bridge! 🌉</div>
+ 
+    <div class="bridge-banner" style="margin-bottom:22px;">
+      <div class="bridge-arch" style="border-color:#ffd54f88;"></div>
+      <div class="bridge-path"></div>
+      <div class="bridge-char2" style="font-size:2rem;">🧒</div>
+      <div class="bridge-flag">🏆</div>
+    </div>
+ 
+    <div class="stars-row" id="stars-row">
+      <span class="star-icon">⭐</span>
+      <span class="star-icon">⭐</span>
+      <span class="star-icon">⭐</span>
+    </div>
+    <div class="score-display" id="final-score">6/6</div>
+    <div class="score-label" id="final-label">Perfect Score! You are a Math Star! 🌟</div>
+ 
+    <div class="complete-btns">
+      <button class="btn btn-orange" onclick="replayLevel()">🔄 Play Again</button>
+      <button class="btn btn-purple" onclick="showPage('page-class')">🏠 Choose Class</button>
+      <button class="btn btn-blue"   onclick="showLevelPage()">⚡ Change Level</button>
+    </div>
+  </div>
+</div>
+ 
+ 
+<script>
+/* ═══════════════════ STATE ═══════════════════ */
+let selectedClass = '';
+let selectedClassCode = '';
+let selectedLevel = '';
+let currentQ = 0;
+let score = 0;
+let questions = [];
+const TOTAL_Q = 6;
+ 
+/* ═══════════════════ QUESTION BANK ══════════════════ */
+const QB = {
+ 
+  KG: {
+    Easy: [
+      { emoji:'🍎', text:'How many apples are here? 🍎🍎🍎', opts:['1','3','5','2'], ans:'3' },
+      { emoji:'⭐', text:'Count the stars! ⭐⭐', opts:['2','3','1','4'], ans:'2' },
+      { emoji:'🔷', text:'What shape is this? 🔷', opts:['Circle','Triangle','Diamond','Square'], ans:'Diamond' },
+      { emoji:'🐣', text:'How many chicks? 🐣🐣🐣🐣', opts:['3','5','4','2'], ans:'4' },
+      { emoji:'🔴', text:'Which number comes after 2?', opts:['1','4','3','2'], ans:'3' },
+      { emoji:'🟦', text:'What color is 🟦?', opts:['Red','Blue','Green','Yellow'], ans:'Blue' },
+    ],
+    Medium: [
+      { emoji:'🍭', text:'Count: 🍭🍭🍭🍭🍭', opts:['4','6','5','3'], ans:'5' },
+      { emoji:'🔴', text:'Which is BIGGER? 7 or 4?', opts:['4','7','Same','None'], ans:'7' },
+      { emoji:'🔺', text:'How many sides does a triangle have?', opts:['4','5','2','3'], ans:'3' },
+      { emoji:'🎈', text:'3 + 1 = ?', opts:['3','5','4','2'], ans:'4' },
+      { emoji:'🌟', text:'Which number comes before 5?', opts:['6','3','4','7'], ans:'4' },
+      { emoji:'🟩', text:'What shape has 4 equal sides?', opts:['Triangle','Circle','Square','Rectangle'], ans:'Square' },
+    ],
+    Hard: [
+      { emoji:'🍬', text:'🍬🍬🍬 + 🍬🍬 = ? candies', opts:['6','4','5','7'], ans:'5' },
+      { emoji:'🔢', text:'What comes after 8?', opts:['7','10','9','11'], ans:'9' },
+      { emoji:'🔷', text:'How many sides does a rectangle have?', opts:['3','5','6','4'], ans:'4' },
+      { emoji:'🌈', text:'5 – 2 = ?', opts:['2','4','3','1'], ans:'3' },
+      { emoji:'⭐', text:'Count by 2s: 2, 4, __', opts:['5','7','6','8'], ans:'6' },
+      { emoji:'🐠', text:'I have 4 fish. 1 swims away. How many left?', opts:['2','5','4','3'], ans:'3' },
+    ],
+  },
+ 
+  '1': {
+    Easy: [
+      { emoji:'🍎', text:'3 + 2 = ?', opts:['4','6','5','7'], ans:'5' },
+      { emoji:'🐦', text:'There are 5 birds, 2 fly away. How many left?', opts:['4','2','3','1'], ans:'3' },
+      { emoji:'🔢', text:'What is 4 + 4?', opts:['9','8','7','6'], ans:'8' },
+      { emoji:'⭐', text:'Which number is SMALLEST? 3, 7, 1, 5', opts:['3','7','5','1'], ans:'1' },
+      { emoji:'🍭', text:'2 + 3 + 1 = ?', opts:['5','7','6','8'], ans:'6' },
+      { emoji:'🌟', text:'10 – 4 = ?', opts:['5','7','6','4'], ans:'6' },
+    ],
+    Medium: [
+      { emoji:'📏', text:'6 + 7 = ?', opts:['14','12','13','11'], ans:'13' },
+      { emoji:'🍕', text:'There are 15 slices. 8 are eaten. How many left?', opts:['6','8','7','9'], ans:'7' },
+      { emoji:'🔷', text:'What is 9 + 5?', opts:['13','15','14','16'], ans:'14' },
+      { emoji:'⭐', text:'Which is the LARGEST? 17, 12, 19, 14', opts:['12','14','17','19'], ans:'19' },
+      { emoji:'🎯', text:'20 – 8 = ?', opts:['10','13','12','11'], ans:'12' },
+      { emoji:'🌈', text:'5 + 9 = ?', opts:['13','15','14','12'], ans:'14' },
+    ],
+    Hard: [
+      { emoji:'🚀', text:'18 + 7 = ?', opts:['24','26','25','23'], ans:'25' },
+      { emoji:'🍭', text:'I have 30 candies. I give 14 away. How many left?', opts:['15','17','16','18'], ans:'16' },
+      { emoji:'🔢', text:'What is 12 + 13?', opts:['24','26','25','23'], ans:'25' },
+      { emoji:'📐', text:'Count by 5s: 5, 10, 15, __', opts:['18','22','20','25'], ans:'20' },
+      { emoji:'🌟', text:'35 – 17 = ?', opts:['19','17','18','16'], ans:'18' },
+      { emoji:'🎉', text:'9 + 9 + 2 = ?', opts:['19','21','20','22'], ans:'20' },
+    ],
+  },
+ 
+  '2': {
+    Easy: [
+      { emoji:'✖️', text:'2 × 3 = ?', opts:['5','7','6','8'], ans:'6' },
+      { emoji:'🔷', text:'A square has how many sides?', opts:['3','6','5','4'], ans:'4' },
+      { emoji:'🔢', text:'What comes next? 2, 4, 6, 8, __', opts:['9','10','11','12'], ans:'10' },
+      { emoji:'🍎', text:'There are 3 baskets with 4 apples each. Total?', opts:['10','13','12','11'], ans:'12' },
+      { emoji:'📏', text:'15 + 12 = ?', opts:['26','28','27','29'], ans:'27' },
+      { emoji:'🌙', text:'How many days in a week?', opts:['5','8','6','7'], ans:'7' },
+    ],
+    Medium: [
+      { emoji:'✖️', text:'4 × 5 = ?', opts:['18','22','20','16'], ans:'20' },
+      { emoji:'🔷', text:'A triangle has __ sides.', opts:['4','2','5','3'], ans:'3' },
+      { emoji:'📐', text:'Pattern: 3, 6, 9, 12, __', opts:['13','16','15','14'], ans:'15' },
+      { emoji:'🍪', text:'24 cookies shared equally among 4 friends = ?', opts:['5','7','6','8'], ans:'6' },
+      { emoji:'📏', text:'Mia is 45 cm tall and Raj is 52 cm. Who is taller?', opts:['Mia','Same','Raj','Unknown'], ans:'Raj' },
+      { emoji:'🌟', text:'5 × 6 = ?', opts:['28','32','30','26'], ans:'30' },
+    ],
+    Hard: [
+      { emoji:'🚀', text:'7 × 8 = ?', opts:['54','58','56','52'], ans:'56' },
+      { emoji:'🔷', text:'A pentagon has __ sides.', opts:['6','4','7','5'], ans:'5' },
+      { emoji:'📏', text:'Pattern: 100, 90, 80, 70, __', opts:['55','65','60','50'], ans:'60' },
+      { emoji:'🍕', text:'3 pizzas × 8 slices each = ?', opts:['22','26','24','20'], ans:'24' },
+      { emoji:'⏰', text:'The clock shows 3:00. What time is it 30 min later?', opts:['3:30','3:45','4:00','3:15'], ans:'3:30' },
+      { emoji:'🌟', text:'9 × 9 = ?', opts:['72','82','81','80'], ans:'81' },
+    ],
+  },
+ 
+  '3': {
+    Easy: [
+      { emoji:'✖️', text:'6 × 7 = ?', opts:['40','43','42','44'], ans:'42' },
+      { emoji:'➗', text:'36 ÷ 6 = ?', opts:['5','7','6','8'], ans:'6' },
+      { emoji:'⏰', text:'How many minutes in 1 hour?', opts:['30','90','120','60'], ans:'60' },
+      { emoji:'📏', text:'1 metre = __ cm', opts:['10','1000','10000','100'], ans:'100' },
+      { emoji:'🔢', text:'What is 125 + 75?', opts:['190','210','200','220'], ans:'200' },
+      { emoji:'🌟', text:'8 × 9 = ?', opts:['70','74','72','76'], ans:'72' },
+    ],
+    Medium: [
+      { emoji:'➗', text:'72 ÷ 8 = ?', opts:['8','10','9','7'], ans:'9' },
+      { emoji:'⏰', text:'School starts at 8:00 AM. Classes are 45 min. When do they end?', opts:['8:30','9:00','8:45','9:15'], ans:'8:45' },
+      { emoji:'📏', text:'A rectangle is 6cm long, 4cm wide. Area = ?', opts:['20','22','24','26'], ans:'24' },
+      { emoji:'🔢', text:'Round 347 to the nearest 10.', opts:['340','360','350','300'], ans:'350' },
+      { emoji:'✖️', text:'12 × 11 = ?', opts:['121','133','132','131'], ans:'132' },
+      { emoji:'🧩', text:'If 5 pens cost ₹35, one pen costs?', opts:['₹5','₹8','₹7','₹6'], ans:'₹7' },
+    ],
+    Hard: [
+      { emoji:'🚀', text:'144 ÷ 12 = ?', opts:['11','13','12','10'], ans:'12' },
+      { emoji:'📐', text:'Perimeter of a square with side 9cm = ?', opts:['27cm','45cm','36cm','18cm'], ans:'36cm' },
+      { emoji:'⏰', text:'A train leaves at 9:15 AM, arrives at 11:45 AM. Journey time?', opts:['2h30m','2h45m','3h','2h15m'], ans:'2h30m' },
+      { emoji:'🔢', text:'What is 750 – 388?', opts:['360','364','362','358'], ans:'362' },
+      { emoji:'✖️', text:'25 × 4 = ?', opts:['90','110','100','80'], ans:'100' },
+      { emoji:'🧩', text:'A book has 240 pages. Sam reads 8 pages a day. In how many days?', opts:['25','35','30','40'], ans:'30' },
+    ],
+  },
+ 
+};
+ 
+/* ═══════════════════ MESSAGES ═════════════════════ */
+const correctMsgs = [
+  { title:'Awesome! 🎉',       emoji:'🎉' },
+  { title:'Excellent! 🌟',     emoji:'🌟' },
+  { title:'Great Job! 🏆',     emoji:'🏆' },
+  { title:'Math Star! ⭐',     emoji:'⭐' },
+  { title:'Brilliant! 🚀',     emoji:'🚀' },
+  { title:'Superb! 🥳',        emoji:'🥳' },
+];
+const wrongMsgs = [
+  'Oops! Try Again! 😅',
+  "You Can Do It! 💪",
+  "Don't Give Up! 🌈",
+  "Almost There! 🎯",
+  "Keep Going! 🚀",
+];
+const quotes = [
+  '"Learning is fun!"',
+  '"Practice makes progress!"',
+  '"Great learners never give up!"',
+  '"Small steps lead to big success!"',
+  '"Every mistake is a lesson!"',
+  '"You are braver than you believe!"',
+];
+const confettiColors = ['#ffd54f','#ff7043','#ec407a','#ab47bc','#7e57c2','#1e88e5','#43a047','#4fc3f7'];
+ 
+/* ═══════════════════ HELPERS ══════════════════════ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+ 
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+ 
+/* ═══════════════════ STARS BACKGROUND ═══════════════ */
+function makeStars(containerId) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 3 + 1;
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*2}s`;
+    c.appendChild(s);
+  }
+}
+ 
+/* ═══════════════════ CONFETTI ═════════════════════ */
+function launchConfetti() {
+  const c = document.getElementById('confetti-container');
+  c.innerHTML = '';
+  for (let i = 0; i < 55; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${rand(confettiColors)};
+      width:${8+Math.random()*10}px;
+      height:${8+Math.random()*12}px;
+      animation-duration:${1.5+Math.random()*2}s;
+      animation-delay:${Math.random()*.6}s;
+      border-radius:${Math.random()>0.5?'50%':'3px'};
+    `;
+    c.appendChild(piece);
+  }
+  setTimeout(() => c.innerHTML = '', 3500);
+}
+ 
+/* ═══════════════════ CLASS SELECT ════════════════════ */
+function selectClass(name, code) {
+  selectedClass = name;
+  selectedClassCode = code;
+  document.getElementById('intro-class-label').textContent = name;
+  document.getElementById('level-class-label').textContent = name;
+  document.getElementById('topbar-info').textContent = name;
+  makeStars('star-field');
+  showPage('page-intro');
+}
+ 
+/* ═══════════════════ SHOW LEVEL PAGE ════════════════ */
+function showLevelPage() {
+  showPage('page-level');
+}
+ 
+/* ═══════════════════ LEVEL SELECT ════════════════════ */
+function selectLevel(level) {
+  selectedLevel = level;
+  startQuiz();
+}
+ 
+/* ═══════════════════ START QUIZ ══════════════════════ */
+function startQuiz() {
+  const pool = QB[selectedClassCode][selectedLevel];
+  // Shuffle & pick 6
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  questions = shuffled.slice(0, TOTAL_Q);
+  currentQ = 0;
+  score = 0;
+  updateScoreBadge();
+  showPage('page-question');
+  loadQuestion();
+}
+ 
+/* ═══════════════════ LOAD QUESTION ═══════════════════ */
+function loadQuestion() {
+  const q = questions[currentQ];
+ 
+  // Badge & progress
+  document.getElementById('q-badge').textContent = `Q ${currentQ+1} / ${TOTAL_Q}`;
+  const pct = Math.round((currentQ / TOTAL_Q) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+ 
+  // Bridge fill (based on correct answers so far)
+  const bridgePct = Math.round((score / TOTAL_Q) * 100);
+  document.getElementById('bridge-fill').style.width = bridgePct + '%';
+ 
+  // Question
+  document.getElementById('q-emoji').textContent = q.emoji;
+  document.getElementById('q-text').textContent = q.text;
+ 
+  // Options – shuffle order
+  const shuffledOpts = [...q.opts].sort(() => Math.random() - 0.5);
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  shuffledOpts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(btn, opt, q.ans);
+    grid.appendChild(btn);
+  });
+}
+ 
+/* ═══════════════════ CHECK ANSWER ════════════════════ */
+function checkAnswer(btn, chosen, correct) {
+  // Disable all
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+ 
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    score++;
+    updateScoreBadge();
+    launchConfetti();
+ 
+    // Update bridge
+    const bridgePct = Math.round((score / TOTAL_Q) * 100);
+    document.getElementById('bridge-fill').style.width = bridgePct + '%';
+ 
+    // Show correct popup
+    const msg = rand(correctMsgs);
+    document.getElementById('correct-emoji').textContent = msg.emoji;
+    document.getElementById('correct-title').textContent = msg.title;
+    document.getElementById('correct-quote').textContent = rand(quotes);
+ 
+    // Last question?
+    if (currentQ === TOTAL_Q - 1) {
+      document.getElementById('next-btn').textContent = '🎊 See Results!';
+      document.getElementById('next-btn').onclick = showComplete;
+    } else {
+      document.getElementById('next-btn').textContent = 'Next Question ➡️';
+      document.getElementById('next-btn').onclick = nextQuestion;
+    }
+    document.getElementById('popup-correct').classList.remove('hidden');
+ 
+  } else {
+    btn.classList.add('wrong');
+    // Highlight correct
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+ 
+    // Show wrong popup
+    document.getElementById('wrong-title').textContent = rand(wrongMsgs);
+    document.getElementById('wrong-hint').textContent = `Correct answer: ${correct}`;
+    document.getElementById('popup-wrong').classList.remove('hidden');
+  }
+}
+ 
+/* ═══════════════════ NEXT QUESTION ═══════════════════ */
+function nextQuestion() {
+  document.getElementById('popup-correct').classList.add('hidden');
+  currentQ++;
+  if (currentQ < TOTAL_Q) {
+    loadQuestion();
+  } else {
+    showComplete();
+  }
+}
+ 
+function dismissWrong() {
+  document.getElementById('popup-wrong').classList.add('hidden');
+  // Re-enable buttons to retry
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct','wrong');
+  });
+}
+ 
+function updateScoreBadge() {
+  document.getElementById('score-badge').textContent = `⭐ Score: ${score}`;
+}
+ 
+/* ═══════════════════ COMPLETION ══════════════════════ */
+function showComplete() {
+  document.getElementById('popup-correct').classList.add('hidden');
+ 
+  // Stars earned
+  let stars = 1;
+  if (score >= 4) stars = 2;
+  if (score >= 5) stars = 3;
+ 
+  const starsRow = document.getElementById('stars-row');
+  starsRow.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const s = document.createElement('span');
+    s.className = 'star-icon';
+    s.textContent = i < stars ? '⭐' : '☆';
+    starsRow.appendChild(s);
+  }
+ 
+  document.getElementById('final-score').textContent = `${score} / ${TOTAL_Q}`;
+ 
+  let label = '';
+  if (score === TOTAL_Q) label = '🌟 Perfect Score! You are a Math Star!';
+  else if (score >= 4) label = '🎉 Great Job! Keep it up!';
+  else if (score >= 2) label = '👍 Good Effort! Practice more!';
+  else label = '💪 Keep trying! You Can Do It!';
+  document.getElementById('final-label').textContent = label;
+ 
+  document.getElementById('topbar-info').textContent = `${selectedClass} • ${selectedLevel}`;
+  makeStars('star-field-2');
+  launchConfetti();
+  showPage('page-complete');
+}
+ 
+/* ═══════════════════ REPLAY ══════════════════════════ */
+function replayLevel() {
+  startQuiz();
+}
+ 
+/* ═══════════════════ INIT ════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  showPage('page-class');
+});
+</script>
+</body>
+</html>

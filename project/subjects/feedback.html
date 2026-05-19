@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#fff0f5,#e6f7ff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.box{
+  background:white;
+  padding:30px;
+  border-radius:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  text-align:center;
+  width:300px;
+}
+
+h1{
+  color:#ff1493;
+}
+
+/* STARS */
+.stars span{
+  font-size:30px;
+  cursor:pointer;
+  color:#ccc;
+  transition:0.2s;
+}
+
+.stars span.active{
+  color:gold;
+  transform:scale(1.2);
+}
+
+/* INPUT */
+textarea{
+  width:100%;
+  height:80px;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  padding:10px;
+}
+
+/* BUTTON */
+button{
+  margin-top:10px;
+  padding:10px 20px;
+  background:#ff1493;
+  color:white;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+#msg{
+  margin-top:10px;
+  font-weight:bold;
+  color:green;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h1>💌 Feedback</h1>
+
+  <p>Rate your experience:</p>
+
+  <div class="stars">
+    <span onclick="rate(1)">⭐</span>
+    <span onclick="rate(2)">⭐</span>
+    <span onclick="rate(3)">⭐</span>
+    <span onclick="rate(4)">⭐</span>
+    <span onclick="rate(5)">⭐</span>
+  </div>
+
+  <textarea placeholder="Write your feedback..."></textarea>
+
+  <button onclick="submitFeedback()">Send</button>
+
+  <div id="msg"></div>
+
+  <br>
+  <a href="color.html">🏠 Back Home</a>
+
+</div>
+
+<script>
+
+let selected = 0;
+
+function rate(n){
+  selected = n;
+  let stars = document.querySelectorAll(".stars span");
+
+  stars.forEach((s,i)=>{
+    s.classList.toggle("active", i < n);
+  });
+}
+
+function submitFeedback(){
+  document.getElementById("msg").innerText =
+  "🎉 Thank you for your feedback!";
+}
+
+</script>
+
+</body>
+</html>
